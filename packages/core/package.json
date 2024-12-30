@@ -1,0 +1,43 @@
+{
+	"name": "@zoboz/core",
+	"version": "1.0.0",
+	"description": "",
+	"homepage": "https://github.com/dariushalipour/zoboz#readme",
+	"bugs": {
+		"url": "https://github.com/dariushalipour/zoboz/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dariushalipour/zoboz.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "GPL-3.0-or-later",
+	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
+	"main": "./dist/cjs/index.cjs",
+	"module": "./dist/mjs/index.mjs",
+	"types": "./dist/dts/index.d.cts",
+	"exports": {
+		".": {
+			"types": "./dist/dts/index.d.cts",
+			"require": "./dist/cjs/index.cjs",
+			"import": "./dist/mjs/index.mjs"
+		}
+	},
+	"bin": {
+		"zoboz": "./bin/zoboz.mjs"
+	},
+	"scripts": {
+		"dev": "echo 'Add dev script here'",
+		"lint": "npx @biomejs/biome lint --write && tsc --noEmit",
+		"build": "node --import ./scripts/tsimport.mjs ./scripts/build.mjs"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"typescript": "^5.7.3"
+	},
+	"dependencies": {
+		"commander": "13.0.0"
+	}
+}
