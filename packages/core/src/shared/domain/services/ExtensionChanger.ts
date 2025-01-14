@@ -35,7 +35,8 @@ export class ExtensionChanger {
 		from: string,
 		to: string,
 	): string {
-		return node.uri.replaceAll(`.${from}`, `.${to}`);
+		const regex = new RegExp(`\\.${from}(\\.map)?$`);
+		return node.uri.replace(regex, `.${to}$1`);
 	}
 
 	private hasMatchingFileExtension(node: FileNode, from: string) {
