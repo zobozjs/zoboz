@@ -1,7 +1,7 @@
 {
 	"name": "@zoboz/core",
-	"version": "1.0.0",
-	"description": "",
+	"version": "1.0.1",
+	"description": "zoboz | d.ts + mjs + cjs - hassle",
 	"homepage": "https://github.com/dariushalipour/zoboz#readme",
 	"bugs": {
 		"url": "https://github.com/dariushalipour/zoboz/issues"
@@ -13,6 +13,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"files": ["dist/", "bin/"],
 	"license": "GPL-3.0-or-later",
 	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
 	"main": "./dist/cjs/index.cjs",
@@ -29,7 +30,6 @@
 		"zoboz": "./bin/zoboz.mjs"
 	},
 	"scripts": {
-		"dev": "echo 'Add dev script here'",
 		"lint": "npx @biomejs/biome lint --write && tsc --noEmit",
 		"build": "node --import ./scripts/tsimport.mjs ./scripts/build.mjs"
 	},
