@@ -16,7 +16,7 @@ export class TscCommonJsBuilder implements Builder {
 			"--noEmit false",
 			"--declaration false",
 			"--module commonjs",
-			"--moduleResolution node10",
+			"--moduleResolution node",
 			`--outDir ${outDir}`,
 		].join(" ");
 

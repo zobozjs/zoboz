@@ -16,7 +16,7 @@ export class TscModuleBuilder implements Builder {
 			"--noEmit false",
 			"--declaration false",
 			"--module es2020",
-			"--moduleResolution bundler",
+			"--moduleResolution node",
 			`--outDir ${outDir}`,
 		].join(" ");
 
