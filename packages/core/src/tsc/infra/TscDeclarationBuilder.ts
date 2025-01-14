@@ -15,8 +15,6 @@ export class TscDeclarationBuilder implements Builder {
 			"tsc",
 			"--noEmit false",
 			"--emitDeclarationOnly",
-			"--module node16",
-			"--moduleResolution node16",
 			"--declaration",
 			`--outDir ${outDir}`,
 		].join(" ");
