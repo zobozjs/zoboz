@@ -1,4 +1,4 @@
-import { logger, type Builder, type FileNode } from "@zoboz/core";
+import { type Builder, type FileNode, logger } from "@zoboz/core";
 import * as esbuild from "esbuild";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 
