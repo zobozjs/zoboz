@@ -54,17 +54,8 @@ program
 	.command("build")
 	.description("Build the project using zoboz.config.ts")
 	.action(async () => {
-		const tsloadPath = path.resolve(import.meta.dirname, "tsload.mjs");
-
-		if (!fs.existsSync(tsloadPath)) {
-			logger.error(
-				'Could not find "tsload.mjs". Make sure it is included in the package.',
-			);
-			process.exit(1);
-		}
-
 		// Load the user's config
-		const config = await getZobozConfig(tsloadPath);
+		const config = await getZobozConfig();
 
 		// Use the loaded configuration
 		logger.debug("Loaded config:", config);
@@ -75,15 +66,15 @@ program
 program.parse(process.argv);
 
 // Load user config dynamically using your `tsload` loader
-async function getZobozConfig(tsloadPath) {
+async function getZobozConfig() {
 	try {
-		return await getZobozConfigTs(tsloadPath, false);
+		return await getZobozConfigTs(false);
 	} catch {
 		return await getZobozConfigMjs(true);
 	}
 }
 
-async function getZobozConfigTs(tsloadPath, shouldExitOnError) {
+async function getZobozConfigTs(shouldExitOnError) {
 	const configPath = path.resolve(process.cwd(), "zoboz.config.ts");
 
 	if (!fs.existsSync(configPath)) {
@@ -96,6 +87,15 @@ async function getZobozConfigTs(tsloadPath, shouldExitOnError) {
 		} else {
 			throw new Error("Config file not found");
 		}
+	}
+
+	const tsloadPath = path.resolve(import.meta.dirname, "tsload.mjs");
+
+	if (!fs.existsSync(tsloadPath)) {
+		logger.error(
+			'Could not find "tsload.mjs". Make sure it is included in the package.',
+		);
+		process.exit(1);
 	}
 
 	try {
