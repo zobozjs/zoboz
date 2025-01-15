@@ -36,8 +36,10 @@ export class BuildsOrchestrator {
 	}
 
 	private async buildAllOrchestrators() {
-		return Promise.all(
-			this.orchestrators.map((orchestrator) => orchestrator.build()),
-		);
+		const results: BuildOrchestratorResult[] = [];
+		for (const orchestrator of this.orchestrators) {
+			results.push(await orchestrator.build());
+		}
+		return results;
 	}
 }

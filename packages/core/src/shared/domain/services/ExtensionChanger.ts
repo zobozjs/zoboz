@@ -1,4 +1,3 @@
-import { FileNode } from "../entities/FileNode.js";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";
 
 export class ExtensionChanger {
@@ -9,37 +8,44 @@ export class ExtensionChanger {
 		fromExtension: string,
 		toExtension: string,
 	): Promise<void> {
-		const rootNode = FileNode.fromUri(dir, this.filesRepository);
-		const children = await rootNode.children();
+		const children = await this.filesRepository.children(dir);
 		await Promise.all(
-			children.map((node) => this.changeNode(node, fromExtension, toExtension)),
+			children.map((uri) => this.changeNode(uri, fromExtension, toExtension)),
 		);
 	}
 
 	private async changeNode(
-		node: FileNode,
-		from: string,
-		to: string,
+		uri: string,
+		fromExtension: string,
+		toExtension: string,
 	): Promise<void> {
-		if (await node.isDir()) {
-			return this.changeInDir(node.uri, from, to);
+		if (await this.filesRepository.isDir(uri)) {
+			return this.changeInDir(uri, fromExtension, toExtension);
 		}
 
-		if (this.hasMatchingFileExtension(node, from)) {
-			return node.mv(this.getUriWithNewExtension(node, from, to));
+		if (this.hasMatchingFileExtension(uri, fromExtension)) {
+			return this.filesRepository.mv(
+				uri,
+				this.getUriWithNewExtension(uri, fromExtension, toExtension),
+			);
 		}
 	}
 
 	private getUriWithNewExtension(
-		node: FileNode,
-		from: string,
-		to: string,
+		uri: string,
+		fromExtension: string,
+		toExtension: string,
 	): string {
-		const regex = new RegExp(`\\.${from}(\\.map)?$`);
-		return node.uri.replace(regex, `.${to}$1`);
+		const regex = new RegExp(`\\.${fromExtension}(\\.map)?$`);
+		return uri.replace(regex, `.${toExtension}$1`);
 	}
 
-	private hasMatchingFileExtension(node: FileNode, from: string) {
-		return node.uri.endsWith(`.${from}`) || node.uri.endsWith(`.${from}.map`);
+	private hasMatchingFileExtension(
+		uri: string,
+		fromExtension: string,
+	): boolean {
+		return (
+			uri.endsWith(`.${fromExtension}`) || uri.endsWith(`.${fromExtension}.map`)
+		);
 	}
 }
