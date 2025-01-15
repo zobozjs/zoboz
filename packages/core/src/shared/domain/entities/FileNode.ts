@@ -31,8 +31,8 @@ export class FileNode {
 		return this.filesRepository.remove(this.uri);
 	}
 
-	move(toUri: string): Promise<void> {
-		return this.filesRepository.move(this.uri, toUri);
+	mv(toUri: string): Promise<void> {
+		return this.filesRepository.mv(this.uri, toUri);
 	}
 
 	async read(): Promise<string> {

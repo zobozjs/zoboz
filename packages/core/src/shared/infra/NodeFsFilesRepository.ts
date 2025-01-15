@@ -12,7 +12,7 @@ export class NodeFsFilesRepository implements FilesRepository {
 		return stat.isDirectory();
 	}
 
-	async move(fromUri: string, toUri: string): Promise<void> {
+	async mv(fromUri: string, toUri: string): Promise<void> {
 		return fs.promises.rename(fromUri, toUri);
 	}
 

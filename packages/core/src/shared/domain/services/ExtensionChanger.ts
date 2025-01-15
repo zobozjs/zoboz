@@ -26,7 +26,7 @@ export class ExtensionChanger {
 		}
 
 		if (this.hasMatchingFileExtension(node, from)) {
-			return node.move(this.getUriWithNewExtension(node, from, to));
+			return node.mv(this.getUriWithNewExtension(node, from, to));
 		}
 	}
 

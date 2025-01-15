@@ -1,7 +1,7 @@
 export interface FilesRepository {
 	getPackageDir: () => Promise<string>;
 	isDir: (uri: string) => Promise<boolean>;
-	move: (fromUri: string, toUri: string) => Promise<void>;
+	mv: (fromUri: string, toUri: string) => Promise<void>;
 	remove: (uri: string) => Promise<void>;
 	children(uri: string): Promise<string[]>;
 	read: (uri: string) => Promise<string>;
