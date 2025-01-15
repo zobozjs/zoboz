@@ -1,11 +1,9 @@
-import type { FileNode } from "../entities/FileNode.js";
-
 export interface FilesRepository {
-	getPackageDir: () => Promise<FileNode>;
-	isDir: (node: FileNode) => Promise<boolean>;
-	move: (node: FileNode, newUri: string) => Promise<void>;
-	remove: (node: FileNode) => Promise<void>;
-	children(node: FileNode): Promise<FileNode[]>;
-	read: (node: FileNode) => Promise<string>;
-	write: (node: FileNode, content: string) => Promise<void>;
+	getPackageDir: () => Promise<string>;
+	isDir: (uri: string) => Promise<boolean>;
+	move: (fromUri: string, toUri: string) => Promise<void>;
+	remove: (uri: string) => Promise<void>;
+	children(uri: string): Promise<string[]>;
+	read: (uri: string) => Promise<string>;
+	write: (uri: string, content: string) => Promise<void>;
 }

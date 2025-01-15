@@ -14,23 +14,25 @@ export class FileNode {
 	}
 
 	isDir(): Promise<boolean> {
-		return this.filesRepository.isDir(this);
+		return this.filesRepository.isDir(this.uri);
 	}
 
-	children(): Promise<FileNode[]> {
-		if (!this.isDir()) {
+	async children(): Promise<FileNode[]> {
+		const isDir = await this.isDir();
+		if (!isDir) {
 			throw new Error("Node is not a directory");
 		}
 
-		return this.filesRepository.children(this);
+		const uris = await this.filesRepository.children(this.uri);
+		return uris.map((uri) => FileNode.fromUri(uri, this.filesRepository));
 	}
 
 	remove(): Promise<void> {
-		return this.filesRepository.remove(this);
+		return this.filesRepository.remove(this.uri);
 	}
 
-	move(newUri: string): Promise<void> {
-		return this.filesRepository.move(this, newUri);
+	move(toUri: string): Promise<void> {
+		return this.filesRepository.move(this.uri, toUri);
 	}
 
 	async read(): Promise<string> {
@@ -38,7 +40,7 @@ export class FileNode {
 			throw new Error("This FileNode is a directory");
 		}
 
-		return this.filesRepository.read(this);
+		return this.filesRepository.read(this.uri);
 	}
 
 	async write(content: string): Promise<void> {
@@ -46,7 +48,7 @@ export class FileNode {
 			throw new Error("This FileNode is a directory");
 		}
 
-		return this.filesRepository.write(this, content);
+		return this.filesRepository.write(this.uri, content);
 	}
 
 	async getRelativeUriOf(uri: string): Promise<string> {
