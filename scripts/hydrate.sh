@@ -35,7 +35,7 @@ const packages = [
 ];
 
 for (const pkg of packages) {
-  assert.strictEqual(typeof pkg.default, \"string\");
+	assert.strictEqual(typeof pkg.default, \"string\");
 
 	assert.deepStrictEqual(
 		pkg.filter((x) => x % 2 === 0, [1, 2, 3, 4, 5]),
@@ -71,7 +71,7 @@ const packages = [
 ];
 
 for (const pkg of packages) {
-  assert.strictEqual(typeof pkg.default, \"string\");
+	assert.strictEqual(typeof pkg.default, \"string\");
 
 	assert.deepStrictEqual(
 		pkg.filter((x) => x % 2 === 0, [1, 2, 3, 4, 5]),
