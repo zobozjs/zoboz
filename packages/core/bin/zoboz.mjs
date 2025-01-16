@@ -68,7 +68,7 @@ const buildProgram = program
 		// Use the loaded configuration
 		logger.debug("Loaded config:", config);
 
-		build(config, options.updatePackageJson ?? true);
+		build(config, options.updatePackageJson ?? false);
 	});
 
 program.parse(process.argv);
