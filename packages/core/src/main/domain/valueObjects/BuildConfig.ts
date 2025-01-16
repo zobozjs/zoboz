@@ -8,12 +8,16 @@ export class BuildConfig {
 	public readonly mjs: MjsConfig | null;
 	public readonly cjs: CjsConfig | null;
 	public readonly dts: DtsConfig | null;
+	public readonly srcDir: string;
+	public readonly distDir: string;
 	public readonly exports: ExportsConfig;
 
 	constructor(params: BuildConfigParams) {
 		this.mjs = params.mjs;
 		this.cjs = params.cjs;
 		this.dts = params.dts;
+		this.srcDir = params.srcDir;
+		this.distDir = params.distDir;
 		this.exports = new ExportsConfig(params.exports);
 	}
 }

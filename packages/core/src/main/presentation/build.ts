@@ -1,23 +1,25 @@
+import * as path from "node:path";
 import * as process from "node:process";
 import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrchestrator.js";
-import { NodeCommonJsReferenceChanger } from "../../commonjs/infra/NodeCommonJsReferenceChanger.js";
+import {
+	commonJsReferenceChanger,
+	extensionChanger,
+	filesRepository,
+	moduleReferenceChanger,
+} from "../../container.js";
 import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
-import { NodeModuleReferenceChanger } from "../../module/infra/NodeModuleReferenceChanger.js";
 import { FileNode } from "../../shared/domain/entities/FileNode.js";
-import { NodeExtensionChanger } from "../../shared/infra/NodeExtensionChanger.js";
-import { NodeFsFilesRepository } from "../../shared/infra/NodeFsFilesRepository.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
 import type { BuildConfig } from "../domain/valueObjects/BuildConfig.js";
 
 export async function build(config: BuildConfig): Promise<void> {
-	const filesRepository = new NodeFsFilesRepository();
 	const packageDirUri = await filesRepository.getPackageDir();
 	const packageDir = FileNode.fromUri(packageDirUri, filesRepository);
 	const distEmptier = new DistEmptier(filesRepository, packageDir);
-	const extensionChanger = new NodeExtensionChanger(filesRepository);
+	const distDirUri = path.resolve(packageDirUri, config.distDir);
 
 	const orchestrators = [
 		config.mjs &&
@@ -25,8 +27,9 @@ export async function build(config: BuildConfig): Promise<void> {
 				filesRepository,
 				distEmptier,
 				extensionChanger,
-				new NodeModuleReferenceChanger(filesRepository),
+				moduleReferenceChanger,
 				packageDir,
+				distDirUri,
 				config.exports,
 				config.mjs,
 			),
@@ -35,8 +38,9 @@ export async function build(config: BuildConfig): Promise<void> {
 				filesRepository,
 				distEmptier,
 				extensionChanger,
-				new NodeCommonJsReferenceChanger(filesRepository),
+				commonJsReferenceChanger,
 				packageDir,
+				distDirUri,
 				config.exports,
 				config.cjs,
 			),
@@ -46,6 +50,7 @@ export async function build(config: BuildConfig): Promise<void> {
 				distEmptier,
 				extensionChanger,
 				packageDir,
+				distDirUri,
 				config.exports,
 				config.dts,
 			),

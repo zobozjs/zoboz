@@ -6,5 +6,7 @@ export interface BuildConfigParams {
 	mjs: MjsConfig | null;
 	cjs: CjsConfig | null;
 	dts: DtsConfig | null;
+	srcDir: "./src";
+	distDir: string;
 	exports: Record<"." | `.${string}`, `${string}.ts` | `${string}.tsx`>;
 }

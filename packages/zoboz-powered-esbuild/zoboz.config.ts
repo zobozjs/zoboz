@@ -5,6 +5,8 @@ export default new BuildConfig({
 	mjs: new esbuildConfigs.Mjs(),
 	cjs: new esbuildConfigs.Cjs(),
 	dts: new tsc.DtsConfig(),
+	srcDir: "./src",
+	distDir: "./dist",
 	exports: {
 		".": "./src/index.ts",
 	},

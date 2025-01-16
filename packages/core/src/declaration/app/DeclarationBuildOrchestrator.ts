@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import type { DtsConfig } from "../../main/domain/interfaces/DtsConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
@@ -12,15 +13,18 @@ import { DeclarationReferenceChanger } from "../domain/services/DeclarationRefer
 
 export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 	private readonly referenceChanger: DeclarationReferenceChanger;
+	private readonly outDirUri: string;
 
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly extensionChanger: ExtensionChanger,
 		private readonly packageDir: FileNode,
+		private readonly distDirUri: string,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly dtsConfig: DtsConfig,
 	) {
+		this.outDirUri = path.join(this.distDirUri, "dts");
 		this.referenceChanger = new DeclarationReferenceChanger(
 			this.filesRepository,
 		);
@@ -29,13 +33,13 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 	async build(): Promise<BuildOrchestratorResult> {
 		const startTime = Date.now();
 		const builder = this.dtsConfig.getBuilder();
-		await this.distEmptier.remove(builder.outdir);
-		await builder.build(this.packageDir);
-		await this.extensionChanger.changeInDir(builder.outdir, "ts", "cts");
-		await this.referenceChanger.changeReferencesInDir(builder.outdir);
+		await this.distEmptier.remove(this.outDirUri);
+		await builder.build(this.packageDir, this.outDirUri);
+		await this.extensionChanger.changeInDir(this.outDirUri, "ts", "cts");
+		await this.referenceChanger.changeReferencesInDir(this.outDirUri);
 
 		const result = new BuildOrchestratorResult(
-			await this.createPackageJsonExpectation(builder.outdir),
+			await this.createPackageJsonExpectation(),
 		);
 
 		const endTime = Date.now();
@@ -44,31 +48,31 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 		return result;
 	}
 
-	private async createPackageJsonExpectation(
-		outdir: string,
-	): Promise<Promise<PackageJsonExpectation>> {
+	private async createPackageJsonExpectation(): Promise<
+		Promise<PackageJsonExpectation>
+	> {
 		return new PackageJsonExpectation(this.filesRepository, {
-			types: await this.generatePackageJsonMain(outdir),
-			exports: await this.generatePackageJsonExports(outdir),
+			types: await this.generatePackageJsonMain(),
+			exports: await this.generatePackageJsonExports(),
 		});
 	}
 
-	private generatePackageJsonMain(outdir: string): Promise<string> {
-		return this.distFromSrc(this.exportsConfig.getRootExport(), outdir);
+	private generatePackageJsonMain(): Promise<string> {
+		return this.distFromSrc(this.exportsConfig.getRootExport());
 	}
 
-	private async distFromSrc(srcUri: string, outdir: string): Promise<string> {
+	private async distFromSrc(srcUri: string): Promise<string> {
 		return srcUri
-			.replace("./src", await this.packageDir.getRelativeUriOf(outdir))
+			.replace("./src", await this.packageDir.getRelativeUriOf(this.outDirUri))
 			.replace(".ts", ".d.cts");
 	}
 
-	private async generatePackageJsonExports(
-		outdir: string,
-	): Promise<Record<string, Record<"types", string>>> {
+	private async generatePackageJsonExports(): Promise<
+		Record<string, Record<"types", string>>
+	> {
 		const entries = this.exportsConfig
 			.entries()
-			.map(async ([k, v]) => [k, { types: await this.distFromSrc(v, outdir) }]);
+			.map(async ([k, v]) => [k, { types: await this.distFromSrc(v) }]);
 
 		return Object.fromEntries(await Promise.all(entries));
 	}

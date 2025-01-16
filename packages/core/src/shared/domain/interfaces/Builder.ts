@@ -1,6 +1,5 @@
 import type { FileNode } from "../entities/FileNode.js";
 
 export interface Builder {
-	readonly outdir: string;
-	build(packageDir: FileNode): Promise<void>;
+	build(packageDir: FileNode, outDir: string): Promise<void>;
 }

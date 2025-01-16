@@ -1,24 +1,57 @@
 import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { Builder } from "../../shared/domain/interfaces/Builder.js";
+import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 
 export class TscDeclarationBuilder implements Builder {
 	constructor(
 		private readonly commandRunner: CommandRunner,
-		public readonly outdir: string,
+		private readonly filesRepository: FilesRepository,
 	) {}
 
-	async build(packageDir: FileNode): Promise<void> {
-		const outDir = await packageDir.getRelativeUriOf(this.outdir);
+	async build(packageDir: FileNode, outDir: string): Promise<void> {
+		let tsConfigPath: string | null = null;
+		try {
+			tsConfigPath = await this.writeTsConfigFile(packageDir, outDir);
+			this.commandRunner.run(`tsc -p ${tsConfigPath}`);
+		} finally {
+			if (tsConfigPath) {
+				await this.filesRepository.remove(tsConfigPath);
+			}
+		}
+	}
 
-		const command = [
-			"tsc",
-			"--noEmit false",
-			"--emitDeclarationOnly",
-			"--declaration",
-			`--outDir ${outDir}`,
-		].join(" ");
+	private async writeTsConfigFile(
+		packageDir: FileNode,
+		outDir: string,
+	): Promise<string> {
+		const tsConfig = await this.generateTsConfig(packageDir, outDir);
+		const tsConfigPath = `${packageDir.uri}/tsconfig.${this.generateRandomString()}.json`;
 
-		this.commandRunner.run(command);
+		await this.filesRepository.write(
+			tsConfigPath,
+			JSON.stringify(tsConfig, null, 2),
+		);
+
+		return tsConfigPath;
+	}
+
+	private async generateTsConfig(packageDir: FileNode, outDir: string) {
+		const relativeOutDir = await packageDir.getRelativeUriOf(outDir);
+
+		return {
+			extends: "./tsconfig.json",
+			include: ["src/**/*"],
+			compilerOptions: {
+				noEmit: false,
+				declaration: true,
+				emitDeclarationOnly: true,
+				outDir: relativeOutDir,
+			},
+		};
+	}
+
+	private generateRandomString() {
+		return Math.random().toString(36).substring(7);
 	}
 }

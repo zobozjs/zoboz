@@ -1,6 +1,6 @@
-import { TscCjsConfig } from "./domain/valueObject/TscCjsConfig.js";
-import { TscDtsConfig } from "./domain/valueObject/TscDtsConfig.js";
-import { TscMjsConfig } from "./domain/valueObject/TscMjsConfig.js";
+import { TscCjsConfig } from "./app/TscCjsConfig.js";
+import { TscDtsConfig } from "./app/TscDtsConfig.js";
+import { TscMjsConfig } from "./app/TscMjsConfig.js";
 
 export const tsc = {
 	MjsConfig: TscMjsConfig,
