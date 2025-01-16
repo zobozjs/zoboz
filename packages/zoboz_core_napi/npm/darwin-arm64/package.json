@@ -1,0 +1,12 @@
+{
+	"name": "zoboz_core_napi-darwin-arm64",
+	"version": "0.0.0",
+	"os": ["darwin"],
+	"cpu": ["arm64"],
+	"main": "zoboz_core_napi.darwin-arm64.node",
+	"files": ["zoboz_core_napi.darwin-arm64.node"],
+	"license": "MIT",
+	"engines": {
+		"node": ">= 10"
+	}
+}

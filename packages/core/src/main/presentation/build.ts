@@ -1,23 +1,23 @@
 import * as process from "node:process";
 import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrchestrator.js";
-import { NodeCommonJsReferenceChanger } from "../../commonjs/infra/NodeCommonJsReferenceChanger.js";
+import { RustCommonJsReferenceChanger } from "../../commonjs/infra/RustCommonJsReferenceChanger.js";
 import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
-import { NodeModuleReferenceChanger } from "../../module/infra/NodeModuleReferenceChanger.js";
+import { RustModuleReferenceChanger } from "../../module/infra/RustModuleReferenceChanger.js";
 import { FileNode } from "../../shared/domain/entities/FileNode.js";
-import { NodeExtensionChanger } from "../../shared/infra/NodeExtensionChanger.js";
-import { NodeFsFilesRepository } from "../../shared/infra/NodeFsFilesRepository.js";
+import { RustExtensionChanger } from "../../shared/infra/RustExtensionChanger.js";
+import { RustFsFilesRepository } from "../../shared/infra/RustFsFilesRepository.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
 import type { BuildConfig } from "../domain/valueObjects/BuildConfig.js";
 
 export async function build(config: BuildConfig): Promise<void> {
-	const filesRepository = new NodeFsFilesRepository();
+	const filesRepository = new RustFsFilesRepository();
 	const packageDirUri = await filesRepository.getPackageDir();
 	const packageDir = FileNode.fromUri(packageDirUri, filesRepository);
 	const distEmptier = new DistEmptier(filesRepository, packageDir);
-	const extensionChanger = new NodeExtensionChanger(filesRepository);
+	const extensionChanger = new RustExtensionChanger();
 
 	const orchestrators = [
 		config.mjs &&
@@ -25,7 +25,7 @@ export async function build(config: BuildConfig): Promise<void> {
 				filesRepository,
 				distEmptier,
 				extensionChanger,
-				new NodeModuleReferenceChanger(filesRepository),
+				new RustModuleReferenceChanger(),
 				packageDir,
 				config.exports,
 				config.mjs,
@@ -35,7 +35,7 @@ export async function build(config: BuildConfig): Promise<void> {
 				filesRepository,
 				distEmptier,
 				extensionChanger,
-				new NodeCommonJsReferenceChanger(filesRepository),
+				new RustCommonJsReferenceChanger(),
 				packageDir,
 				config.exports,
 				config.cjs,
