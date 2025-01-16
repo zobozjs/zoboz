@@ -1,7 +1,6 @@
 import * as path from "node:path";
 import * as process from "node:process";
 import { logger } from "../../supporting/logger.js";
-import { FileNode } from "../entities/FileNode.js";
 import { PackageJsonVerificationError } from "../errors/PackageJsonVerificationError.js";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";
 
@@ -140,10 +139,31 @@ export class PackageJsonExpectation {
 		logger.success("package.json matches zoboz.config.ts");
 	}
 
+	async updatePackageJson() {
+		const packageJson = await this.getPackageJson();
+		const updatedPackageJson = { ...packageJson, ...this.value };
+		const updatedPackageJsonText = JSON.stringify(updatedPackageJson, null, 2);
+
+		if (updatedPackageJsonText === JSON.stringify(packageJson, null, 2)) {
+			logger.success("package.json is up to date");
+			return;
+		}
+
+		await this.filesRepository.write(
+			this.getPackageJsonUri(),
+			`${updatedPackageJsonText}\n`,
+		);
+
+		logger.success("Updated package.json");
+	}
+
 	private async getPackageJson(): Promise<Record<string, unknown>> {
-		const uri = path.resolve(process.cwd(), "package.json");
-		const file = FileNode.fromUri(uri, this.filesRepository);
-		const text = await file.read();
+		const packageJsonUri = this.getPackageJsonUri();
+		const text = await this.filesRepository.read(packageJsonUri);
 		return JSON.parse(text);
+	}
+
+	private getPackageJsonUri() {
+		return path.resolve(process.cwd(), "package.json");
 	}
 }

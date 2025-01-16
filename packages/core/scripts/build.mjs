@@ -11,4 +11,5 @@ build(
 			".": "./src/index.ts",
 		},
 	}),
+	true,
 );

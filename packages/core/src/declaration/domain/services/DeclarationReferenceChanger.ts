@@ -1,7 +1,10 @@
+import { UriReformatter } from "../../../main/domain/services/UriReformatter.js";
 import { FileNode } from "../../../shared/domain/entities/FileNode.js";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository.js";
 
 export class DeclarationReferenceChanger {
+	private readonly uriReformatter = new UriReformatter({});
+
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(mjsdir: string): Promise<void> {
@@ -22,29 +25,15 @@ export class DeclarationReferenceChanger {
 				x
 					.replace(
 						/from\s+(['"])(\..+?)\1/g,
-						(match, p1, p2) => `from ${p1}${this.formattedUri(p2)}${p1}`,
+						(match, p1, p2) =>
+							`from ${p1}${this.uriReformatter.reformat(p2)}${p1}`,
 					)
 					.replace(
 						/import\(['"](\..+?)\1\)/g,
-						(match, p1, p2) => `import(${p1}${this.formattedUri(p2)}${p1})`,
+						(match, p1, p2) =>
+							`import(${p1}${this.uriReformatter.reformat(p2)}${p1})`,
 					),
 			);
 		}
-	}
-
-	private formattedUri(uri: string) {
-		if (uri.endsWith(".cjs")) {
-			return uri.slice(0, -4);
-		}
-
-		if (uri.endsWith(".mjs")) {
-			return uri.slice(0, -4);
-		}
-
-		if (uri.endsWith(".js")) {
-			return uri.slice(0, -3);
-		}
-
-		return uri;
 	}
 }

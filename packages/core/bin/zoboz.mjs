@@ -52,17 +52,23 @@ program
 		logger.hint("Now you can run `zoboz build` to build your project.");
 	});
 
-program
+const buildProgram = program
 	.command("build")
 	.description("Build the project using zoboz.config.ts")
+	.option(
+		"--update-package-json",
+		"Updates package.json if needed. CAUTION: Do not use in CI",
+	)
 	.action(async () => {
+		const options = buildProgram.opts();
+
 		// Load the user's config
 		const config = await getZobozConfig();
 
 		// Use the loaded configuration
 		logger.debug("Loaded config:", config);
 
-		build(config);
+		build(config, options.updatePackageJson ?? true);
 	});
 
 program.parse(process.argv);

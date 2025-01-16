@@ -12,11 +12,17 @@ export class BuildsOrchestrator {
 		}
 	}
 
-	async build() {
+	async build(shouldUpdatePackageJson: boolean) {
 		try {
 			const results = await this.buildAllOrchestrators();
 			const packageJsonExpectation = this.mergePackageJsonExpectations(results);
-			await packageJsonExpectation.verifyPackageJson();
+
+			if (shouldUpdatePackageJson) {
+				await packageJsonExpectation.updatePackageJson();
+			} else {
+				await packageJsonExpectation.verifyPackageJson();
+			}
+
 			logger.success("zoboz build complete");
 		} catch (error) {
 			if (error instanceof PackageJsonVerificationError) {

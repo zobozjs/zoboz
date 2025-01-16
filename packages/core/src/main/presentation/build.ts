@@ -15,7 +15,10 @@ import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
 import type { BuildConfig } from "../domain/valueObjects/BuildConfig.js";
 
-export async function build(config: BuildConfig): Promise<void> {
+export async function build(
+	config: BuildConfig,
+	shouldUpdatePackageJson: boolean,
+): Promise<void> {
 	const packageDirUri = await filesRepository.getPackageDir();
 	const packageDir = FileNode.fromUri(packageDirUri, filesRepository);
 	const distEmptier = new DistEmptier(filesRepository, packageDir);
@@ -66,5 +69,5 @@ export async function build(config: BuildConfig): Promise<void> {
 		process.exit(1);
 	}
 
-	new BuildsOrchestrator(orchestrators).build();
+	new BuildsOrchestrator(orchestrators).build(shouldUpdatePackageJson);
 }

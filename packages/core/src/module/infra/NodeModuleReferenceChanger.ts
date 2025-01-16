@@ -1,7 +1,13 @@
+import { UriReformatter } from "../../main/domain/services/UriReformatter";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository";
 import type { ModuleReferenceChanger } from "../domain/interfaces/ModuleReferenceChanger";
 
 export class NodeModuleReferenceChanger implements ModuleReferenceChanger {
+	private readonly uriReformatter = new UriReformatter(
+		{ ".js": ".mjs" },
+		".mjs",
+	);
+
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(mjsdir: string): Promise<void> {
@@ -25,23 +31,12 @@ export class NodeModuleReferenceChanger implements ModuleReferenceChanger {
 		return content
 			.replace(
 				/from\s+(['"])(\..+?)\1/g,
-				(match, p1, p2) => `from ${p1}${this.formattedUri(p2)}${p1}`,
+				(match, p1, p2) => `from ${p1}${this.uriReformatter.reformat(p2)}${p1}`,
 			)
 			.replace(
 				/import\(['"](\..+?)\1\)/g,
-				(match, p1, p2) => `import(${p1}${this.formattedUri(p2)}${p1})`,
+				(match, p1, p2) =>
+					`import(${p1}${this.uriReformatter.reformat(p2)}${p1})`,
 			);
-	}
-
-	private formattedUri(uri: string) {
-		if (uri.endsWith(".mjs")) {
-			return uri;
-		}
-
-		if (uri.endsWith(".js")) {
-			return `${uri.slice(0, -3)}.mjs`;
-		}
-
-		return `${uri}.mjs`;
 	}
 }

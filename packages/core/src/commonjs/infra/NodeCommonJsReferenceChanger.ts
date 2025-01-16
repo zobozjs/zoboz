@@ -1,7 +1,13 @@
+import { UriReformatter } from "../../main/domain/services/UriReformatter";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository";
 import type { CommonJsReferenceChanger } from "../domain/interfaces/CommonJsReferenceChanger";
 
 export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
+	private readonly uriReformatter = new UriReformatter(
+		{ ".js": ".cjs" },
+		".cjs",
+	);
+
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(cjsdir: string): Promise<void> {
@@ -24,19 +30,8 @@ export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
 	private replaceContent(content: string): string {
 		return content.replace(
 			/require\((['"])(\..+?)\1\)/g,
-			(match, p1, p2) => `require(${p1}${this.formattedUri(p2)}${p1})`,
+			(match, p1, p2) =>
+				`require(${p1}${this.uriReformatter.reformat(p2)}${p1})`,
 		);
-	}
-
-	private formattedUri(uri: string) {
-		if (uri.endsWith(".cjs")) {
-			return uri;
-		}
-
-		if (uri.endsWith(".js")) {
-			return `${uri.slice(0, -3)}.cjs`;
-		}
-
-		return `${uri}.cjs`;
 	}
 }
