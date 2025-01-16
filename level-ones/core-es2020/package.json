@@ -1,0 +1,23 @@
+{
+	"name": "@level-ones/core-es2020",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./dist/cjs/index.cjs",
+	"module": "./dist/mjs/index.mjs",
+	"types": "./dist/dts/index.d.cts",
+	"exports": {
+		".": {
+			"types": "./dist/dts/index.d.cts",
+			"require": "./dist/cjs/index.cjs",
+			"import": "./dist/mjs/index.mjs"
+		}
+	},
+	"scripts": {
+		"build": "zoboz build"
+	},
+	"devDependencies": {
+		"@zoboz/core": "*",
+		"@types/node": "^22.10.5",
+		"typescript": "^5.7.3"
+	}
+}

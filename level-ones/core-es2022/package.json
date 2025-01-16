@@ -1,5 +1,5 @@
 {
-	"name": "zoboz-powered-minimal",
+	"name": "@level-ones/core-es2022",
 	"version": "0.0.0",
 	"private": true,
 	"main": "./dist/cjs/index.cjs",

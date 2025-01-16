@@ -1,12 +1,10 @@
 {
-	"include": ["src/**/*.ts"],
 	"compilerOptions": {
 		"strictNullChecks": true,
 		"lib": ["ESNext"],
 		"skipLibCheck": true,
 		"target": "ES2017",
-		"module": "Node16",
-		"noEmit": true,
-		"sourceMap": true
+		"module": "ES2022",
+		"noEmit": true
 	}
 }
