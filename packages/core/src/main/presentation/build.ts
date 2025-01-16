@@ -29,9 +29,9 @@ export async function build(config: BuildConfig): Promise<void> {
 				extensionChanger,
 				moduleReferenceChanger,
 				packageDir,
-				distDirUri,
 				config.exports,
 				config.mjs,
+				distDirUri,
 			),
 		config.cjs &&
 			new CommonJsBuildOrchestrator(
@@ -40,19 +40,18 @@ export async function build(config: BuildConfig): Promise<void> {
 				extensionChanger,
 				commonJsReferenceChanger,
 				packageDir,
-				distDirUri,
 				config.exports,
 				config.cjs,
+				distDirUri,
 			),
 		config.dts &&
 			new DeclarationBuildOrchestrator(
 				filesRepository,
 				distEmptier,
-				extensionChanger,
 				packageDir,
-				distDirUri,
 				config.exports,
 				config.dts,
+				distDirUri,
 			),
 	].filter((x) => x !== null);
 
