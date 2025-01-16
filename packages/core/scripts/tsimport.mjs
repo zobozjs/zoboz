@@ -1,6 +1,9 @@
-import { register } from "node:module";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import { register } from "module";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import { pathToFileURL } from "url";
 
 register(
 	path.resolve(import.meta.dirname, "../bin/tsload.mjs"),

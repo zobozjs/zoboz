@@ -1,5 +1,7 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as fs from "fs";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
 import type { FilesRepository } from "../domain/interfaces/FilesRepository";
 
 export class NodeFsFilesRepository implements FilesRepository {

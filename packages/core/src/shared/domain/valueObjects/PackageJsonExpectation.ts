@@ -1,5 +1,7 @@
-import * as path from "node:path";
-import * as process from "node:process";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as process from "process";
 import { logger } from "../../supporting/logger.js";
 import { PackageJsonVerificationError } from "../errors/PackageJsonVerificationError.js";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";

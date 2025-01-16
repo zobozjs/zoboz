@@ -1,4 +1,3 @@
-import * as path from "node:path";
 import type { DtsConfig } from "../../main/domain/interfaces/DtsConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";

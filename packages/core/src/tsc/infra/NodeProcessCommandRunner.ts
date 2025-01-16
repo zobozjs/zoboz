@@ -1,4 +1,5 @@
-import * as child_process from "node:child_process";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as child_process from "child_process";
 import { logger } from "../../shared/supporting/logger.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 

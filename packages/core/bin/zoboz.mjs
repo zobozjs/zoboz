@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-import fs from "node:fs";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as fs from "fs";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import { pathToFileURL } from "url";
 import { Command } from "commander";
 import { build } from "../dist/mjs/index.js";
 import { logger } from "../dist/mjs/shared/supporting/logger.js";
@@ -107,7 +110,8 @@ async function getZobozConfigTs(shouldExitOnError) {
 	}
 
 	try {
-		const { register } = await import("node:module");
+		// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+		const { register } = await import("module");
 
 		// Register your tsload loader
 		register(tsloadPath, pathToFileURL("./"));

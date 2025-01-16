@@ -1,4 +1,5 @@
-import * as process from "node:process";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as process from "process";
 import { PackageJsonVerificationError } from "../../shared/domain/errors/PackageJsonVerificationError.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
 import type { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";

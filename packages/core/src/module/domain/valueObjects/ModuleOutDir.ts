@@ -1,4 +1,5 @@
-import * as path from "node:path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
 import { OutDir } from "../../../main/domain/valueObjects/OutDir";
 
 export class ModuleOutDir extends OutDir {

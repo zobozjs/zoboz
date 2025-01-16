@@ -1,7 +1,11 @@
-import fs from "node:fs";
-import fsPromises from "node:fs/promises";
-import path from "node:path";
-import url from "node:url";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as fs from "fs";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as url from "url";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as fsPromises from "fs/promises";
 import typescript from "typescript";
 
 export async function resolve(specifier, context, defaultResolve) {

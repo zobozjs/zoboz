@@ -1,4 +1,5 @@
-import * as path from "node:path";
+// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
+import * as path from "path";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";
 
 type ContentReplacer = (currentContent: string) => string;
