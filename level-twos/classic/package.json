@@ -14,7 +14,13 @@
 		"typescript": "^5.7.3"
 	},
 	"dependencies": {
-		"@level-ones/core-esnext": "*",
-		"@level-ones/esbuild-v0": "*"
+		"@level-ones/core-bundler": "*",
+		"@level-ones/core-classic": "*",
+		"@level-ones/core-node10": "*",
+		"@level-ones/core-node16": "*",
+		"@level-ones/esbuild-v0-bundler": "*",
+		"@level-ones/esbuild-v0-classic": "*",
+		"@level-ones/esbuild-v0-node10": "*",
+		"@level-ones/esbuild-v0-node16": "*"
 	}
 }
