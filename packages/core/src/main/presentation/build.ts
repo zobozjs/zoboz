@@ -5,7 +5,7 @@ import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationB
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
 import { NodeModuleReferenceChanger } from "../../module/infra/NodeModuleReferenceChanger.js";
 import { FileNode } from "../../shared/domain/entities/FileNode.js";
-import { ExtensionChanger } from "../../shared/domain/services/ExtensionChanger.js";
+import { NodeExtensionChanger } from "../../shared/infra/NodeExtensionChanger.js";
 import { NodeFsFilesRepository } from "../../shared/infra/NodeFsFilesRepository.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
@@ -17,7 +17,7 @@ export async function build(config: BuildConfig): Promise<void> {
 	const packageDirUri = await filesRepository.getPackageDir();
 	const packageDir = FileNode.fromUri(packageDirUri, filesRepository);
 	const distEmptier = new DistEmptier(filesRepository, packageDir);
-	const extensionChanger = new ExtensionChanger(filesRepository);
+	const extensionChanger = new NodeExtensionChanger(filesRepository);
 
 	const orchestrators = [
 		config.mjs &&

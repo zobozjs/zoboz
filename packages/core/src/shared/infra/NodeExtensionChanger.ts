@@ -1,6 +1,7 @@
-import type { FilesRepository } from "../interfaces/FilesRepository.js";
+import type { ExtensionChanger } from "../domain/interfaces/ExtensionChanger";
+import type { FilesRepository } from "../domain/interfaces/FilesRepository";
 
-export class ExtensionChanger {
+export class NodeExtensionChanger implements ExtensionChanger {
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeInDir(
