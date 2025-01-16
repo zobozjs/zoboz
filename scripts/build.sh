@@ -2,7 +2,7 @@
 
 execute_build() {
   npm -w @zoboz/core run build &&
-    npm -w @zoboz/esbuild-v0 run build
+    npm -w @zoboz/plugin-esbuild-v0 run build
 }
 
 if [ "$1" != "--alone" ]; then

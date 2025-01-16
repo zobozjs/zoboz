@@ -1,8 +1,7 @@
 {
-	"name": "@zoboz/esbuild-v0",
+	"name": "@zoboz/plugin-esbuild-v0",
 	"version": "1.0.0",
 	"private": true,
-	"type": "module",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/mjs/index.js",
 	"types": "./dist/dts/index.d.ts",

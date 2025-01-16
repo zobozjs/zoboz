@@ -30,7 +30,7 @@
 		"zoboz": "./bin/zoboz.mjs"
 	},
 	"scripts": {
-		"lint": "npx @biomejs/biome lint --write && tsc --noEmit",
+		"typecheck": "tsc --noEmit",
 		"build": "node --import ./scripts/tsimport.mjs ./scripts/build.mjs"
 	},
 	"devDependencies": {

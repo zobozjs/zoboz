@@ -1,2 +1,2 @@
-# `@zoboz/esbuild-v0`
+# `@zoboz/plugin-esbuild-v0`
 
