@@ -5,8 +5,8 @@
 	"scripts": {
 		"build": "zoboz build",
 		"typecheck": "tsc --noEmit",
-		"test:cjs": "node ./routine.test.cjs",
-		"test:mjs": "node ./routine.test.mjs",
+		"test:cjs": "node ./level-two.test.cjs",
+		"test:mjs": "node ./level-two.test.mjs",
 		"test": "npm run typecheck && npm run test:cjs && npm run test:mjs"
 	},
 	"devDependencies": {
