@@ -1,6 +1,7 @@
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository.js";
+import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository";
+import type { ModuleReferenceChanger } from "../domain/interfaces/ModuleReferenceChanger";
 
-export class ModuleReferenceChanger {
+export class NodeModuleReferenceChanger implements ModuleReferenceChanger {
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(mjsdir: string): Promise<void> {

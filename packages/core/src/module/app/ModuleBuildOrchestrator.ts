@@ -1,39 +1,30 @@
 import type { MjsConfig } from "../../main/domain/interfaces/MjsConfig.js";
-import { DistEmptier } from "../../main/domain/services/DistEmptier.js";
+import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
 import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
-import { ExtensionChanger } from "../../shared/domain/services/ExtensionChanger.js";
+import type { ExtensionChanger } from "../../shared/domain/services/ExtensionChanger.js";
 import { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
 import { PackageJsonExpectation } from "../../shared/domain/valueObjects/PackageJsonExpectation.js";
 import { logger } from "../../shared/supporting/logger.js";
-import { ModuleReferenceChanger } from "../domain/services/ModuleReferenceChanger.js";
+import type { ModuleReferenceChanger } from "../domain/interfaces/ModuleReferenceChanger.js";
 
 export class ModuleBuildOrchestrator implements BuildOrchestrator {
-	private readonly extensionChanger: ExtensionChanger;
-	private readonly referenceChanger: ModuleReferenceChanger;
-
 	constructor(
 		private readonly filesRepository: FilesRepository,
+		private readonly distEmptier: DistEmptier,
+		private readonly extensionChanger: ExtensionChanger,
+		private readonly referenceChanger: ModuleReferenceChanger,
 		private readonly packageDir: FileNode,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly mjsConfig: MjsConfig,
-	) {
-		this.extensionChanger = new ExtensionChanger(this.filesRepository);
-		this.referenceChanger = new ModuleReferenceChanger(this.filesRepository);
-	}
+	) {}
 
 	async build(): Promise<BuildOrchestratorResult> {
 		const startTime = Date.now();
 		const builder = this.mjsConfig.getBuilder();
-
-		await new DistEmptier(
-			this.filesRepository,
-			this.packageDir,
-			builder.outdir,
-		).remove();
-
+		await this.distEmptier.remove(builder.outdir);
 		await builder.build(this.packageDir);
 		await this.extensionChanger.changeInDir(builder.outdir, "js", "mjs");
 		await this.referenceChanger.changeReferencesInDir(builder.outdir);

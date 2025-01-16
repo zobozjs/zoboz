@@ -1,7 +1,8 @@
-import { FileNode } from "../../../shared/domain/entities/FileNode.js";
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository.js";
+import { FileNode } from "../../shared/domain/entities/FileNode";
+import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository";
+import type { CommonJsReferenceChanger } from "../domain/interfaces/CommonJsReferenceChanger";
 
-export class CommonJsReferenceChanger {
+export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(cjsdir: string): Promise<void> {
