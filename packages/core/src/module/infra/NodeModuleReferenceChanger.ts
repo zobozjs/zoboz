@@ -3,10 +3,7 @@ import type { FilesRepository } from "../../shared/domain/interfaces/FilesReposi
 import type { ModuleReferenceChanger } from "../domain/interfaces/ModuleReferenceChanger";
 
 export class NodeModuleReferenceChanger implements ModuleReferenceChanger {
-	private readonly uriReformatter = new UriReformatter(
-		{ ".js": ".mjs" },
-		".mjs",
-	);
+	private readonly uriReformatter = new UriReformatter({}, ".js");
 
 	constructor(private readonly filesRepository: FilesRepository) {}
 
@@ -20,11 +17,15 @@ export class NodeModuleReferenceChanger implements ModuleReferenceChanger {
 			return this.changeReferencesInDir(uri);
 		}
 
-		if (uri.endsWith(".mjs")) {
+		if (this.isJs(uri)) {
 			const content = await this.filesRepository.read(uri);
 			const newContent = this.replaceContent(content);
 			await this.filesRepository.write(uri, newContent);
 		}
+	}
+
+	private isJs(uri: string) {
+		return uri.endsWith(".js") || uri.endsWith(".mjs");
 	}
 
 	private replaceContent(content: string): string {

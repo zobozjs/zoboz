@@ -1,0 +1,23 @@
+{
+	"name": "@level-ones/core-node10",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/mjs/index.js",
+	"types": "./dist/dts/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/dts/index.d.ts",
+			"require": "./dist/cjs/index.js",
+			"import": "./dist/mjs/index.js"
+		}
+	},
+	"scripts": {
+		"build": "zoboz build"
+	},
+	"devDependencies": {
+		"@zoboz/core": "*",
+		"@types/node": "^22.10.5",
+		"typescript": "^5.7.3"
+	}
+}

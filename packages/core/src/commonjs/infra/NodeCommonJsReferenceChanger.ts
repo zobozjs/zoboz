@@ -3,10 +3,7 @@ import type { FilesRepository } from "../../shared/domain/interfaces/FilesReposi
 import type { CommonJsReferenceChanger } from "../domain/interfaces/CommonJsReferenceChanger";
 
 export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
-	private readonly uriReformatter = new UriReformatter(
-		{ ".js": ".cjs" },
-		".cjs",
-	);
+	private readonly uriReformatter = new UriReformatter({}, ".js");
 
 	constructor(private readonly filesRepository: FilesRepository) {}
 
@@ -20,11 +17,15 @@ export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
 			return this.changeReferencesInDir(uri);
 		}
 
-		if (uri.endsWith(".cjs")) {
+		if (this.isJs(uri)) {
 			const content = await this.filesRepository.read(uri);
 			const newContent = this.replaceContent(content);
 			await this.filesRepository.write(uri, newContent);
 		}
+	}
+
+	private isJs(uri: string) {
+		return uri.endsWith(".js") || uri.endsWith(".cjs");
 	}
 
 	private replaceContent(content: string): string {

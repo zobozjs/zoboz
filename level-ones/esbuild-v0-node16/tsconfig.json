@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"strictNullChecks": true,
+		"lib": ["ES2015"],
+		"skipLibCheck": true,
+		"target": "ES2017",
+		"module": "Node16",
+		"moduleResolution": "node16",
+		"noEmit": true
+	}
+}

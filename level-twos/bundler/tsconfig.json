@@ -1,0 +1,12 @@
+{
+	"include": ["routine.test.cjs", "routine.test.mjs"],
+	"compilerOptions": {
+		"noEmit": true,
+		"strictNullChecks": true,
+		"skipLibCheck": true,
+		"checkJs": true,
+		"lib": ["ES5"],
+		"target": "ES2015",
+		"moduleResolution": "bundler"
+	}
+}

@@ -1,5 +1,6 @@
 import type { MjsConfig } from "../../main/domain/interfaces/MjsConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
+import { TypeEnforcer } from "../../main/domain/services/TypeEnforcer.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
 import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
@@ -13,6 +14,7 @@ import { ModuleOutDir } from "../domain/valueObjects/ModuleOutDir.js";
 
 export class ModuleBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: ModuleOutDir;
+	private readonly typeEnforcer: TypeEnforcer;
 	private readonly packageJsonExpectationFactory: ModulePackageJsonExpectationFactory;
 
 	constructor(
@@ -26,6 +28,7 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		distDirUri: string,
 	) {
 		this.outDir = new ModuleOutDir(distDirUri);
+		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
 		this.packageJsonExpectationFactory =
 			new ModulePackageJsonExpectationFactory(
 				this.filesRepository,
@@ -40,8 +43,8 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		const builder = this.mjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
 		await builder.build(this.packageDir, this.outDir.uri);
-		await this.extensionChanger.changeInDir(this.outDir.uri, "js", "mjs");
 		await this.referenceChanger.changeReferencesInDir(this.outDir.uri);
+		await this.typeEnforcer.enforce("module", this.outDir);
 
 		const packageJsonExpectation =
 			await this.packageJsonExpectationFactory.create();

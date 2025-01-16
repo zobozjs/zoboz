@@ -1,10 +1,17 @@
 #!/bin/bash
 
 execute_test() {
-  npm -w @level-ones/core-es2020 run build &&
-    npm -w @level-ones/core-es2022 run build &&
-    npm -w @level-ones/esbuild-v0-es2022 run build &&
-    npm -w @level-twos/commonjs run test &&
+  npm -w @level-ones/core-bundler run build &&
+    npm -w @level-ones/core-classic run build &&
+    npm -w @level-ones/core-node10 run build &&
+    npm -w @level-ones/core-node16 run build &&
+    npm -w @level-ones/esbuild-v0-bundler run build &&
+    npm -w @level-ones/esbuild-v0-classic run build &&
+    npm -w @level-ones/esbuild-v0-node10 run build &&
+    npm -w @level-ones/esbuild-v0-node16 run build &&
+    npm -w @level-twos/bundler run test &&
+    npm -w @level-twos/classic run test &&
+    npm -w @level-twos/node10 run test &&
     npm -w @level-twos/node16 run test
 }
 

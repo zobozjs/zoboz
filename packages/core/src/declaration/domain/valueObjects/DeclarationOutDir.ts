@@ -1,8 +1,8 @@
 import * as path from "node:path";
+import { OutDir } from "../../../main/domain/valueObjects/OutDir";
 
-export class DeclarationOutDir {
-	public readonly uri: string;
-	constructor(private readonly distDirUri: string) {
-		this.uri = path.join(this.distDirUri, "dts");
+export class DeclarationOutDir extends OutDir {
+	constructor(distDirUri: string) {
+		super(path.join(distDirUri, "dts"));
 	}
 }

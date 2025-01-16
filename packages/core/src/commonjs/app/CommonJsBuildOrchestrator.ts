@@ -1,5 +1,6 @@
 import type { CjsConfig } from "../../main/domain/interfaces/CjsConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
+import { TypeEnforcer } from "../../main/domain/services/TypeEnforcer.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
 import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
@@ -13,6 +14,7 @@ import { CommonJsOutDir } from "../domain/valueObjects/CommonJsOutDir.js";
 
 export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: CommonJsOutDir;
+	private readonly typeEnforcer: TypeEnforcer;
 	private readonly packageJsonExpectationFactory: CommonJsPackageJsonExpectationFactory;
 
 	constructor(
@@ -26,6 +28,7 @@ export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 		distDirUri: string,
 	) {
 		this.outDir = new CommonJsOutDir(distDirUri);
+		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
 		this.packageJsonExpectationFactory =
 			new CommonJsPackageJsonExpectationFactory(
 				this.filesRepository,
@@ -40,8 +43,8 @@ export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 		const builder = this.cjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
 		await builder.build(this.packageDir, this.outDir.uri);
-		await this.extensionChanger.changeInDir(this.outDir.uri, "js", "cjs");
 		await this.referenceChanger.changeReferencesInDir(this.outDir.uri);
+		await this.typeEnforcer.enforce("commonjs", this.outDir);
 
 		const packageJsonExpectation =
 			await this.packageJsonExpectationFactory.create();

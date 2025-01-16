@@ -26,7 +26,7 @@ export class CommonJsPackageJsonExpectationFactory {
 	private async distFromSrc(srcUri: string): Promise<string> {
 		return srcUri
 			.replace("./src", await this.packageDir.getRelativeUriOf(this.outDir.uri))
-			.replace(".ts", ".cjs");
+			.replace(".ts", ".js");
 	}
 
 	private async generatePackageJsonExports(): Promise<

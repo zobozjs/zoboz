@@ -18,6 +18,10 @@ export class UriReformatter {
 			}
 		}
 
+		if (this.elseExt === undefined) {
+			return uri;
+		}
+
 		if (this.elseExt === null) {
 			const extensionRemover = new UriReformatter({
 				".d.ts": "",
@@ -28,6 +32,10 @@ export class UriReformatter {
 			});
 
 			return extensionRemover.reformat(uri);
+		}
+
+		if (uri.endsWith(this.elseExt)) {
+			return uri;
 		}
 
 		return `${uri}${this.elseExt}`;

@@ -4,8 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Command } from "commander";
-import { build } from "../dist/mjs/index.mjs";
-import { logger } from "../dist/mjs/shared/supporting/logger.mjs";
+import { build } from "../dist/mjs/index.js";
+import { logger } from "../dist/mjs/shared/supporting/logger.js";
 
 const program = new Command();
 
