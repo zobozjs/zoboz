@@ -3,7 +3,7 @@ import { FileNode } from "../../../shared/domain/entities/FileNode.js";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository.js";
 
 export class DeclarationReferenceChanger {
-	private readonly uriReformatter = new UriReformatter({});
+	private readonly uriReformatter = new UriReformatter([]);
 
 	constructor(private readonly filesRepository: FilesRepository) {}
 
@@ -26,12 +26,12 @@ export class DeclarationReferenceChanger {
 					.replace(
 						/from\s+(['"])(\..+?)\1/g,
 						(match, p1, p2) =>
-							`from ${p1}${this.uriReformatter.reformat(p2)}${p1}`,
+							`from ${p1}${this.uriReformatter.reformat(child.uri, p2)}${p1}`,
 					)
 					.replace(
 						/import\(['"](\..+?)\1\)/g,
 						(match, p1, p2) =>
-							`import(${p1}${this.uriReformatter.reformat(p2)}${p1})`,
+							`import(${p1}${this.uriReformatter.reformat(child.uri, p2)}${p1})`,
 					),
 			);
 		}

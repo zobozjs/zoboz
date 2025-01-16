@@ -1,43 +1,33 @@
-type From = string;
-type To = string;
+import * as path from "node:path";
+
+const pathCandidates = ["", "index"];
+const extCandidates = ["", ".js", ".mjs", ".cjs", ".json"];
 
 export class UriReformatter {
-	constructor(
-		private readonly mapping: Record<From, To>,
-		private readonly elseExt?: string | null,
-	) {}
+	constructor(private readonly uris: string[]) {}
 
-	reformat(uri: string): string {
-		for (const [from, to] of Object.entries(this.mapping)) {
-			if (!uri.endsWith(from)) {
-				continue;
+	reformat(sourceUri: string, refUri: string): string {
+		const absoluteRefUri = this.makeAbsoluteRefUri(sourceUri, refUri);
+
+		for (const pathCandidate of pathCandidates) {
+			const combinedPath = path.join(absoluteRefUri, pathCandidate);
+			for (const extCandidate of extCandidates) {
+				const uriWithExtension = `${combinedPath}${extCandidate}`;
+				if (this.isAbsoluteUriValid(uriWithExtension)) {
+					return `./${path.join(refUri, pathCandidate)}${extCandidate}`;
+				}
 			}
-
-			if (uri.endsWith(from)) {
-				return `${uri.slice(0, -from.length)}${to}`;
-			}
 		}
 
-		if (this.elseExt === undefined) {
-			return uri;
-		}
+		return refUri;
+	}
 
-		if (this.elseExt === null) {
-			const extensionRemover = new UriReformatter({
-				".d.ts": "",
-				".js": "",
-				".mjs": "",
-				".cjs": "",
-				".json": "",
-			});
+	private isAbsoluteUriValid(absoluteRefUri: string) {
+		return this.uris.includes(absoluteRefUri);
+	}
 
-			return extensionRemover.reformat(uri);
-		}
-
-		if (uri.endsWith(this.elseExt)) {
-			return uri;
-		}
-
-		return `${uri}${this.elseExt}`;
+	makeAbsoluteRefUri(sourceUri: string, refUri: string) {
+		const sourceDirUri = path.dirname(sourceUri);
+		return path.join(sourceDirUri, refUri);
 	}
 }
