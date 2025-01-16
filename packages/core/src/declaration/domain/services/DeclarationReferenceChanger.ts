@@ -17,7 +17,7 @@ export class DeclarationReferenceChanger {
 			return this.changeReferencesInDir(child.uri);
 		}
 
-		if (child.uri.endsWith(".cts")) {
+		if (child.uri.endsWith(".d.ts")) {
 			await child.replaceContent((x) =>
 				x
 					.replace(
@@ -34,13 +34,17 @@ export class DeclarationReferenceChanger {
 
 	private formattedUri(uri: string) {
 		if (uri.endsWith(".cjs")) {
-			return uri;
+			return uri.slice(0, -4);
+		}
+
+		if (uri.endsWith(".mjs")) {
+			return uri.slice(0, -4);
 		}
 
 		if (uri.endsWith(".js")) {
-			return `${uri.slice(0, -3)}.cjs`;
+			return uri.slice(0, -3);
 		}
 
-		return `${uri}.cjs`;
+		return uri;
 	}
 }
