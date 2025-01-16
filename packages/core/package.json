@@ -1,6 +1,6 @@
 {
 	"name": "@zoboz/core",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "zoboz | d.ts + mjs + cjs - hassle",
 	"homepage": "https://github.com/dariushalipour/zoboz#readme",
 	"bugs": {
