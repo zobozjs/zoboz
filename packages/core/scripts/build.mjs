@@ -1,15 +1,4 @@
-import { BuildConfig, build, tsc } from "../src/index.ts";
+import { build } from "../src/index.js";
+import buildConfig from "../zoboz.config.js";
 
-build(
-	new BuildConfig({
-		mjs: new tsc.MjsConfig(),
-		cjs: new tsc.CjsConfig(),
-		dts: new tsc.DtsConfig(),
-		srcDir: "./src",
-		distDir: "./dist",
-		exports: {
-			".": "./src/index.ts",
-		},
-	}),
-	true,
-);
+build(buildConfig, true);
