@@ -32,7 +32,7 @@ const packages = [
 	require(\"@level-ones/esbuild-v0-classic\"),
 	require(\"@level-ones/esbuild-v0-node10\"),
 	require(\"@level-ones/esbuild-v0-node16\"),
-]
+];
 
 for (const pkg of packages) {
   assert.strictEqual(typeof pkg.default, \"string\");
