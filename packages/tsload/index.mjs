@@ -4,8 +4,6 @@ import * as fs from "fs";
 import * as path from "path";
 // biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as url from "url";
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
-import * as fsPromises from "fs/promises";
 import typescript from "typescript";
 
 export async function resolve(specifier, context, defaultResolve) {
@@ -49,7 +47,7 @@ export async function load(url, context, defaultLoad) {
 		return defaultLoad(url, context, defaultLoad);
 	}
 
-	const sourceCode = await fsPromises.readFile(new URL(url), "utf8");
+	const sourceCode = await fs.promises.readFile(new URL(url), "utf8");
 	const { outputText: code } = typescript.transpileModule(sourceCode, {
 		compilerOptions: {
 			module: typescript.ModuleKind.ESNext,
