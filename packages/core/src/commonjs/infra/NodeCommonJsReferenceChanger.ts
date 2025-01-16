@@ -1,4 +1,3 @@
-import { FileNode } from "../../shared/domain/entities/FileNode";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository";
 import type { CommonJsReferenceChanger } from "../domain/interfaces/CommonJsReferenceChanger";
 
@@ -6,26 +5,27 @@ export class NodeCommonJsReferenceChanger implements CommonJsReferenceChanger {
 	constructor(private readonly filesRepository: FilesRepository) {}
 
 	async changeReferencesInDir(cjsdir: string): Promise<void> {
-		const node = FileNode.fromUri(cjsdir, this.filesRepository);
-		const children = await node.children();
-		await Promise.all(
-			children.map((child) => this.changeReferencesInNode(child)),
-		);
+		const children = await this.filesRepository.children(cjsdir);
+		await Promise.all(children.map((uri) => this.changeReferencesInNode(uri)));
 	}
 
-	private async changeReferencesInNode(child: FileNode): Promise<void> {
-		if (await child.isDir()) {
-			return this.changeReferencesInDir(child.uri);
+	private async changeReferencesInNode(uri: string): Promise<void> {
+		if (await this.filesRepository.isDir(uri)) {
+			return this.changeReferencesInDir(uri);
 		}
 
-		if (child.uri.endsWith(".cjs")) {
-			await child.replaceContent((x) =>
-				x.replace(
-					/require\((['"])(\..+?)\1\)/g,
-					(match, p1, p2) => `require(${p1}${this.formattedUri(p2)}${p1})`,
-				),
-			);
+		if (uri.endsWith(".cjs")) {
+			const content = await this.filesRepository.read(uri);
+			const newContent = this.replaceContent(content);
+			await this.filesRepository.write(uri, newContent);
 		}
+	}
+
+	private replaceContent(content: string): string {
+		return content.replace(
+			/require\((['"])(\..+?)\1\)/g,
+			(match, p1, p2) => `require(${p1}${this.formattedUri(p2)}${p1})`,
+		);
 	}
 
 	private formattedUri(uri: string) {
