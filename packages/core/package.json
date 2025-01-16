@@ -18,10 +18,10 @@
 	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
 	"main": "./dist/cjs/index.cjs",
 	"module": "./dist/mjs/index.mjs",
-	"types": "./dist/dts/index.d.cts",
+	"types": "./dist/dts/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/dts/index.d.cts",
+			"types": "./dist/dts/index.d.ts",
 			"require": "./dist/cjs/index.cjs",
 			"import": "./dist/mjs/index.mjs"
 		}

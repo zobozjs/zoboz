@@ -9,10 +9,8 @@ import type { FilesRepository } from "../../shared/domain/interfaces/FilesReposi
 import { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
 import { PackageJsonExpectation } from "../../shared/domain/valueObjects/PackageJsonExpectation.js";
 import { logger } from "../../shared/supporting/logger.js";
-import { DeclarationReferenceChanger } from "../domain/services/DeclarationReferenceChanger.js";
 
 export class DeclarationBuildOrchestrator implements BuildOrchestrator {
-	private readonly referenceChanger: DeclarationReferenceChanger;
 	private readonly outDirUri: string;
 
 	constructor(
@@ -25,9 +23,6 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 		private readonly dtsConfig: DtsConfig,
 	) {
 		this.outDirUri = path.join(this.distDirUri, "dts");
-		this.referenceChanger = new DeclarationReferenceChanger(
-			this.filesRepository,
-		);
 	}
 
 	async build(): Promise<BuildOrchestratorResult> {
@@ -35,8 +30,6 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 		const builder = this.dtsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDirUri);
 		await builder.build(this.packageDir, this.outDirUri);
-		await this.extensionChanger.changeInDir(this.outDirUri, "ts", "cts");
-		await this.referenceChanger.changeReferencesInDir(this.outDirUri);
 
 		const result = new BuildOrchestratorResult(
 			await this.createPackageJsonExpectation(),
@@ -64,7 +57,7 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 	private async distFromSrc(srcUri: string): Promise<string> {
 		return srcUri
 			.replace("./src", await this.packageDir.getRelativeUriOf(this.outDirUri))
-			.replace(".ts", ".d.cts");
+			.replace(".ts", ".d.ts");
 	}
 
 	private async generatePackageJsonExports(): Promise<
