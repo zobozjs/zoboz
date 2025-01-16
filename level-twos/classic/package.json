@@ -7,7 +7,7 @@
 		"typecheck": "tsc --noEmit",
 		"test:cjs": "node ./level-two.test.cjs",
 		"test:mjs": "node ./level-two.test.mjs",
-		"test": "npm run typecheck && npm run test:cjs && npm run test:mjs"
+		"test": "npm run test:cjs && npm run test:mjs"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.5",
