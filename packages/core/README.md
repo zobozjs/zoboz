@@ -1,8 +1,12 @@
 # 🐐 zoboz | d.ts + mjs + cjs - hassle
 
-## Requirements
+## What
 
-Developers of `@zoboz/core` must use Node.js version 18 or above.
+Zoboz guarantees your library works flawlessly across all Node.js versions and configurations. It manages the build process and optimizes the distribution files, ensuring a consistent and dependable package for your users. Plus, it reviews and refines your `package.json` for you.
+
+## Why
+
+Developing libraries can be tricky, especially when aiming for the perfect build that works seamlessly with CommonJS, ES Modules, and includes proper type files. You want your library to just work for your consumers, regardless of their `tsconfig.json` module resolution. With `zoboz`, you don't need to worry about these subtle configurations. Let `zoboz` handle the complexities and keep your development process smooth and hassle-free. If there's room for improvement or an issue arises, an update from `zoboz` will fix it for everyone, so you can focus on what you do best.
 
 ## Usage
 
