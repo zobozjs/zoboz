@@ -133,6 +133,9 @@ export class PackageJsonExpectation {
 			logger.error(
 				[title, ...errors.map((x) => `Action Needed: ${x}`)].join("\n"),
 			);
+
+			logger.hint('Run "zoboz build --update-package-json" to fix it.');
+
 			throw new PackageJsonVerificationError();
 		}
 
