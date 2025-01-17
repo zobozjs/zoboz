@@ -2,8 +2,8 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { build } from "../dist/mjs/index.js";
-import { logger } from "../dist/mjs/shared/supporting/logger.js";
+import { build } from "../dist/esm/index.js";
+import { logger } from "../dist/esm/shared/supporting/logger.js";
 import { ZobozConfigFetcher } from "./deps/ZobozConfigFetcher.mjs";
 import { doesNodeSupportTsConfig, nodeVersion } from "./deps/nodeVersion.mjs";
 import { program } from "./deps/program.mjs";
@@ -31,9 +31,9 @@ program.registerCommand(
 			'import { BuildConfig, tsc } from "@zoboz/core";',
 			"",
 			"export default new BuildConfig({",
-			"  mjs: new tsc.MjsConfig(),",
-			"  cjs: new tsc.CjsConfig(),",
-			"  dts: new tsc.DtsConfig(),",
+			"  esm: tsc.esm(),",
+			"  cjs: tsc.cjs(),",
+			"  dts: tsc.dts(),",
 			'  srcDir: "./src",',
 			'  distDir: "./dist",',
 			"  exports: {",

@@ -1,16 +1,15 @@
-import * as path from "path";
 import type { Builder, CjsConfig } from "@zoboz/core";
 import { EsbuildCommonJsBuilder } from "../../infra/EsbuildCommonJsBuilder.js";
 import type { EsbuildOptions } from "../interfaces/EsbuildOptions.js";
 
-type EsbuildCjsConfigOptions = {
-	outdir?: string;
+export type EsbuildCjsConfigOptions = {
 	esbuildOptions?: EsbuildOptions;
 };
 
 export class EsbuildCjsConfig implements CjsConfig {
-	getBuilder(options?: EsbuildCjsConfigOptions): Builder {
-		const outdir = options?.outdir ?? path.resolve(process.cwd(), "dist/cjs");
-		return new EsbuildCommonJsBuilder(outdir, options?.esbuildOptions);
+	constructor(private readonly options?: EsbuildCjsConfigOptions) {}
+
+	getBuilder(): Builder {
+		return new EsbuildCommonJsBuilder(this.options?.esbuildOptions);
 	}
 }

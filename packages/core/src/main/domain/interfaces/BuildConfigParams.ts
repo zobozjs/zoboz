@@ -1,9 +1,9 @@
 import type { CjsConfig } from "./CjsConfig.js";
 import type { DtsConfig } from "./DtsConfig.js";
-import type { MjsConfig } from "./MjsConfig.js";
+import type { EsmConfig } from "./EsmConfig.js";
 
 export interface BuildConfigParams {
-	mjs: MjsConfig | null;
+	esm: EsmConfig | null;
 	cjs: CjsConfig | null;
 	dts: DtsConfig | null;
 	srcDir: "./src";

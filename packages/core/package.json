@@ -1,7 +1,7 @@
 {
 	"name": "@zoboz/core",
-	"version": "2.0.7",
-	"description": "zoboz | d.ts + mjs + cjs - hassle",
+	"version": "3.0.0",
+	"description": "zoboz | d.ts + esm + cjs - hassle",
 	"homepage": "https://github.com/dariushalipour/zoboz#readme",
 	"bugs": {
 		"url": "https://github.com/dariushalipour/zoboz/issues"
@@ -17,13 +17,13 @@
 	"license": "GPL-3.0-or-later",
 	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
 	"main": "./dist/cjs/index.js",
-	"module": "./dist/mjs/index.js",
+	"module": "./dist/esm/index.js",
 	"types": "./dist/dts/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/dts/index.d.ts",
 			"require": "./dist/cjs/index.js",
-			"import": "./dist/mjs/index.js"
+			"import": "./dist/esm/index.js"
 		}
 	},
 	"bin": {

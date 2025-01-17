@@ -25,7 +25,7 @@ export async function build(
 	const distDirUri = path.resolve(packageDirUri, config.distDir);
 
 	const orchestrators = [
-		config.mjs &&
+		config.esm &&
 			new ModuleBuildOrchestrator(
 				filesRepository,
 				distEmptier,
@@ -33,7 +33,7 @@ export async function build(
 				moduleReferenceChanger,
 				packageDir,
 				config.exports,
-				config.mjs,
+				config.esm,
 				distDirUri,
 			),
 		config.cjs &&
@@ -59,9 +59,9 @@ export async function build(
 	].filter((x) => x !== null);
 
 	if (orchestrators.length === 0) {
-		logger.error("No cjs/mjs/dts build config provided.");
+		logger.error("No cjs/esm/dts build config provided.");
 		logger.hint(
-			"BuildConfig in zoboz.config.ts has mjs, cjs, and dts set to null.",
+			"BuildConfig in zoboz.config.ts has esm, cjs, and dts set to null.",
 		);
 		logger.hint(
 			"Set at least one of them to a non-null value to have an effective build.",

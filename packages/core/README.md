@@ -1,4 +1,4 @@
-# 🐐 zoboz | d.ts + mjs + cjs - hassle
+# 🐐 zoboz | d.ts + esm + cjs - hassle
 
 # Why You Should Use Zoboz for Your Library Builds
 
@@ -38,18 +38,18 @@ With Zoboz, setting up sub-path exports is straightforward. For example, the fol
 import { BuildConfig, tsc } from "@zoboz/core";
 
 export default new BuildConfig({
-    mjs: new tsc.MjsConfig(),
-    cjs: new tsc.CjsConfig(),
-    dts: new tsc.DtsConfig(),
-    srcDir: "./src",
-    distDir: "./dist",
-    exports: {
-        ".": "./src/index.ts",
-    },
+	esm: tsc.esm(),
+	cjs: tsc.cjs(),
+	dts: tsc.dts(),
+	srcDir: "./src",
+	distDir: "./dist",
+	exports: {
+		".": "./src/index.ts",
+	},
 });
 ```
 
-will automatically generate the necessary `package.json` adjustments to handle `.mjs`, `.cjs`, and `.d.ts` files correctly for each entry.
+will automatically generate the necessary `package.json` adjustments to handle `esm`, `cjs`, and `types` files correctly for each entry.
 
 ---
 

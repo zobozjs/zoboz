@@ -3,19 +3,16 @@ import * as esbuild from "esbuild";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 
 export class EsbuildModuleBuilder implements Builder {
-	constructor(
-		public readonly outdir: string,
-		private readonly buildOptions?: EsbuildOptions,
-	) {}
+	constructor(private readonly buildOptions?: EsbuildOptions) {}
 
-	async build(packageDir: FileNode): Promise<void> {
-		const outDir = await packageDir.getRelativeUriOf(this.outdir);
+	async build(packageDir: FileNode, outDir: string): Promise<void> {
+		const relativeOutDir = await packageDir.getRelativeUriOf(outDir);
 
-		logger.pending(`Building ES Module by esbuild to ${outDir}`);
+		logger.pending(`Building ES Module by esbuild to ${relativeOutDir}`);
 
 		await esbuild.build({
 			entryPoints: ["./src/**/*.ts"],
-			outdir: outDir,
+			outdir: relativeOutDir,
 			format: "esm",
 			platform: "node",
 			...(this.buildOptions ?? {}),

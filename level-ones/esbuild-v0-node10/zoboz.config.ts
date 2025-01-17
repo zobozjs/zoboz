@@ -1,10 +1,10 @@
 import { BuildConfig, tsc } from "@zoboz/core";
-import { esbuildConfigs } from "@zoboz/plugin-esbuild-v0";
+import { esbuild } from "@zoboz/plugin-esbuild-v0";
 
 export default new BuildConfig({
-	mjs: new esbuildConfigs.Mjs(),
-	cjs: new esbuildConfigs.Cjs(),
-	dts: new tsc.DtsConfig(),
+	esm: esbuild.esm(),
+	cjs: esbuild.cjs(),
+	dts: tsc.dts(),
 	srcDir: "./src",
 	distDir: "./dist",
 	exports: {

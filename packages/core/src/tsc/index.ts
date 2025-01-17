@@ -1,9 +1,9 @@
 import { TscCjsConfig } from "./app/TscCjsConfig.js";
 import { TscDtsConfig } from "./app/TscDtsConfig.js";
-import { TscMjsConfig } from "./app/TscMjsConfig.js";
+import { TscEsmConfig } from "./app/TscEsmConfig.js";
 
 export const tsc = {
-	MjsConfig: TscMjsConfig,
-	CjsConfig: TscCjsConfig,
-	DtsConfig: TscDtsConfig,
+	esm: () => new TscEsmConfig(),
+	cjs: () => new TscCjsConfig(),
+	dts: () => new TscDtsConfig(),
 };

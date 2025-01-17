@@ -3,7 +3,7 @@ import { argv } from "process";
 export const program = {
 	name: "zoboz",
 	version: "1.0.0",
-	description: "CLI for 🐐 zoboz | d.ts + mjs + cjs - hassle",
+	description: "CLI for 🐐 zoboz | d.ts + esm + cjs - hassle",
 	commands: {},
 	registerCommand(name, description, options, action) {
 		this.commands[name] = { description, options, action };

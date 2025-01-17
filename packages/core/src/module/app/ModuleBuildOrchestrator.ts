@@ -1,4 +1,4 @@
-import type { MjsConfig } from "../../main/domain/interfaces/MjsConfig.js";
+import type { EsmConfig } from "../../main/domain/interfaces/EsmConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "../../main/domain/services/TypeEnforcer.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
@@ -24,7 +24,7 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		private readonly referenceChanger: ModuleReferenceChanger,
 		private readonly packageDir: FileNode,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly mjsConfig: MjsConfig,
+		private readonly mjsConfig: EsmConfig,
 		distDirUri: string,
 	) {
 		this.outDir = new ModuleOutDir(distDirUri);

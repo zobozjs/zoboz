@@ -1,11 +1,8 @@
 import * as fs from "fs";
-
 import { createRequire } from "module";
-
 import * as path from "path";
-
 import * as url from "url";
-import { logger } from "../../dist/mjs/shared/supporting/logger.js";
+import { logger } from "../../dist/esm/shared/supporting/logger.js";
 import { doesNodeSupportModuleRegister } from "./nodeVersion.mjs";
 
 export class ZobozConfigFetcher {

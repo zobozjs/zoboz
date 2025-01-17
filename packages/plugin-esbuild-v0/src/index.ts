@@ -1,7 +1,13 @@
-import { EsbuildCjsConfig } from "./domain/valueObject/EsbuildCjsConfig.js";
-import { EsbuildMjsConfig } from "./domain/valueObject/EsbuildMjsConfig.js";
+import {
+	EsbuildCjsConfig,
+	type EsbuildCjsConfigOptions,
+} from "./domain/valueObject/EsbuildCjsConfig.js";
+import {
+	EsbuildEsmConfig,
+	type EsbuildEsmConfigOptions,
+} from "./domain/valueObject/EsbuildEsmConfig.js";
 
-export const esbuildConfigs = {
-	Mjs: EsbuildMjsConfig,
-	Cjs: EsbuildCjsConfig,
+export const esbuild = {
+	esm: (options?: EsbuildEsmConfigOptions) => new EsbuildEsmConfig(options),
+	cjs: (options?: EsbuildCjsConfigOptions) => new EsbuildCjsConfig(options),
 };
