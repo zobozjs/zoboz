@@ -1,4 +1,3 @@
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as path from "path";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
 import type { OutDir } from "../valueObjects/OutDir";

@@ -1,5 +1,8 @@
 {
+	"exclude": ["node_modules", "dist"],
 	"compilerOptions": {
+		"noEmit": true,
+		"checkJs": true,
 		"strictNullChecks": true,
 		"lib": ["ESNext"],
 		"skipLibCheck": true,

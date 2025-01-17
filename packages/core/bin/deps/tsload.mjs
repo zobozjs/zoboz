@@ -1,8 +1,5 @@
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as fs from "fs";
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as path from "path";
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as url from "url";
 import typescript from "typescript";
 

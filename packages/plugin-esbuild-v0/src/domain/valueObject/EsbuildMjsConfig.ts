@@ -1,4 +1,3 @@
-// biome-ignore lint/style/useNodejsImportProtocol: backward-compatibility
 import * as path from "path";
 import type { Builder, MjsConfig } from "@zoboz/core";
 import { EsbuildModuleBuilder } from "../../infra/EsbuildModuleBuilder.js";

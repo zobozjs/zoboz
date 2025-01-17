@@ -2,8 +2,11 @@ import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { Builder } from "../../shared/domain/interfaces/Builder.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
+import { TscBinary } from "./TscBinary.js";
 
 export class TscDeclarationBuilder implements Builder {
+	private readonly tscBinary: TscBinary = new TscBinary();
+
 	constructor(
 		private readonly commandRunner: CommandRunner,
 		private readonly filesRepository: FilesRepository,
@@ -13,7 +16,7 @@ export class TscDeclarationBuilder implements Builder {
 		let tsConfigPath: string | null = null;
 		try {
 			tsConfigPath = await this.writeTsConfigFile(packageDir, outDir);
-			this.commandRunner.run(`tsc -p ${tsConfigPath}`);
+			this.commandRunner.run(`${this.tscBinary.path} -p ${tsConfigPath}`);
 		} finally {
 			if (tsConfigPath) {
 				await this.filesRepository.remove(tsConfigPath);
