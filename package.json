@@ -12,10 +12,5 @@
 		"node": ">=18"
 	},
 	"packageManager": "npm@10.9.0",
-	"workspaces": [
-		"apps/*",
-		"packages/*",
-		"level-ones/*",
-		"level-twos/*"
-	]
+	"workspaces": ["apps/*", "packages/*", "level-ones/*", "level-twos/*"]
 }
