@@ -1,6 +1,6 @@
 {
 	"name": "@zoboz/core",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "zoboz | d.ts + esm + cjs - hassle",
 	"homepage": "https://github.com/dariushalipour/zoboz#readme",
 	"bugs": {
@@ -14,7 +14,7 @@
 		"access": "public"
 	},
 	"files": ["dist/", "bin/"],
-	"license": "GPL-3.0-or-later",
+	"license": "MIT",
 	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
