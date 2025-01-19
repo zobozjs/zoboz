@@ -6,7 +6,7 @@ export interface BuildConfigParams {
 	esm: EsmConfig | null;
 	cjs: CjsConfig | null;
 	dts: DtsConfig | null;
-	srcDir: "./src";
+	srcDir: string;
 	distDir: string;
 	exports: Record<"." | `.${string}`, `${string}.ts` | `${string}.tsx`>;
 }

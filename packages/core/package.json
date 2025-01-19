@@ -1,6 +1,6 @@
 {
 	"name": "@zoboz/core",
-	"version": "3.0.2",
+	"version": "3.0.3",
 	"description": "zoboz | d.ts + esm + cjs - hassle",
 	"homepage": "https://github.com/dariushalipour/zoboz#readme",
 	"bugs": {
@@ -24,6 +24,11 @@
 			"types": "./dist/dts/index.d.ts",
 			"require": "./dist/cjs/index.js",
 			"import": "./dist/esm/index.js"
+		},
+		"./extend": {
+			"types": "./dist/dts/extend.d.ts",
+			"require": "./dist/cjs/extend.js",
+			"import": "./dist/esm/extend.js"
 		}
 	},
 	"bin": {
@@ -34,8 +39,8 @@
 		"build": "node --import ./scripts/tsimport.mjs ./scripts/build.mjs"
 	},
 	"devDependencies": {
-		"@types/node": "^22.10.5",
-		"typescript": "^5.7.3"
+		"@types/node": "22.10.5",
+		"typescript": "5.7.3"
 	},
 	"dependencies": {}
 }

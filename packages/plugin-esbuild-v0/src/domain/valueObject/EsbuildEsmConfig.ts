@@ -1,4 +1,4 @@
-import type { Builder, EsmConfig } from "@zoboz/core";
+import type { Builder, EsmConfig } from "@zoboz/core/extend";
 import { EsbuildModuleBuilder } from "../../infra/EsbuildModuleBuilder.js";
 import type { EsbuildOptions } from "../interfaces/EsbuildOptions.js";
 

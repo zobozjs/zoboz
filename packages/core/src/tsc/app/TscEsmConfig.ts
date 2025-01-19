@@ -1,6 +1,6 @@
 import { filesRepository, nodeProcessCommandRunner } from "../../container.js";
-import type { EsmConfig } from "../../main/domain/interfaces/EsmConfig.js";
 import type { Builder } from "../../shared/domain/interfaces/Builder.js";
+import type { EsmConfig } from "../../shared/domain/interfaces/EsmConfig.js";
 import { TscModuleBuilder } from "../infra/TscModuleBuilder.js";
 
 export class TscEsmConfig implements EsmConfig {

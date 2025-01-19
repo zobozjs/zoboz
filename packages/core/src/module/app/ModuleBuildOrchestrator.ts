@@ -1,11 +1,11 @@
-import type { EsmConfig } from "../../main/domain/interfaces/EsmConfig.js";
-import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
-import { TypeEnforcer } from "../../main/domain/services/TypeEnforcer.js";
-import type { DistDir } from "../../main/domain/valueObjects/DistDir.js";
-import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
+import type { EsmConfig } from "../../shared/domain/interfaces/EsmConfig.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
+import type { DistEmptier } from "../../shared/domain/services/DistEmptier.js";
+import { TypeEnforcer } from "../../shared/domain/services/TypeEnforcer.js";
 import { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
+import type { DistDir } from "../../shared/domain/valueObjects/DistDir.js";
+import type { ExportsConfig } from "../../shared/domain/valueObjects/ExportsConfig.js";
 import type { SrcDir } from "../../shared/domain/valueObjects/SrcDir.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { ModulePackageJsonExpectationFactory } from "../domain/services/ModulePackageJsonExpectationFactory.js";
@@ -40,7 +40,7 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		const startTime = Date.now();
 		const builder = this.mjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
-		await builder.build(this.srcDir, this.outDir);
+		await builder.build(this.srcDir, this.exportsConfig, this.outDir);
 		const outDirFiles = await this.listAllFilesInOutDir();
 		await new ModuleReferenceLinter(this.filesRepository, outDirFiles).lint();
 		await this.typeEnforcer.enforce("module", this.outDir);

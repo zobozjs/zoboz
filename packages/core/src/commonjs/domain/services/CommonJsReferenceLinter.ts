@@ -1,5 +1,5 @@
-import { UriReformatter } from "../../../main/domain/services/UriReformatter";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
+import { UriReformatter } from "../../../shared/domain/services/UriReformatter";
 
 export class CommonJsReferenceLinter {
 	private readonly uriReformatter: UriReformatter;

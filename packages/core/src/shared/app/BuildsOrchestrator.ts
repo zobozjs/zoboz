@@ -1,9 +1,9 @@
 import * as process from "process";
-import { PackageJsonVerificationError } from "../../shared/domain/errors/PackageJsonVerificationError.js";
-import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
-import type { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
-import { PackageJsonExpectation } from "../../shared/domain/valueObjects/PackageJsonExpectation.js";
-import { logger } from "../../shared/supporting/logger.js";
+import { PackageJsonVerificationError } from "../domain/errors/PackageJsonVerificationError.js";
+import type { BuildOrchestrator } from "../domain/interfaces/BuildOrchestrator.js";
+import type { BuildOrchestratorResult } from "../domain/valueObjects/BuildOrchestratorResult.js";
+import { PackageJsonExpectation } from "../domain/valueObjects/PackageJsonExpectation.js";
+import { logger } from "../supporting/logger.js";
 
 export class BuildsOrchestrator {
 	constructor(private readonly orchestrators: BuildOrchestrator[]) {

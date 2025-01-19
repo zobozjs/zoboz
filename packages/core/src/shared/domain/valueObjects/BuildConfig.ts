@@ -1,10 +1,10 @@
-import { SrcDir } from "../../../shared/domain/valueObjects/SrcDir.js";
+import type { CjsConfig } from "../../../shared/domain/interfaces/CjsConfig.js";
 import type { BuildConfigParams } from "../interfaces/BuildConfigParams.js";
-import type { CjsConfig } from "../interfaces/CjsConfig.js";
 import type { DtsConfig } from "../interfaces/DtsConfig.js";
 import type { EsmConfig } from "../interfaces/EsmConfig.js";
 import { DistDir } from "./DistDir.js";
 import { ExportsConfig } from "./ExportsConfig.js";
+import { SrcDir } from "./SrcDir.js";
 
 export class BuildConfig {
 	public readonly esm: EsmConfig | null;
@@ -20,6 +20,6 @@ export class BuildConfig {
 		this.dts = params.dts;
 		this.srcDir = new SrcDir(params.srcDir);
 		this.distDir = new DistDir(params.distDir);
-		this.exports = new ExportsConfig(params.exports);
+		this.exports = new ExportsConfig(this.srcDir, params.exports);
 	}
 }

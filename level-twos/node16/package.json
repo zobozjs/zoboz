@@ -10,16 +10,14 @@
 		"test": "npm run test:cjs && npm run test:mjs"
 	},
 	"devDependencies": {
-		"@types/node": "^22.10.5",
-		"typescript": "^5.7.3"
+		"@types/node": "22.10.5",
+		"typescript": "5.7.3"
 	},
 	"dependencies": {
 		"@level-ones/core-bundler": "*",
-		"@level-ones/core-classic": "*",
 		"@level-ones/core-node10": "*",
 		"@level-ones/core-node16": "*",
 		"@level-ones/esbuild-v0-bundler": "*",
-		"@level-ones/esbuild-v0-classic": "*",
 		"@level-ones/esbuild-v0-node10": "*",
 		"@level-ones/esbuild-v0-node16": "*"
 	}

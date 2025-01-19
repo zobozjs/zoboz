@@ -3,10 +3,10 @@ import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrche
 import { filesRepository } from "../../container.js";
 import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
+import type { BuildConfig } from "../../shared/domain/valueObjects/BuildConfig.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
-import type { BuildConfig } from "../domain/valueObjects/BuildConfig.js";
 
 export async function build(
 	config: BuildConfig,
@@ -42,7 +42,7 @@ export async function build(
 				config.srcDir,
 				config.distDir,
 			),
-	].filter((x) => x !== null);
+	].filter(<A>(x: A | null): x is A => x !== null);
 
 	if (orchestrators.length === 0) {
 		logger.error("No cjs/esm/dts build config provided.");
