@@ -1,15 +1,15 @@
 import type { EsmConfig } from "../../main/domain/interfaces/EsmConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "../../main/domain/services/TypeEnforcer.js";
+import type { DistDir } from "../../main/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
-import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
-import type { ExtensionChanger } from "../../shared/domain/interfaces/ExtensionChanger.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
 import { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
+import type { SrcDir } from "../../shared/domain/valueObjects/SrcDir.js";
 import { logger } from "../../shared/supporting/logger.js";
-import type { ModuleReferenceChanger } from "../domain/interfaces/ModuleReferenceChanger.js";
 import { ModulePackageJsonExpectationFactory } from "../domain/services/ModulePackageJsonExpectationFactory.js";
+import { ModuleReferenceLinter } from "../domain/services/ModuleReferenceChanger.js";
 import { ModuleOutDir } from "../domain/valueObjects/ModuleOutDir.js";
 
 export class ModuleBuildOrchestrator implements BuildOrchestrator {
@@ -20,20 +20,18 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
-		private readonly extensionChanger: ExtensionChanger,
-		private readonly referenceChanger: ModuleReferenceChanger,
-		private readonly packageDir: FileNode,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly mjsConfig: EsmConfig,
-		distDirUri: string,
+		private readonly srcDir: SrcDir,
+		distDir: DistDir,
 	) {
-		this.outDir = new ModuleOutDir(distDirUri);
+		this.outDir = new ModuleOutDir(this.filesRepository, distDir);
 		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
 		this.packageJsonExpectationFactory =
 			new ModulePackageJsonExpectationFactory(
 				this.filesRepository,
 				this.exportsConfig,
-				this.packageDir,
+				srcDir,
 				this.outDir,
 			);
 	}
@@ -42,8 +40,9 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		const startTime = Date.now();
 		const builder = this.mjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
-		await builder.build(this.packageDir, this.outDir.uri);
-		await this.referenceChanger.changeReferencesInDir(this.outDir.uri);
+		await builder.build(this.srcDir, this.outDir);
+		const outDirFiles = await this.listAllFilesInOutDir();
+		await new ModuleReferenceLinter(this.filesRepository, outDirFiles).lint();
 		await this.typeEnforcer.enforce("module", this.outDir);
 
 		const packageJsonExpectation =
@@ -55,5 +54,9 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		logger.debug(`Built ESM Module: ${endTime - startTime}ms`);
 
 		return result;
+	}
+
+	private async listAllFilesInOutDir() {
+		return await this.filesRepository.listFilesRecursively(this.outDir.uri);
 	}
 }

@@ -1,14 +1,14 @@
 import type { ExportsConfig } from "../../../main/domain/valueObjects/ExportsConfig";
-import type { FileNode } from "../../../shared/domain/entities/FileNode";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
 import { PackageJsonExpectation } from "../../../shared/domain/valueObjects/PackageJsonExpectation";
+import type { SrcDir } from "../../../shared/domain/valueObjects/SrcDir";
 import type { ModuleOutDir } from "../valueObjects/ModuleOutDir";
 
 export class ModulePackageJsonExpectationFactory {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly packageDir: FileNode,
+		private readonly srcDir: SrcDir,
 		private readonly outDir: ModuleOutDir,
 	) {}
 
@@ -23,10 +23,13 @@ export class ModulePackageJsonExpectationFactory {
 		return this.distFromSrc(this.exportsConfig.getRootExport());
 	}
 
-	private async distFromSrc(srcUri: string): Promise<string> {
-		return srcUri
-			.replace("./src", await this.packageDir.getRelativeUriOf(this.outDir.uri))
-			.replace(".ts", ".js");
+	private async distFromSrc(relativeSrcPath: string): Promise<string> {
+		const uri = this.replaceExtension(
+			relativeSrcPath.replace(this.srcDir.uri, this.outDir.uri),
+			".js",
+		);
+
+		return `./${uri}`;
 	}
 
 	private async generatePackageJsonExports(): Promise<
@@ -34,8 +37,15 @@ export class ModulePackageJsonExpectationFactory {
 	> {
 		const entries = this.exportsConfig
 			.entries()
-			.map(async ([k, v]) => [k, { import: await this.distFromSrc(v) }]);
+			.map(async ([entryAlias, srcPath]) => [
+				entryAlias,
+				{ import: await this.distFromSrc(srcPath) },
+			]);
 
 		return Object.fromEntries(await Promise.all(entries));
+	}
+
+	private replaceExtension(uri: string, ext: string) {
+		return uri.replace(/\.[^/.]+$/, ext);
 	}
 }

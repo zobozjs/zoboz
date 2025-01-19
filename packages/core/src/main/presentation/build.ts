@@ -1,15 +1,8 @@
-import * as path from "path";
 import * as process from "process";
 import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrchestrator.js";
-import {
-	commonJsReferenceChanger,
-	extensionChanger,
-	filesRepository,
-	moduleReferenceChanger,
-} from "../../container.js";
+import { filesRepository } from "../../container.js";
 import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
-import { FileNode } from "../../shared/domain/entities/FileNode.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
@@ -19,42 +12,35 @@ export async function build(
 	config: BuildConfig,
 	shouldUpdatePackageJson: boolean,
 ): Promise<void> {
-	const packageDirUri = await filesRepository.getPackageDir();
-	const packageDir = FileNode.fromUri(packageDirUri, filesRepository);
-	const distEmptier = new DistEmptier(filesRepository, packageDir);
-	const distDirUri = path.resolve(packageDirUri, config.distDir);
+	const distEmptier = new DistEmptier(filesRepository);
 
 	const orchestrators = [
 		config.esm &&
 			new ModuleBuildOrchestrator(
 				filesRepository,
 				distEmptier,
-				extensionChanger,
-				moduleReferenceChanger,
-				packageDir,
 				config.exports,
 				config.esm,
-				distDirUri,
+				config.srcDir,
+				config.distDir,
 			),
 		config.cjs &&
 			new CommonJsBuildOrchestrator(
 				filesRepository,
 				distEmptier,
-				extensionChanger,
-				commonJsReferenceChanger,
-				packageDir,
 				config.exports,
 				config.cjs,
-				distDirUri,
+				config.srcDir,
+				config.distDir,
 			),
 		config.dts &&
 			new DeclarationBuildOrchestrator(
 				filesRepository,
 				distEmptier,
-				packageDir,
 				config.exports,
 				config.dts,
-				distDirUri,
+				config.srcDir,
+				config.distDir,
 			),
 	].filter((x) => x !== null);
 

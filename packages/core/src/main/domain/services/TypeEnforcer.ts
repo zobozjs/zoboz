@@ -1,6 +1,6 @@
 import * as path from "path";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
-import type { OutDir } from "../valueObjects/OutDir";
+import type { OutDir } from "../../../shared/domain/valueObjects/OutDir";
 
 export class TypeEnforcer {
 	constructor(private readonly filesRepository: FilesRepository) {}

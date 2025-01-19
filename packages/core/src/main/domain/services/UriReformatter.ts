@@ -4,7 +4,7 @@ const pathCandidates = ["", "index"];
 const extCandidates = ["", ".js", ".mjs", ".cjs", ".json"];
 
 export class UriReformatter {
-	constructor(private readonly uris: string[]) {}
+	constructor(private readonly absoluteUris: string[]) {}
 
 	reformat(sourceUri: string, refUri: string): string {
 		const absoluteRefUri = this.makeAbsoluteRefUri(sourceUri, refUri);
@@ -23,10 +23,10 @@ export class UriReformatter {
 	}
 
 	private isAbsoluteUriValid(absoluteRefUri: string) {
-		return this.uris.includes(absoluteRefUri);
+		return this.absoluteUris.includes(absoluteRefUri);
 	}
 
-	makeAbsoluteRefUri(sourceUri: string, refUri: string) {
+	private makeAbsoluteRefUri(sourceUri: string, refUri: string) {
 		const sourceDirUri = path.dirname(sourceUri);
 		return path.join(sourceDirUri, refUri);
 	}

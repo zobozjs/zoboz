@@ -1,32 +1,32 @@
 import type { ExportsConfig } from "../../../main/domain/valueObjects/ExportsConfig";
-import type { FileNode } from "../../../shared/domain/entities/FileNode";
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
 import { PackageJsonExpectation } from "../../../shared/domain/valueObjects/PackageJsonExpectation";
+import type { SrcDir } from "../../../shared/domain/valueObjects/SrcDir";
 import type { CommonJsOutDir } from "../valueObjects/CommonJsOutDir";
 
 export class CommonJsPackageJsonExpectationFactory {
 	constructor(
 		private readonly filesRepository: FilesRepository,
-		private readonly packageDir: FileNode,
 		private readonly exportsConfig: ExportsConfig,
+		private readonly srcDir: SrcDir,
 		private readonly outDir: CommonJsOutDir,
 	) {}
 
 	public async create(): Promise<PackageJsonExpectation> {
+		const exportsMap = await this.generatePackageJsonExports();
 		return new PackageJsonExpectation(this.filesRepository, {
-			main: await this.generatePackageJsonMain(),
-			exports: await this.generatePackageJsonExports(),
+			main: exportsMap["."].require,
+			exports: exportsMap,
 		});
 	}
 
-	private generatePackageJsonMain(): Promise<string> {
-		return this.distFromSrc(this.exportsConfig.getRootExport());
-	}
+	private async distFromSrc(relativeSrcPath: string): Promise<string> {
+		const uri = this.replaceExtension(
+			relativeSrcPath.replace(this.srcDir.uri, this.outDir.uri),
+			".js",
+		);
 
-	private async distFromSrc(srcUri: string): Promise<string> {
-		return srcUri
-			.replace("./src", await this.packageDir.getRelativeUriOf(this.outDir.uri))
-			.replace(".ts", ".js");
+		return `./${uri}`;
 	}
 
 	private async generatePackageJsonExports(): Promise<
@@ -34,8 +34,15 @@ export class CommonJsPackageJsonExpectationFactory {
 	> {
 		const entries = this.exportsConfig
 			.entries()
-			.map(async ([k, v]) => [k, { require: await this.distFromSrc(v) }]);
+			.map(async ([entryAlias, srcPath]) => {
+				const entry = await this.distFromSrc(srcPath);
+				return [entryAlias, { require: entry }];
+			});
 
 		return Object.fromEntries(await Promise.all(entries));
+	}
+
+	private replaceExtension(uri: string, ext: string) {
+		return uri.replace(/\.[^/.]+$/, ext);
 	}
 }

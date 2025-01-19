@@ -3,7 +3,15 @@ import * as path from "path";
 import type { FilesRepository } from "../domain/interfaces/FilesRepository";
 
 export class NodeFsFilesRepository implements FilesRepository {
-	async getPackageDir(): Promise<string> {
+	getAbsoluteUri(uri: string) {
+		return path.join(this.getPackageDir(), uri);
+	}
+
+	getRelativeUri(uri: string): string {
+		return path.join("./", uri.replace(this.getPackageDir(), ""));
+	}
+
+	getPackageDir(): string {
 		return process.cwd();
 	}
 
@@ -32,5 +40,20 @@ export class NodeFsFilesRepository implements FilesRepository {
 
 	async write(uri: string, content: string): Promise<void> {
 		return fs.promises.writeFile(uri, content);
+	}
+
+	async listFilesRecursively(rootDirUri: string): Promise<string[]> {
+		const children = await this.children(rootDirUri);
+		const uris = await Promise.all(
+			children.map(async (uri) => {
+				if (await this.isDir(uri)) {
+					return this.listFilesRecursively(uri);
+				}
+
+				return this.getAbsoluteUri(uri);
+			}),
+		);
+
+		return uris.flat();
 	}
 }

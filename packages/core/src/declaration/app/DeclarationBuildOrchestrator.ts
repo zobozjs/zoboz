@@ -1,10 +1,11 @@
 import type { DtsConfig } from "../../main/domain/interfaces/DtsConfig.js";
 import type { DistEmptier } from "../../main/domain/services/DistEmptier.js";
+import type { DistDir } from "../../main/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "../../main/domain/valueObjects/ExportsConfig.js";
-import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { BuildOrchestrator } from "../../shared/domain/interfaces/BuildOrchestrator.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
 import { BuildOrchestratorResult } from "../../shared/domain/valueObjects/BuildOrchestratorResult.js";
+import type { SrcDir } from "../../shared/domain/valueObjects/SrcDir.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { DeclarationPackageJsonExpectationFactory } from "../domain/services/DeclarationPackageJsonExpectationFactory.js";
 import { DeclarationOutDir } from "../domain/valueObjects/DeclarationOutDir.js";
@@ -16,17 +17,17 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
-		private readonly packageDir: FileNode,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly dtsConfig: DtsConfig,
-		distDirUri: string,
+		private readonly srcDir: SrcDir,
+		distDir: DistDir,
 	) {
-		this.outDir = new DeclarationOutDir(distDirUri);
+		this.outDir = new DeclarationOutDir(this.filesRepository, distDir);
 		this.packageJsonExpectationFactory =
 			new DeclarationPackageJsonExpectationFactory(
 				this.filesRepository,
-				this.packageDir,
 				this.exportsConfig,
+				srcDir,
 				this.outDir,
 			);
 	}
@@ -35,7 +36,7 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 		const startTime = Date.now();
 		const builder = this.dtsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
-		await builder.build(this.packageDir, this.outDir.uri);
+		await builder.build(this.srcDir, this.outDir);
 
 		const packageJsonExpectation =
 			await this.packageJsonExpectationFactory.create();

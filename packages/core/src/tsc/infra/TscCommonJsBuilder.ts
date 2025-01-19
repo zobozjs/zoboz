@@ -1,6 +1,7 @@
-import type { FileNode } from "../../shared/domain/entities/FileNode.js";
 import type { Builder } from "../../shared/domain/interfaces/Builder.js";
 import type { FilesRepository } from "../../shared/domain/interfaces/FilesRepository.js";
+import type { OutDir } from "../../shared/domain/valueObjects/OutDir.js";
+import type { SrcDir } from "../../shared/domain/valueObjects/SrcDir.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 import { TscBinary } from "./TscBinary.js";
 
@@ -12,10 +13,10 @@ export class TscCommonJsBuilder implements Builder {
 		private readonly filesRepository: FilesRepository,
 	) {}
 
-	async build(packageDir: FileNode, outDir: string): Promise<void> {
+	async build(srcDir: SrcDir, outDir: OutDir): Promise<void> {
 		let tsConfigPath: string | null = null;
 		try {
-			tsConfigPath = await this.writeTsConfigFile(packageDir, outDir);
+			tsConfigPath = await this.writeTsConfigFile(srcDir, outDir.uri);
 			this.commandRunner.run(`${this.tscBinary.path} -p ${tsConfigPath}`);
 		} finally {
 			if (tsConfigPath) {
@@ -25,11 +26,11 @@ export class TscCommonJsBuilder implements Builder {
 	}
 
 	private async writeTsConfigFile(
-		packageDir: FileNode,
+		srcDir: SrcDir,
 		outDir: string,
 	): Promise<string> {
-		const tsConfig = await this.generateTsConfig(packageDir, outDir);
-		const tsConfigPath = `${packageDir.uri}/tsconfig.${this.generateRandomString()}.json`;
+		const tsConfig = await this.generateTsConfig(srcDir, outDir);
+		const tsConfigPath = `${this.filesRepository.getPackageDir()}/tsconfig.${this.generateRandomString()}.json`;
 
 		await this.filesRepository.write(
 			tsConfigPath,
@@ -39,18 +40,16 @@ export class TscCommonJsBuilder implements Builder {
 		return tsConfigPath;
 	}
 
-	private async generateTsConfig(packageDir: FileNode, outDir: string) {
-		const relativeOutDir = await packageDir.getRelativeUriOf(outDir);
-
+	private async generateTsConfig(srcDir: SrcDir, outDir: string) {
 		return {
 			extends: "./tsconfig.json",
-			include: ["src/**/*"],
+			include: [`${srcDir.uri}/**/*`],
 			compilerOptions: {
 				noEmit: false,
 				declaration: false,
 				module: "commonjs",
 				moduleResolution: "node",
-				outDir: relativeOutDir,
+				outDir: outDir,
 			},
 		};
 	}
