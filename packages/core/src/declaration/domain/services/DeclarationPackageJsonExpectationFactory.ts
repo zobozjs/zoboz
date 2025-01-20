@@ -29,7 +29,7 @@ export class DeclarationPackageJsonExpectationFactory {
 			".d.ts",
 		);
 
-		return `./${uri}`;
+		return this.withLeadingDotSlash(uri);
 	}
 
 	private async generatePackageJsonExports(): Promise<
@@ -44,5 +44,10 @@ export class DeclarationPackageJsonExpectationFactory {
 
 	private replaceExtension(uri: string, ext: string) {
 		return uri.replace(/\.[^/.]+$/, ext);
+	}
+
+	private withLeadingDotSlash(uri: string) {
+		const dotSlash = "./";
+		return uri.startsWith("./") ? uri : `${dotSlash}${uri}`;
 	}
 }

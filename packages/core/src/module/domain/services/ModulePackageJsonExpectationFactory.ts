@@ -29,7 +29,7 @@ export class ModulePackageJsonExpectationFactory {
 			".js",
 		);
 
-		return `./${uri}`;
+		return this.withLeadingDotSlash(uri);
 	}
 
 	private async generatePackageJsonExports(): Promise<
@@ -47,5 +47,10 @@ export class ModulePackageJsonExpectationFactory {
 
 	private replaceExtension(uri: string, ext: string) {
 		return uri.replace(/\.[^/.]+$/, ext);
+	}
+
+	private withLeadingDotSlash(uri: string) {
+		const dotSlash = "./";
+		return uri.startsWith("./") ? uri : `${dotSlash}${uri}`;
 	}
 }

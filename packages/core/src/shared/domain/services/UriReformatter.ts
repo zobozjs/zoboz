@@ -14,7 +14,9 @@ export class UriReformatter {
 			for (const extCandidate of extCandidates) {
 				const uriWithExtension = `${combinedPath}${extCandidate}`;
 				if (this.isAbsoluteUriValid(uriWithExtension)) {
-					return `./${path.join(refUri, pathCandidate)}${extCandidate}`;
+					return this.withLeadingDotSlash(
+						`${path.join(refUri, pathCandidate)}${extCandidate}`,
+					);
 				}
 			}
 		}
@@ -29,5 +31,10 @@ export class UriReformatter {
 	private makeAbsoluteRefUri(sourceUri: string, refUri: string) {
 		const sourceDirUri = path.dirname(sourceUri);
 		return path.join(sourceDirUri, refUri);
+	}
+
+	private withLeadingDotSlash(uri: string) {
+		const dotSlash = "./";
+		return uri.startsWith("./") ? uri : `${dotSlash}${uri}`;
 	}
 }

@@ -62,12 +62,9 @@ class ZobozConfigTsFetcher {
 	}
 
 	async load_experimental(configPath) {
-		const __dirname = path.dirname(new URL(import.meta.url).pathname);
-		const tsloadPath = path.resolve(__dirname, "tsload.mjs");
-
 		// @ts-expect-error It is still not available in the types, since it is only a Release Candidate
 		const { register } = await import("module");
-		register(tsloadPath, url.pathToFileURL("./"));
+		register("./deps/tsload.mjs", url.pathToFileURL(import.meta.dirname));
 		const { default: userConfig } = await import(configPath);
 		return userConfig;
 	}
