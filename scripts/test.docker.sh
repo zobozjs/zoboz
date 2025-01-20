@@ -2,7 +2,7 @@ mkdir -p $(pwd)/temp
 echo '' >$(pwd)/temp/test.docker.sh.results
 
 #!/bin/bash
-for node_version in 12 14 16 18 20 22; do
+for node_version in 14 16 18 20 22; do
   for ts_version in 4 5; do
     docker run -it --rm -v $(pwd):/app -w /app node:$node_version bash -c "
       npm install -g typescript@$ts_version &&
