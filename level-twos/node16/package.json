@@ -17,8 +17,8 @@
 		"@level-ones/core-bundler": "*",
 		"@level-ones/core-node10": "*",
 		"@level-ones/core-node16": "*",
-		"@level-ones/esbuild-v0-bundler": "*",
-		"@level-ones/esbuild-v0-node10": "*",
-		"@level-ones/esbuild-v0-node16": "*"
+		"@level-ones/esbuild-bundler": "*",
+		"@level-ones/esbuild-node10": "*",
+		"@level-ones/esbuild-node16": "*"
 	}
 }

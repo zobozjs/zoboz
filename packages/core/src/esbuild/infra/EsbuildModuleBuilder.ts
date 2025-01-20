@@ -1,7 +1,7 @@
 import * as esbuild from "esbuild";
 import type {
-	Builder,
 	BuildParams,
+	Builder,
 } from "../../shared/domain/interfaces/Builder.js";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 

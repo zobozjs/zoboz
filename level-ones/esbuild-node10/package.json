@@ -1,5 +1,5 @@
 {
-	"name": "@level-ones/esbuild-v0-node10",
+	"name": "@level-ones/esbuild-node10",
 	"version": "0.0.0",
 	"private": true,
 	"main": "./dist/cjs/index.js",

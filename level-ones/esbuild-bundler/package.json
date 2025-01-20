@@ -1,5 +1,5 @@
 {
-	"name": "@level-ones/esbuild-v0-node16",
+	"name": "@level-ones/esbuild-bundler",
 	"version": "0.0.0",
 	"private": true,
 	"main": "./dist/cjs/index.js",

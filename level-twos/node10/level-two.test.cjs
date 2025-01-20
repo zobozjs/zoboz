@@ -5,9 +5,9 @@ const packages = [
 	require("@level-ones/core-bundler"),
 	require("@level-ones/core-node10"),
 	require("@level-ones/core-node16"),
-	require("@level-ones/esbuild-v0-bundler"),
-	require("@level-ones/esbuild-v0-node10"),
-	require("@level-ones/esbuild-v0-node16"),
+	require("@level-ones/esbuild-bundler"),
+	require("@level-ones/esbuild-node10"),
+	require("@level-ones/esbuild-node16"),
 ];
 
 for (const pkg of packages) {

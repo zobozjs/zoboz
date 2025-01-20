@@ -3,9 +3,9 @@ import * as assert from "node:assert";
 import * as coreBundler from "@level-ones/core-bundler";
 import * as coreNode10 from "@level-ones/core-node10";
 import * as coreNode16 from "@level-ones/core-node16";
-import * as esbuildV0Bundler from "@level-ones/esbuild-v0-bundler";
-import * as esbuildV0Node10 from "@level-ones/esbuild-v0-node10";
-import * as esbuildV0Node16 from "@level-ones/esbuild-v0-node16";
+import * as esbuildV0Bundler from "@level-ones/esbuild-bundler";
+import * as esbuildV0Node10 from "@level-ones/esbuild-node10";
+import * as esbuildV0Node16 from "@level-ones/esbuild-node16";
 
 const packages = [
 	coreBundler,
