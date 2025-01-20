@@ -11,6 +11,8 @@ export class EsbuildCjsConfig implements CjsConfig {
 	constructor(private readonly options?: EsbuildCjsConfigOptions) {}
 
 	getBuilder(): Builder {
-		return new EsbuildCommonJsBuilder(this.options?.esbuildOptions);
+		return new EsbuildCommonJsBuilder(
+			this.options ? this.options.esbuildOptions : undefined,
+		);
 	}
 }

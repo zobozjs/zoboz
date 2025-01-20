@@ -16,7 +16,7 @@ export class EsbuildCommonJsBuilder implements Builder {
 			outdir: outDir.absoluteUri,
 			format: "cjs",
 			platform: "node",
-			...(this.buildOptions ?? {}),
+			...(this.buildOptions || {}),
 		});
 	}
 }

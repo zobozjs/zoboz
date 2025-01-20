@@ -54,7 +54,7 @@ export class PackageJsonExpectation {
 			}
 		}
 
-		const mergingExports = merging.exports ?? {};
+		const mergingExports = merging.exports || {};
 
 		if (newValue.exports === undefined) {
 			newValue.exports = {};

@@ -16,7 +16,7 @@ export class EsbuildModuleBuilder implements Builder {
 			outdir: outDir.absoluteUri,
 			format: "esm",
 			platform: "node",
-			...(this.buildOptions ?? {}),
+			...(this.buildOptions || {}),
 		});
 	}
 }

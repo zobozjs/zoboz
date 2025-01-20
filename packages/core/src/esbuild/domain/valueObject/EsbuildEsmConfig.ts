@@ -11,6 +11,8 @@ export class EsbuildEsmConfig implements EsmConfig {
 	constructor(private readonly options?: EsbuildEsmConfigOptions) {}
 
 	getBuilder(): Builder {
-		return new EsbuildModuleBuilder(this.options?.esbuildOptions);
+		return new EsbuildModuleBuilder(
+			this.options ? this.options.esbuildOptions : undefined,
+		);
 	}
 }
