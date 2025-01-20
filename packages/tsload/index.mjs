@@ -1,32 +1,32 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as url from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import typescript from "typescript";
 
-export async function resolve(specifier, context, defaultResolve) {
+export async function resolve(specifier, context, nextResolve) {
+	const parentURL = asUrl(context.parentURL);
+
 	if ([".", "/"].every((x) => !specifier.startsWith(x))) {
-		return defaultResolve(specifier, context, defaultResolve);
+		return nextResolve(specifier, { ...context, parentURL }, nextResolve);
 	}
 
-	const typescriptFilePath = resolveTypescriptFile(
-		specifier,
-		context.parentURL,
-	);
-
 	return {
-		url: url.pathToFileURL(typescriptFilePath).href,
+		url: pathToFileURL(resolveTypescriptFile(specifier, parentURL)).href,
 		shortCircuit: true,
 	};
 }
 
 function resolveTypescriptFile(specifier, parentURL) {
-	const baseDir = url.fileURLToPath(new URL(".", parentURL));
+	const baseDir = fileURLToPath(new URL(".", parentURL));
 
 	const candidates = [
 		specifier,
 		`${specifier}.ts`,
+		`${specifier}.tsx`,
 		specifier.replace(".js", ".ts"),
+		specifier.replace(".js", ".tsx"),
 		path.join(specifier, "index.ts"),
+		path.join(specifier, "index.tsx"),
 	];
 
 	for (const candidate of candidates) {
@@ -39,12 +39,12 @@ function resolveTypescriptFile(specifier, parentURL) {
 	throw new Error(`Cannot resolve module '${specifier}' from '${parentURL}'`);
 }
 
-export async function load(url, context, defaultLoad) {
-	if (!url.endsWith(".ts")) {
-		return defaultLoad(url, context, defaultLoad);
+export async function load(url, context, nextLoad) {
+	if (!url.endsWith(".ts") && !url.endsWith(".tsx")) {
+		return nextLoad(url, context, nextLoad);
 	}
 
-	const sourceCode = await fs.promises.readFile(new URL(url), "utf8");
+	const sourceCode = await fs.promises.readFile(asUrl(url), "utf8");
 	const { outputText: code } = typescript.transpileModule(sourceCode, {
 		compilerOptions: {
 			module: typescript.ModuleKind.ESNext,
@@ -62,4 +62,8 @@ export async function load(url, context, defaultLoad) {
 		source: code,
 		shortCircuit: true,
 	};
+}
+
+function asUrl(url) {
+	return url.startsWith("file:") ? new URL(url) : pathToFileURL(url);
 }

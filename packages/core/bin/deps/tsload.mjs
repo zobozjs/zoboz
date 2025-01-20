@@ -5,8 +5,9 @@ import typescript from "typescript";
 
 export async function resolve(specifier, context, nextResolve) {
 	const parentURL = asUrl(context.parentURL);
+
 	if ([".", "/"].every((x) => !specifier.startsWith(x))) {
-		return nextResolve(specifier, { ...context, parentURL });
+		return nextResolve(specifier, { ...context, parentURL }, nextResolve);
 	}
 
 	return {
@@ -21,8 +22,11 @@ function resolveTypescriptFile(specifier, parentURL) {
 	const candidates = [
 		specifier,
 		`${specifier}.ts`,
+		`${specifier}.tsx`,
 		specifier.replace(".js", ".ts"),
+		specifier.replace(".js", ".tsx"),
 		path.join(specifier, "index.ts"),
+		path.join(specifier, "index.tsx"),
 	];
 
 	for (const candidate of candidates) {
@@ -36,8 +40,8 @@ function resolveTypescriptFile(specifier, parentURL) {
 }
 
 export async function load(url, context, nextLoad) {
-	if (!url.endsWith(".ts")) {
-		return nextLoad(url, context);
+	if (!url.endsWith(".ts") && !url.endsWith(".tsx")) {
+		return nextLoad(url, context, nextLoad);
 	}
 
 	const sourceCode = await fs.promises.readFile(asUrl(url), "utf8");
