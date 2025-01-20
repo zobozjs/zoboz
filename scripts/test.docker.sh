@@ -1,5 +1,5 @@
-mkdir -p /app/temp
-echo '' >/app/temp/test.docker.sh.results
+mkdir -p $(pwd)/temp
+echo '' >$(pwd)/temp/test.docker.sh.results
 
 #!/bin/bash
 for node_version in 12 14 16 18 20 22; do
