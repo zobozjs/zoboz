@@ -1,4 +1,5 @@
 import * as path from "path";
+import { RelativeSpecifier } from "../valueObjects/RelativeSpecifier";
 
 const pathCandidates = ["", "index"];
 const extCandidates = ["", ".js", ".mjs", ".cjs", ".json"];
@@ -14,9 +15,9 @@ export class UriReformatter {
 			for (const extCandidate of extCandidates) {
 				const uriWithExtension = `${combinedPath}${extCandidate}`;
 				if (this.isAbsoluteUriValid(uriWithExtension)) {
-					return this.withLeadingDotSlash(
+					return new RelativeSpecifier(
 						`${path.join(refUri, pathCandidate)}${extCandidate}`,
-					);
+					).uri;
 				}
 			}
 		}
@@ -31,10 +32,5 @@ export class UriReformatter {
 	private makeAbsoluteRefUri(sourceUri: string, refUri: string) {
 		const sourceDirUri = path.dirname(sourceUri);
 		return path.join(sourceDirUri, refUri);
-	}
-
-	private withLeadingDotSlash(uri: string) {
-		const dotSlash = "./";
-		return uri.startsWith("./") ? uri : `${dotSlash}${uri}`;
 	}
 }

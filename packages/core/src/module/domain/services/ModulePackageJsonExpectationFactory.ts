@@ -1,6 +1,7 @@
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
 import type { ExportsConfig } from "../../../shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "../../../shared/domain/valueObjects/PackageJsonExpectation";
+import { RelativeSpecifier } from "../../../shared/domain/valueObjects/RelativeSpecifier";
 import type { SrcDir } from "../../../shared/domain/valueObjects/SrcDir";
 import type { ModuleOutDir } from "../valueObjects/ModuleOutDir";
 
@@ -29,7 +30,7 @@ export class ModulePackageJsonExpectationFactory {
 			".js",
 		);
 
-		return this.withLeadingDotSlash(uri);
+		return new RelativeSpecifier(uri).uri;
 	}
 
 	private async generatePackageJsonExports(): Promise<
@@ -47,10 +48,5 @@ export class ModulePackageJsonExpectationFactory {
 
 	private replaceExtension(uri: string, ext: string) {
 		return uri.replace(/\.[^/.]+$/, ext);
-	}
-
-	private withLeadingDotSlash(uri: string) {
-		const dotSlash = "./";
-		return uri.startsWith("./") ? uri : `${dotSlash}${uri}`;
 	}
 }

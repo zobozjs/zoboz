@@ -47,7 +47,6 @@ class ZobozConfigTsFetcher {
 		require.extensions[".ts"] = (module_, filename) => {
 			const { transpile, ModuleKind, ScriptTarget } = require("typescript");
 			const source = fs.readFileSync(filename, "utf8");
-			console.log("source", source);
 			const transpiled = transpile(source, {
 				module: ModuleKind.CommonJS,
 				target: ScriptTarget.ES2015,
