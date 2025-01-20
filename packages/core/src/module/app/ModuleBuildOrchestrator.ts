@@ -9,7 +9,7 @@ import type { ExportsConfig } from "../../shared/domain/valueObjects/ExportsConf
 import type { SrcDir } from "../../shared/domain/valueObjects/SrcDir.js";
 import { logger } from "../../shared/supporting/logger.js";
 import { ModulePackageJsonExpectationFactory } from "../domain/services/ModulePackageJsonExpectationFactory.js";
-import { ModuleReferenceLinter } from "../domain/services/ModuleReferenceChanger.js";
+import { ModuleReferenceLinter } from "../domain/services/ModuleReferenceLinter.js";
 import { ModuleOutDir } from "../domain/valueObjects/ModuleOutDir.js";
 
 export class ModuleBuildOrchestrator implements BuildOrchestrator {
