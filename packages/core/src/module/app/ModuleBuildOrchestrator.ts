@@ -40,7 +40,12 @@ export class ModuleBuildOrchestrator implements BuildOrchestrator {
 		const startTime = Date.now();
 		const builder = this.mjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
-		await builder.build(this.srcDir, this.exportsConfig, this.outDir);
+		await builder.build({
+			srcDir: this.srcDir,
+			exportsConfig: this.exportsConfig,
+			outDir: this.outDir,
+			logger: logger,
+		});
 		const outDirFiles = await this.listAllFilesInOutDir();
 		await new ModuleReferenceLinter(this.filesRepository, outDirFiles).lint();
 		await this.typeEnforcer.enforce("module", this.outDir);

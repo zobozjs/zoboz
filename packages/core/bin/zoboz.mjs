@@ -28,11 +28,11 @@ program.registerCommand(
 		}
 
 		const template = [
-			'import { BuildConfig, tsc } from "@zoboz/core";',
+			'import { BuildConfig, esbuild, tsc } from "@zoboz/core";',
 			"",
 			"export default new BuildConfig({",
-			"  esm: tsc.esm(),",
-			"  cjs: tsc.cjs(),",
+			"  esm: esbuild.esm(),",
+			"  cjs: esbuild.cjs(),",
 			"  dts: tsc.dts(),",
 			'  srcDir: "./src",',
 			'  distDir: "./dist",',

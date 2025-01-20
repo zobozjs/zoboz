@@ -1,4 +1,5 @@
-import type { Builder, CjsConfig } from "@zoboz/core/extend";
+import type { Builder } from "../../../shared/domain/interfaces/Builder.js";
+import type { CjsConfig } from "../../../shared/domain/interfaces/CjsConfig.js";
 import { EsbuildCommonJsBuilder } from "../../infra/EsbuildCommonJsBuilder.js";
 import type { EsbuildOptions } from "../interfaces/EsbuildOptions.js";
 

@@ -1,25 +1,18 @@
-import {
-	type Builder,
-	type ExportsConfig,
-	type OutDir,
-	type SrcDir,
-	logger,
-} from "@zoboz/core/extend";
 import * as esbuild from "esbuild";
+import type {
+	Builder,
+	BuildParams,
+} from "../../shared/domain/interfaces/Builder.js";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 
 export class EsbuildModuleBuilder implements Builder {
 	constructor(private readonly buildOptions?: EsbuildOptions) {}
 
-	async build(
-		srcDir: SrcDir,
-		exportsConfig: ExportsConfig,
-		outDir: OutDir,
-	): Promise<void> {
+	async build({ srcDir, outDir, logger }: BuildParams): Promise<void> {
 		logger.pending(`Building ES Module by esbuild to ${outDir.uri}`);
 
 		await esbuild.build({
-			entryPoints: ["./src/**/*.ts"],
+			entryPoints: [`./${srcDir.uri}/**/*.ts`, `./${srcDir.uri}/**/*.tsx`],
 			outdir: outDir.absoluteUri,
 			format: "esm",
 			platform: "node",

@@ -1,5 +1,4 @@
-import { BuildConfig, tsc } from "@zoboz/core";
-import { esbuild } from "@zoboz/plugin-esbuild-v0";
+import { BuildConfig, esbuild, tsc } from "@zoboz/core";
 
 export default new BuildConfig({
 	esm: esbuild.esm(),

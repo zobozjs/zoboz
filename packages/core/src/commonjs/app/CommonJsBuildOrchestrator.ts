@@ -40,7 +40,12 @@ export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 		const startTime = Date.now();
 		const builder = this.cjsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
-		await builder.build(this.srcDir, this.exportsConfig, this.outDir);
+		await builder.build({
+			srcDir: this.srcDir,
+			exportsConfig: this.exportsConfig,
+			outDir: this.outDir,
+			logger: logger,
+		});
 		const outDirFiles = await this.listAllFilesInOutDir();
 		await new CommonJsReferenceLinter(this.filesRepository, outDirFiles).lint();
 		await this.typeEnforcer.enforce("commonjs", this.outDir);

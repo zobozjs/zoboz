@@ -1,8 +1,8 @@
-import { BuildConfig, tsc } from "./src/index.js";
+import { BuildConfig, esbuild, tsc } from "./src/index.js";
 
 export default new BuildConfig({
-	esm: tsc.esm(),
-	cjs: tsc.cjs(),
+	esm: esbuild.esm(),
+	cjs: esbuild.cjs(),
 	dts: tsc.dts(),
 	srcDir: "./src",
 	distDir: "./dist",
