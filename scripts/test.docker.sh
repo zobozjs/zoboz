@@ -1,4 +1,5 @@
-echo '' >.temp/test.docker.sh.results
+mkdir -p /app/temp
+echo '' >/app/temp/test.docker.sh.results
 
 #!/bin/bash
 for node_version in 12 14 16 18 20 22; do
@@ -15,7 +16,7 @@ for node_version in 12 14 16 18 20 22; do
       cd /app/level-twos/bundler && npm run test && npm run typecheck &&
       cd /app/level-twos/node10 && npm run test && npm run typecheck &&
       cd /app/level-twos/node16 && npm run test npm run typecheck &&
-      echo 'All tests passed (node: $node_version, ts: $ts_version)' >> /app/.temp/test.docker.sh.results
+      echo 'All tests passed (node: $node_version, ts: $ts_version)' >> /app/temp/test.docker.sh.results
     "
   done
 done
