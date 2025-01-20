@@ -36,7 +36,7 @@
 	},
 	"scripts": {
 		"typecheck": "tsc --noEmit",
-		"build": "node --import ./scripts/tsimport.mjs ./scripts/build.mjs"
+		"build": "node ./scripts/build.mjs"
 	},
 	"devDependencies": {
 		"@types/node": "22.10.5",
