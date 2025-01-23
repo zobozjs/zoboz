@@ -1,5 +1,6 @@
 import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
-import { UriReformatter } from "../../../shared/domain/services/UriReformatter";
+import type { UriReformatter } from "../../../shared/domain/interfaces/UriReformatter";
+import { OxcUriReformatter } from "../../../shared/domain/services/OxcUriReformatter";
 
 export class CommonJsReferenceLinter {
 	private readonly uriReformatter: UriReformatter;
@@ -8,7 +9,7 @@ export class CommonJsReferenceLinter {
 		private readonly filesRepository: FilesRepository,
 		private readonly fileUris: string[],
 	) {
-		this.uriReformatter = new UriReformatter(fileUris);
+		this.uriReformatter = new OxcUriReformatter();
 	}
 
 	async lint(): Promise<void> {
