@@ -1,8 +1,8 @@
 import type { BuildConfig } from "@shared/domain/valueObjects/BuildConfig.js";
 import { logger } from "@shared/supporting/logger.js";
+import { filesRepository } from "container.js";
 import * as process from "process";
 import { CjsBuildOrchestrator } from "../../cjs/app/CjsBuildOrchestrator.js";
-import { filesRepository } from "../../container.js";
 import { DtsBuildOrchestrator } from "../../dts/app/DtsBuildOrchestrator.js";
 import { EsmBuildOrchestrator } from "../../esm/app/EsmBuildOrchestrator.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";

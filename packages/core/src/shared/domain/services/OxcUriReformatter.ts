@@ -9,16 +9,22 @@ import { TsConfig } from "../valueObjects/TsConfig";
 
 export class OxcUriReformatter implements UriReformatter {
 	private readonly resolver: ResolverFactory;
+	private readonly absoluteDistBaseUrl: string;
 
 	constructor(
 		private readonly outDir: OutDir,
 		private readonly srcDistMapper: SrcDistMapper,
 	) {
 		const tsConfig = TsConfig.fromCurrentProject();
-		const baseUrl = tsConfig.compilerOptions.baseUrl;
+		const absoluteBaseUrl = tsConfig.compilerOptions.baseUrl;
 
 		const withBaseUrl = (value: string) =>
-			path.relative(process.cwd(), path.resolve(baseUrl, value));
+			path.relative(process.cwd(), path.resolve(absoluteBaseUrl, value));
+
+		this.absoluteDistBaseUrl = path.resolve(
+			process.cwd(),
+			this.srcDistMapper.distFromSrc(withBaseUrl("")),
+		);
 
 		const aliases = Object.fromEntries(
 			Object.entries(tsConfig.compilerOptions.paths).map(([key, values]) => [
@@ -43,18 +49,35 @@ export class OxcUriReformatter implements UriReformatter {
 				".tsx": [".tsx", ".jsx"], // probably redundant
 			},
 			alias: aliases,
+			builtinModules: true,
 		});
 	}
 
-	reformat(absoluteSourceUri: string, relativeRefUri: string): string {
+	reformat(
+		absoluteSourceUri: string,
+		relativeRefUri: string,
+		isTryingBaseUrl?: boolean,
+	): string {
 		const absoluteSourceDirUri = path.dirname(absoluteSourceUri);
 
+		const sourceDir = isTryingBaseUrl
+			? this.absoluteDistBaseUrl
+			: absoluteSourceDirUri;
+
+		const specifier = isTryingBaseUrl
+			? new RelativeSpecifier(relativeRefUri).uri
+			: relativeRefUri;
+
 		const { path: absoluteResolvedUri } = this.resolver.sync(
-			absoluteSourceDirUri,
-			relativeRefUri,
+			sourceDir,
+			specifier,
 		);
 
 		if (!absoluteResolvedUri) {
+			if (this.absoluteDistBaseUrl && !isTryingBaseUrl) {
+				return this.reformat(absoluteSourceUri, relativeRefUri, true);
+			}
+
 			return relativeRefUri;
 		}
 
@@ -62,8 +85,10 @@ export class OxcUriReformatter implements UriReformatter {
 			return relativeRefUri;
 		}
 
-		return new RelativeSpecifier(
+		const formattedRelativeUri = new RelativeSpecifier(
 			path.relative(absoluteSourceDirUri, absoluteResolvedUri),
 		).uri;
+
+		return formattedRelativeUri;
 	}
 }

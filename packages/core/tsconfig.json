@@ -8,9 +8,9 @@
 		"target": "ES2017",
 		"module": "Node16",
 		"sourceMap": true,
-		"baseUrl": "./",
+		"baseUrl": "./src",
 		"paths": {
-			"@shared/*": ["src/shared/*"]
+			"@shared/*": ["shared/*"]
 		}
 	},
 	"exclude": ["node_modules", "dist"]
