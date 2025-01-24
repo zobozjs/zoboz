@@ -2,6 +2,15 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import typescript from "typescript";
+import { ResolverFactory } from "oxc-resolver";
+
+const resolver = new ResolverFactory({
+	extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".mjs", ".cjs"],
+	extensionAlias: {
+		".js": [".ts", ".tsx"],
+		".jsx": [".tsx"],
+	},
+});
 
 export async function resolve(specifier, context, nextResolve) {
 	const parentURL = asUrl(context.parentURL);
@@ -11,32 +20,20 @@ export async function resolve(specifier, context, nextResolve) {
 	}
 
 	return {
-		url: pathToFileURL(resolveTypescriptFile(specifier, parentURL)).href,
+		url: pathToFileURL(resolveFile(specifier, parentURL)).href,
 		shortCircuit: true,
 	};
 }
 
-function resolveTypescriptFile(specifier, parentURL) {
-	const baseDir = fileURLToPath(new URL(".", parentURL));
+function resolveFile(specifier, parentURL) {
+	const parentPath = path.dirname(fileURLToPath(parentURL));
+	const { path: resolved } = resolver.sync(parentPath, specifier);
 
-	const candidates = [
-		specifier,
-		`${specifier}.ts`,
-		`${specifier}.tsx`,
-		specifier.replace(".js", ".ts"),
-		specifier.replace(".js", ".tsx"),
-		path.join(specifier, "index.ts"),
-		path.join(specifier, "index.tsx"),
-	];
-
-	for (const candidate of candidates) {
-		const candidateFilePath = path.resolve(baseDir, candidate);
-		if (fs.existsSync(candidateFilePath)) {
-			return candidateFilePath;
-		}
+	if (!resolved) {
+		throw new Error(`Cannot resolve module ${specifier} from ${parentURL}`);
 	}
 
-	throw new Error(`Cannot resolve module '${specifier}' from '${parentURL}'`);
+	return resolved;
 }
 
 export async function load(url, context, nextLoad) {
