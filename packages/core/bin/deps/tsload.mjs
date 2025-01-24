@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
-import typescript from "typescript";
 import { ResolverFactory } from "oxc-resolver";
+import typescript from "typescript";
 
 const resolver = new ResolverFactory({
 	extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".mjs", ".cjs"],
