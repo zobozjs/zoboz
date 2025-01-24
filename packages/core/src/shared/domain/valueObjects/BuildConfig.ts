@@ -1,4 +1,4 @@
-import type { CjsConfig } from "../../../shared/domain/interfaces/CjsConfig.js";
+import type { CjsConfig } from "@shared/domain/interfaces/CjsConfig.js";
 import type { BuildConfigParams } from "../interfaces/BuildConfigParams.js";
 import type { DtsConfig } from "../interfaces/DtsConfig.js";
 import type { EsmConfig } from "../interfaces/EsmConfig.js";

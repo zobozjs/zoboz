@@ -1,6 +1,8 @@
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
-import type { UriReformatter } from "../../../shared/domain/interfaces/UriReformatter";
-import { OxcUriReformatter } from "../../../shared/domain/services/OxcUriReformatter";
+import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
+import type { SrcDistMapper } from "@shared/domain/interfaces/SrcDistMapper";
+import type { UriReformatter } from "@shared/domain/interfaces/UriReformatter";
+import { OxcUriReformatter } from "@shared/domain/services/OxcUriReformatter";
+import type { CommonJsOutDir } from "../valueObjects/CommonJsOutDir";
 
 export class CommonJsReferenceLinter {
 	private readonly uriReformatter: UriReformatter;
@@ -8,8 +10,10 @@ export class CommonJsReferenceLinter {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly fileUris: string[],
+		outDir: CommonJsOutDir,
+		srcDistMapper: SrcDistMapper,
 	) {
-		this.uriReformatter = new OxcUriReformatter();
+		this.uriReformatter = new OxcUriReformatter(outDir, srcDistMapper);
 	}
 
 	async lint(): Promise<void> {
@@ -32,7 +36,7 @@ export class CommonJsReferenceLinter {
 
 	private replaceContent(sourceUri: string, content: string): string {
 		return content.replace(
-			/require\((['"])(\..+?)\1\)/g,
+			/require\((['"])(.+?)\1\)/g,
 			(match, p1, p2) =>
 				`require(${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1})`,
 		);

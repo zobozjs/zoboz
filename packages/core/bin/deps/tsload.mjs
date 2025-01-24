@@ -7,22 +7,25 @@ import typescript from "typescript";
 const resolver = new ResolverFactory({
 	extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".mjs", ".cjs"],
 	extensionAlias: {
-		".js": [".ts", ".tsx"],
-		".jsx": [".tsx"],
+		".js": [".js", ".ts", ".tsx"],
+		".jsx": [".jsx", ".tsx"],
+	},
+	tsconfig: {
+		configFile: path.resolve(process.cwd(), "tsconfig.json"),
 	},
 });
 
 export async function resolve(specifier, context, nextResolve) {
 	const parentURL = asUrl(context.parentURL);
 
-	if ([".", "/"].every((x) => !specifier.startsWith(x))) {
+	try {
+		return {
+			url: pathToFileURL(resolveFile(specifier, parentURL)).href,
+			shortCircuit: true,
+		};
+	} catch {
 		return nextResolve(specifier, { ...context, parentURL }, nextResolve);
 	}
-
-	return {
-		url: pathToFileURL(resolveFile(specifier, parentURL)).href,
-		shortCircuit: true,
-	};
 }
 
 function resolveFile(specifier, parentURL) {

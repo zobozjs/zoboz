@@ -1,10 +1,10 @@
+import type { BuildConfig } from "@shared/domain/valueObjects/BuildConfig.js";
+import { logger } from "@shared/supporting/logger.js";
 import * as process from "process";
 import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrchestrator.js";
 import { filesRepository } from "../../container.js";
 import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
 import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
-import type { BuildConfig } from "../../shared/domain/valueObjects/BuildConfig.js";
-import { logger } from "../../shared/supporting/logger.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
 

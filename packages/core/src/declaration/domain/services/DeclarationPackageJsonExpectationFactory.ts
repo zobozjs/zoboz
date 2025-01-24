@@ -1,8 +1,8 @@
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
-import type { ExportsConfig } from "../../../shared/domain/valueObjects/ExportsConfig";
-import { PackageJsonExpectation } from "../../../shared/domain/valueObjects/PackageJsonExpectation";
-import { RelativeSpecifier } from "../../../shared/domain/valueObjects/RelativeSpecifier";
-import type { SrcDir } from "../../../shared/domain/valueObjects/SrcDir";
+import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
+import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
+import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
+import { RelativeSpecifier } from "@shared/domain/valueObjects/RelativeSpecifier";
+import type { SrcDir } from "@shared/domain/valueObjects/SrcDir";
 import type { DeclarationOutDir } from "../valueObjects/DeclarationOutDir";
 
 export class DeclarationPackageJsonExpectationFactory {

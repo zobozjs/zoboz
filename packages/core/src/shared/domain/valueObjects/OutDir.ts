@@ -1,5 +1,5 @@
 import * as path from "path";
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
+import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
 import { RelativeSpecifier } from "./RelativeSpecifier";
 
 export class OutDir {

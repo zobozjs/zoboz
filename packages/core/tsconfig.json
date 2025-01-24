@@ -1,13 +1,17 @@
 {
-	"exclude": ["node_modules", "dist"],
 	"compilerOptions": {
 		"noEmit": true,
 		"checkJs": true,
 		"strictNullChecks": true,
-		"lib": ["ESNext"],
+		"lib": ["ES2017"],
 		"skipLibCheck": true,
 		"target": "ES2017",
 		"module": "Node16",
-		"sourceMap": true
-	}
+		"sourceMap": true,
+		"baseUrl": "./",
+		"paths": {
+			"@shared/*": ["src/shared/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist"]
 }

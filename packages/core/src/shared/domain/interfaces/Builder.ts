@@ -8,6 +8,7 @@ export type BuildParams = {
 	exportsConfig: ExportsConfig;
 	outDir: OutDir;
 	logger: typeof logger;
+	alias?: Record<string, string>;
 };
 
 export interface Builder {

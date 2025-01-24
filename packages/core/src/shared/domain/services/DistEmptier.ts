@@ -1,5 +1,5 @@
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository.js";
-import { logger } from "../../../shared/supporting/logger.js";
+import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
+import { logger } from "@shared/supporting/logger.js";
 
 export class DistEmptier {
 	constructor(private readonly filesRepository: FilesRepository) {}

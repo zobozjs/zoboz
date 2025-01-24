@@ -1,6 +1,8 @@
-import type { FilesRepository } from "../../../shared/domain/interfaces/FilesRepository";
-import type { UriReformatter } from "../../../shared/domain/interfaces/UriReformatter";
-import { OxcUriReformatter } from "../../../shared/domain/services/OxcUriReformatter";
+import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
+import type { SrcDistMapper } from "@shared/domain/interfaces/SrcDistMapper";
+import type { UriReformatter } from "@shared/domain/interfaces/UriReformatter";
+import { OxcUriReformatter } from "@shared/domain/services/OxcUriReformatter";
+import type { ModuleOutDir } from "../valueObjects/ModuleOutDir";
 
 export class ModuleReferenceLinter {
 	private readonly uriReformatter: UriReformatter;
@@ -8,8 +10,10 @@ export class ModuleReferenceLinter {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly fileUris: string[],
+		outDir: ModuleOutDir,
+		srcDistMapper: SrcDistMapper,
 	) {
-		this.uriReformatter = new OxcUriReformatter();
+		this.uriReformatter = new OxcUriReformatter(outDir, srcDistMapper);
 	}
 
 	async lint(): Promise<void> {
@@ -33,12 +37,12 @@ export class ModuleReferenceLinter {
 	private replaceContent(sourceUri: string, content: string): string {
 		return content
 			.replace(
-				/from\s+(['"])(\..+?)\1/g,
+				/from\s+(['"])(.+?)\1/g,
 				(match, p1, p2) =>
 					`from ${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1}`,
 			)
 			.replace(
-				/import\(['"](\..+?)\1\)/g,
+				/import\(['"](.+?)\1\)/g,
 				(match, p1, p2) =>
 					`import(${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1})`,
 			);

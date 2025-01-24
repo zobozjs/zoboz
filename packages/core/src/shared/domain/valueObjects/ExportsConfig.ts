@@ -1,4 +1,4 @@
-import type { SrcDir } from "../../../shared/domain/valueObjects/SrcDir";
+import type { SrcDir } from "@shared/domain/valueObjects/SrcDir";
 
 export class ExportsConfig {
 	private readonly items: [string, string][];
