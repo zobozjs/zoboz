@@ -1,10 +1,10 @@
 import type { BuildConfig } from "@shared/domain/valueObjects/BuildConfig.js";
 import { logger } from "@shared/supporting/logger.js";
 import * as process from "process";
-import { CommonJsBuildOrchestrator } from "../../commonjs/app/CommonJsBuildOrchestrator.js";
+import { CjsBuildOrchestrator } from "../../cjs/app/CjsBuildOrchestrator.js";
 import { filesRepository } from "../../container.js";
-import { DeclarationBuildOrchestrator } from "../../declaration/app/DeclarationBuildOrchestrator.js";
-import { ModuleBuildOrchestrator } from "../../module/app/ModuleBuildOrchestrator.js";
+import { DtsBuildOrchestrator } from "../../dts/app/DtsBuildOrchestrator.js";
+import { EsmBuildOrchestrator } from "../../esm/app/EsmBuildOrchestrator.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
 
@@ -16,7 +16,7 @@ export async function build(
 
 	const orchestrators = [
 		config.esm &&
-			new ModuleBuildOrchestrator(
+			new EsmBuildOrchestrator(
 				filesRepository,
 				distEmptier,
 				config.exports,
@@ -25,7 +25,7 @@ export async function build(
 				config.distDir,
 			),
 		config.cjs &&
-			new CommonJsBuildOrchestrator(
+			new CjsBuildOrchestrator(
 				filesRepository,
 				distEmptier,
 				config.exports,
@@ -34,7 +34,7 @@ export async function build(
 				config.distDir,
 			),
 		config.dts &&
-			new DeclarationBuildOrchestrator(
+			new DtsBuildOrchestrator(
 				filesRepository,
 				distEmptier,
 				config.exports,

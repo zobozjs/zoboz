@@ -34,8 +34,6 @@ export class OxcUriReformatter implements UriReformatter {
 			]),
 		);
 
-		console.log({ aliases, outDir });
-
 		this.resolver = new ResolverFactory({
 			extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".mjs", ".cjs"],
 			extensionAlias: {

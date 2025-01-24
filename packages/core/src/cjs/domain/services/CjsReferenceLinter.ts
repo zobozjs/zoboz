@@ -2,15 +2,15 @@ import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository"
 import type { SrcDistMapper } from "@shared/domain/interfaces/SrcDistMapper";
 import type { UriReformatter } from "@shared/domain/interfaces/UriReformatter";
 import { OxcUriReformatter } from "@shared/domain/services/OxcUriReformatter";
-import type { ModuleOutDir } from "../valueObjects/ModuleOutDir";
+import type { CjsOutDir } from "../valueObjects/CjsOutDir";
 
-export class ModuleReferenceLinter {
+export class CjsReferenceLinter {
 	private readonly uriReformatter: UriReformatter;
 
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly fileUris: string[],
-		outDir: ModuleOutDir,
+		outDir: CjsOutDir,
 		srcDistMapper: SrcDistMapper,
 	) {
 		this.uriReformatter = new OxcUriReformatter(outDir, srcDistMapper);
@@ -31,20 +31,14 @@ export class ModuleReferenceLinter {
 	}
 
 	private isJs(uri: string) {
-		return uri.endsWith(".js") || uri.endsWith(".mjs");
+		return uri.endsWith(".js") || uri.endsWith(".cjs");
 	}
 
 	private replaceContent(sourceUri: string, content: string): string {
-		return content
-			.replace(
-				/from\s+(['"])(.+?)\1/g,
-				(match, p1, p2) =>
-					`from ${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1}`,
-			)
-			.replace(
-				/import\(['"](.+?)\1\)/g,
-				(match, p1, p2) =>
-					`import(${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1})`,
-			);
+		return content.replace(
+			/require\((['"])(.+?)\1\)/g,
+			(match, p1, p2) =>
+				`require(${p1}${this.uriReformatter.reformat(sourceUri, p2)}${p1})`,
+		);
 	}
 }

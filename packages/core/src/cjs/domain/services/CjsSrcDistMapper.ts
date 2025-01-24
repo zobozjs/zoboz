@@ -2,12 +2,12 @@ import * as path from "path";
 import type { SrcDistMapper } from "@shared/domain/interfaces/SrcDistMapper";
 import { RelativeSpecifier } from "@shared/domain/valueObjects/RelativeSpecifier";
 import type { SrcDir } from "src/extend";
-import type { CommonJsOutDir } from "../valueObjects/CommonJsOutDir";
+import type { CjsOutDir } from "../valueObjects/CjsOutDir";
 
 export class CjsSrcDistMapper implements SrcDistMapper {
 	constructor(
 		private readonly srcDir: SrcDir,
-		private readonly outDir: CommonJsOutDir,
+		private readonly outDir: CjsOutDir,
 	) {}
 
 	distFromSrc(relativeSrcPath: string): string {

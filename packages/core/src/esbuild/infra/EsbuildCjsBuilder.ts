@@ -6,7 +6,7 @@ import * as esbuild from "esbuild";
 import * as process from "process";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 
-export class EsbuildCommonJsBuilder implements Builder {
+export class EsbuildCjsBuilder implements Builder {
 	constructor(private readonly buildOptions?: EsbuildOptions) {}
 
 	async build({ srcDir, outDir, logger }: BuildParams): Promise<void> {

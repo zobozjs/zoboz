@@ -3,14 +3,14 @@ import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
 import { RelativeSpecifier } from "@shared/domain/valueObjects/RelativeSpecifier";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir";
-import type { DeclarationOutDir } from "../valueObjects/DeclarationOutDir";
+import type { DtsOutDir } from "../valueObjects/DtsOutDir";
 
-export class DeclarationPackageJsonExpectationFactory {
+export class DtsPackageJsonExpectationFactory {
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly srcDir: SrcDir,
-		private readonly outDir: DeclarationOutDir,
+		private readonly outDir: DtsOutDir,
 	) {}
 
 	public async create(): Promise<Promise<PackageJsonExpectation>> {

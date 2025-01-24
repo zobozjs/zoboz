@@ -7,7 +7,7 @@ import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 import { TscBinary } from "./TscBinary.js";
 
-export class TscDeclarationBuilder implements Builder {
+export class TscCjsBuilder implements Builder {
 	private readonly tscBinary: TscBinary = new TscBinary();
 
 	constructor(
@@ -32,7 +32,7 @@ export class TscDeclarationBuilder implements Builder {
 		outDir: string,
 	): Promise<string> {
 		const tsConfig = await this.generateTsConfig(srcDir, outDir);
-		const tsConfigFilename = `tsconfig.dts.${this.generateRandomString()}.json`;
+		const tsConfigFilename = `tsconfig.cjs.${this.generateRandomString()}.json`;
 		const tsConfigPath = `${this.filesRepository.getPackageDir()}/${tsConfigFilename}`;
 
 		await this.filesRepository.write(
@@ -48,9 +48,11 @@ export class TscDeclarationBuilder implements Builder {
 			extends: "./tsconfig.json",
 			include: [`${srcDir.uri}/**/*`],
 			compilerOptions: {
+				noCheck: true,
 				noEmit: false,
-				declaration: true,
-				emitDeclarationOnly: true,
+				declaration: false,
+				module: "commonjs",
+				moduleResolution: "node",
 				outDir: outDir,
 			},
 		};

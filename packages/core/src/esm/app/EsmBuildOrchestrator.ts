@@ -1,5 +1,5 @@
 import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
-import type { CjsConfig } from "@shared/domain/interfaces/CjsConfig.js";
+import type { EsmConfig } from "@shared/domain/interfaces/EsmConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
@@ -8,38 +8,39 @@ import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
-import { CjsPackageJsonExpectationFactory } from "../domain/services/CjsPackageJsonExpectationFactory.js";
-import { CjsSrcDistMapper } from "../domain/services/CjsSrcDistMapper.js";
-import { CommonJsReferenceLinter } from "../domain/services/CommonJsReferenceLinter.js";
-import { CommonJsOutDir } from "../domain/valueObjects/CommonJsOutDir.js";
+import { EsmPackageJsonExpectationFactory } from "../domain/services/EsmPackageJsonExpectationFactory.js";
+import { EsmReferenceLinter } from "../domain/services/EsmReferenceLinter.js";
+import { EsmSrcDistMapper } from "../domain/services/EsmSrcDistMapper.js";
+import { EsmOutDir } from "../domain/valueObjects/EsmOutDir.js";
 
-export class CommonJsBuildOrchestrator implements BuildOrchestrator {
-	private readonly outDir: CommonJsOutDir;
+export class EsmBuildOrchestrator implements BuildOrchestrator {
+	private readonly outDir: EsmOutDir;
 	private readonly typeEnforcer: TypeEnforcer;
-	private readonly packageJsonExpectationFactory: CjsPackageJsonExpectationFactory;
-	private readonly cjsSrcDistMapper: CjsSrcDistMapper;
+	private readonly packageJsonExpectationFactory: EsmPackageJsonExpectationFactory;
+	private readonly esmSrcDistMapper: EsmSrcDistMapper;
 
 	constructor(
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly cjsConfig: CjsConfig,
+		private readonly esmConfig: EsmConfig,
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new CommonJsOutDir(this.filesRepository, distDir);
+		this.outDir = new EsmOutDir(this.filesRepository, distDir);
 		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
-		this.cjsSrcDistMapper = new CjsSrcDistMapper(srcDir, this.outDir);
-		this.packageJsonExpectationFactory = new CjsPackageJsonExpectationFactory(
+		this.esmSrcDistMapper = new EsmSrcDistMapper(srcDir, this.outDir);
+
+		this.packageJsonExpectationFactory = new EsmPackageJsonExpectationFactory(
 			this.filesRepository,
 			this.exportsConfig,
-			this.cjsSrcDistMapper,
+			this.esmSrcDistMapper,
 		);
 	}
 
 	async build(): Promise<BuildOrchestratorResult> {
 		const startTime = Date.now();
-		const builder = this.cjsConfig.getBuilder();
+		const builder = this.esmConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
 
 		await builder.build({
@@ -51,14 +52,14 @@ export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 
 		const outDirFiles = await this.listAllFilesInOutDir();
 
-		await new CommonJsReferenceLinter(
+		await new EsmReferenceLinter(
 			this.filesRepository,
 			outDirFiles,
 			this.outDir,
-			this.cjsSrcDistMapper,
+			this.esmSrcDistMapper,
 		).lint();
 
-		await this.typeEnforcer.enforce("commonjs", this.outDir);
+		await this.typeEnforcer.enforce("module", this.outDir);
 
 		const packageJsonExpectation =
 			await this.packageJsonExpectationFactory.create();
@@ -66,7 +67,7 @@ export class CommonJsBuildOrchestrator implements BuildOrchestrator {
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
 
 		const endTime = Date.now();
-		logger.debug(`Built CommonJS: ${endTime - startTime}ms`);
+		logger.debug(`Built ESM Module: ${endTime - startTime}ms`);
 
 		return result;
 	}

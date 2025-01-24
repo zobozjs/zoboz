@@ -7,7 +7,7 @@ import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 import { TscBinary } from "./TscBinary.js";
 
-export class TscCommonJsBuilder implements Builder {
+export class TscEsmBuilder implements Builder {
 	private readonly tscBinary: TscBinary = new TscBinary();
 
 	constructor(
@@ -32,7 +32,7 @@ export class TscCommonJsBuilder implements Builder {
 		outDir: string,
 	): Promise<string> {
 		const tsConfig = await this.generateTsConfig(srcDir, outDir);
-		const tsConfigFilename = `tsconfig.cjs.${this.generateRandomString()}.json`;
+		const tsConfigFilename = `tsconfig.esm.${this.generateRandomString()}.json`;
 		const tsConfigPath = `${this.filesRepository.getPackageDir()}/${tsConfigFilename}`;
 
 		await this.filesRepository.write(
@@ -51,7 +51,7 @@ export class TscCommonJsBuilder implements Builder {
 				noCheck: true,
 				noEmit: false,
 				declaration: false,
-				module: "commonjs",
+				module: "es2020",
 				moduleResolution: "node",
 				outDir: outDir,
 			},

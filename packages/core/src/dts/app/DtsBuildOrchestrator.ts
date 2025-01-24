@@ -7,12 +7,12 @@ import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
-import { DeclarationPackageJsonExpectationFactory } from "../domain/services/DeclarationPackageJsonExpectationFactory.js";
-import { DeclarationOutDir } from "../domain/valueObjects/DeclarationOutDir.js";
+import { DtsPackageJsonExpectationFactory } from "../domain/services/DtsPackageJsonExpectationFactory.js";
+import { DtsOutDir } from "../domain/valueObjects/DtsOutDir.js";
 
-export class DeclarationBuildOrchestrator implements BuildOrchestrator {
-	private readonly outDir: DeclarationOutDir;
-	private readonly packageJsonExpectationFactory: DeclarationPackageJsonExpectationFactory;
+export class DtsBuildOrchestrator implements BuildOrchestrator {
+	private readonly outDir: DtsOutDir;
+	private readonly packageJsonExpectationFactory: DtsPackageJsonExpectationFactory;
 
 	constructor(
 		private readonly filesRepository: FilesRepository,
@@ -22,14 +22,13 @@ export class DeclarationBuildOrchestrator implements BuildOrchestrator {
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new DeclarationOutDir(this.filesRepository, distDir);
-		this.packageJsonExpectationFactory =
-			new DeclarationPackageJsonExpectationFactory(
-				this.filesRepository,
-				this.exportsConfig,
-				srcDir,
-				this.outDir,
-			);
+		this.outDir = new DtsOutDir(this.filesRepository, distDir);
+		this.packageJsonExpectationFactory = new DtsPackageJsonExpectationFactory(
+			this.filesRepository,
+			this.exportsConfig,
+			srcDir,
+			this.outDir,
+		);
 	}
 
 	async build(): Promise<BuildOrchestratorResult> {
