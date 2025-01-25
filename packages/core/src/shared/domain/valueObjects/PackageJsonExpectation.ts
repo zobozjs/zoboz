@@ -1,7 +1,6 @@
-import * as path from "node:path";
-import * as process from "node:process";
+import * as path from "path";
+import * as process from "process";
 import { logger } from "../../supporting/logger.js";
-import { FileNode } from "../entities/FileNode.js";
 import { PackageJsonVerificationError } from "../errors/PackageJsonVerificationError.js";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";
 
@@ -55,7 +54,7 @@ export class PackageJsonExpectation {
 			}
 		}
 
-		const mergingExports = merging.exports ?? {};
+		const mergingExports = merging.exports || {};
 
 		if (newValue.exports === undefined) {
 			newValue.exports = {};
@@ -134,16 +133,54 @@ export class PackageJsonExpectation {
 			logger.error(
 				[title, ...errors.map((x) => `Action Needed: ${x}`)].join("\n"),
 			);
+
+			logger.hint('Run "zoboz build --update-package-json" to fix it.');
+
 			throw new PackageJsonVerificationError();
 		}
 
 		logger.success("package.json matches zoboz.config.ts");
 	}
 
+	async updatePackageJson() {
+		const packageJson = await this.getPackageJson();
+		const updatedPackageJson = { ...packageJson, ...this.value };
+		const updatedPackageJsonText = JSON.stringify(updatedPackageJson, null, 2);
+
+		if (updatedPackageJsonText === JSON.stringify(packageJson, null, 2)) {
+			logger.success("package.json is up to date");
+			return;
+		}
+
+		await this.filesRepository.write(
+			this.getPackageJsonUri(),
+			`${updatedPackageJsonText}\n`,
+		);
+
+		logger.success("Updated package.json");
+	}
+
 	private async getPackageJson(): Promise<Record<string, unknown>> {
-		const uri = path.resolve(process.cwd(), "package.json");
-		const file = FileNode.fromUri(uri, this.filesRepository);
-		const text = await file.read();
-		return JSON.parse(text);
+		const packageJsonUri = this.getPackageJsonUri();
+		const text = await this.filesRepository.read(packageJsonUri);
+		const packageJson = JSON.parse(text);
+
+		if (packageJson.type !== undefined) {
+			logger.warn(
+				[
+					'package.json currently contains "type" field which threats compatibility of the package.',
+					"If you do not have to use it, consider removing it.",
+					'To briefly disclose its harmfulness, think of the lost meaning of field "main" and "module" fields.',
+					'When "type" is set to "module", possibly "main" is ignored and solely "module" is used instead.',
+					'When "type" is set to "commonjs", possibly "module" is ignored and solely "main" is used instead.',
+				].join("\n"),
+			);
+		}
+
+		return packageJson;
+	}
+
+	private getPackageJsonUri() {
+		return path.resolve(process.cwd(), "package.json");
 	}
 }

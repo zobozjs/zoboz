@@ -1,12 +1,11 @@
-import { BuildConfig, build, tsc } from "../src/index.ts";
+import * as url from "url";
 
-build(
-	new BuildConfig({
-		mjs: new tsc.MjsConfig(),
-		cjs: new tsc.CjsConfig(),
-		dts: new tsc.DtsConfig(),
-		exports: {
-			".": "./src/index.ts",
-		},
-	}),
-);
+// @ts-expect-error It is still not available in the types, since it is only a Release Candidate
+const { register } = await import("module");
+register("./bin/deps/tsload.mjs", url.pathToFileURL("./"));
+
+const { build } = await import("../src/index.js");
+const buildConfig = await import("../zoboz.config.js");
+
+// @ts-expect-error
+build(buildConfig.default, true);

@@ -1,2 +1,0 @@
-# `@zoboz/esbuild-v0`
-

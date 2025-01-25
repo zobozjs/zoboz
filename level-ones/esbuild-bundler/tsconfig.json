@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"noEmit": true,
+		"strictNullChecks": true,
+		"skipLibCheck": true,
+		"lib": ["ES2015"],
+		"target": "ES2017",
+		"moduleResolution": "bundler"
+	}
+}

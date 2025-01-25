@@ -6,11 +6,11 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"typescript": "^5.7.3"
+		"typescript": "5.7.3"
 	},
 	"engines": {
 		"node": ">=18"
 	},
 	"packageManager": "npm@10.9.0",
-	"workspaces": ["apps/*", "packages/*"]
+	"workspaces": ["apps/*", "packages/*", "level-ones/*", "level-twos/*"]
 }
