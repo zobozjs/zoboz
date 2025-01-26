@@ -1,0 +1,17 @@
+{
+	"name": "zoboz_specifier_formatter",
+	"version": "1.0.0",
+	"main": "index.js",
+	"private": true,
+	"bin": {
+		"zoboz_specifier_formatter": "./target/release/zoboz_specifier_formatter"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"description": ""
+}

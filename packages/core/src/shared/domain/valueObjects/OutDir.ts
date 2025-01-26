@@ -7,6 +7,6 @@ export class OutDir {
 	public readonly uri: string;
 	constructor(filesRepository: FilesRepository, uri: string) {
 		this.uri = new RelativeSpecifier(path.join(uri)).uri;
-		this.absoluteUri = path.join(filesRepository.getPackageDir(), this.uri);
+		this.absoluteUri = filesRepository.getAbsoluteUri(this.uri);
 	}
 }

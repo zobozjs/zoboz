@@ -8,6 +8,7 @@ import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
+import { nodeProcessCommandRunner } from "container.js";
 import { CjsPackageJsonExpectationFactory } from "../domain/services/CjsPackageJsonExpectationFactory.js";
 import { CjsSpecifierFormatter } from "../domain/services/CjsSpecifierFormatter.js";
 import { CjsSrcDistMapper } from "../domain/services/CjsSrcDistMapper.js";
@@ -51,12 +52,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 
 		const outDirFiles = await this.listAllFilesInOutDir();
 
-		await new CjsSpecifierFormatter(
-			this.filesRepository,
-			outDirFiles,
-			this.outDir,
-			this.cjsSrcDistMapper,
-		).format();
+		await this.formatSpecifiers(outDirFiles);
 
 		await this.typeEnforcer.enforce("commonjs", this.outDir);
 
@@ -69,6 +65,27 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		logger.debug(`Built CommonJS: ${endTime - startTime}ms`);
 
 		return result;
+	}
+
+	private async formatSpecifiers(outDirFiles: string[]) {
+		await nodeProcessCommandRunner.run(
+			[
+				// this will have compatibility issues with older versions of node, and also with windows
+				"zoboz_specifier_formatter",
+				"--format cjs",
+				"--absolute-src-dir",
+				this.filesRepository.getAbsoluteUri(this.srcDir.uri),
+				"--absolute-out-dir",
+				this.filesRepository.getAbsoluteUri(this.outDir.uri),
+			].join(" "),
+		);
+
+		// await new CjsSpecifierFormatter(
+		// 	this.filesRepository,
+		// 	outDirFiles,
+		// 	this.outDir,
+		// 	this.cjsSrcDistMapper,
+		// ).format();
 	}
 
 	private async listAllFilesInOutDir() {

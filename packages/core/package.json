@@ -6,6 +6,7 @@
 	"bugs": {
 		"url": "https://github.com/dariushalipour/zoboz/issues"
 	},
+	"private": "true",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/dariushalipour/zoboz.git"
@@ -40,12 +41,11 @@
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.5",
-		"typescript": "^5.7.3",
-		"zoboz_core_napi": "*"
+		"typescript": "^5.7.3"
 	},
 	"dependencies": {
 		"esbuild": "0.24.2",
-		"oxc-resolver": "4.0.0"
-	},
-	"bundleDependencies": ["zoboz_core_napi"]
+		"oxc-resolver": "4.0.0",
+		"zoboz_specifier_formatter": "*"
+	}
 }
