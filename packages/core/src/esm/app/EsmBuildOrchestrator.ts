@@ -9,7 +9,7 @@ import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
 import { EsmPackageJsonExpectationFactory } from "../domain/services/EsmPackageJsonExpectationFactory.js";
-import { EsmReferenceLinter } from "../domain/services/EsmReferenceLinter.js";
+import { EsmSpecifierFormatter } from "../domain/services/EsmSpecifierFormatter.js";
 import { EsmSrcDistMapper } from "../domain/services/EsmSrcDistMapper.js";
 import { EsmOutDir } from "../domain/valueObjects/EsmOutDir.js";
 
@@ -52,12 +52,12 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 
 		const outDirFiles = await this.listAllFilesInOutDir();
 
-		await new EsmReferenceLinter(
+		await new EsmSpecifierFormatter(
 			this.filesRepository,
 			outDirFiles,
 			this.outDir,
 			this.esmSrcDistMapper,
-		).lint();
+		).format();
 
 		await this.typeEnforcer.enforce("module", this.outDir);
 

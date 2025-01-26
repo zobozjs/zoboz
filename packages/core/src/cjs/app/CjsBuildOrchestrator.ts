@@ -9,7 +9,7 @@ import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
 import { CjsPackageJsonExpectationFactory } from "../domain/services/CjsPackageJsonExpectationFactory.js";
-import { CjsReferenceLinter } from "../domain/services/CjsReferenceLinter.js";
+import { CjsSpecifierFormatter } from "../domain/services/CjsSpecifierFormatter.js";
 import { CjsSrcDistMapper } from "../domain/services/CjsSrcDistMapper.js";
 import { CjsOutDir } from "../domain/valueObjects/CjsOutDir.js";
 
@@ -51,12 +51,12 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 
 		const outDirFiles = await this.listAllFilesInOutDir();
 
-		await new CjsReferenceLinter(
+		await new CjsSpecifierFormatter(
 			this.filesRepository,
 			outDirFiles,
 			this.outDir,
 			this.cjsSrcDistMapper,
-		).lint();
+		).format();
 
 		await this.typeEnforcer.enforce("commonjs", this.outDir);
 
