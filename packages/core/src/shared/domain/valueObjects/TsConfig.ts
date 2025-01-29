@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as process from "process";
-import * as typescript from "typescript";
+import typescript from "typescript";
 
 export class TsConfig {
 	public readonly compilerOptions: {
