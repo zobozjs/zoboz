@@ -1,0 +1,31 @@
+storage: ./storage
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  '@zoboz/*':
+    access: $all
+    publish: $all
+  "**":
+    access: $all
+    publish: $all
+    proxy: npmjs
+
+publish:
+  allow_offline: true  # Allow publishing without an uplink
+
+logs:
+  - { type: stdout, format: pretty, level: http }
+
+server:
+  keepAliveTimeout: 60
+
+middlewares:
+  audit:
+    enabled: true
