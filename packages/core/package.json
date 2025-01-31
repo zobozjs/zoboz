@@ -11,6 +11,7 @@
 		"url": "git+https://github.com/dariushalipour/zoboz.git"
 	},
 	"publishConfig": {
+		"registry": "http://localhost:4873",
 		"access": "public"
 	},
 	"files": ["dist/", "bin/", "cli/"],
