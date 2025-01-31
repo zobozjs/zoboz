@@ -1,7 +1,6 @@
 {
 	"name": "@level-ones/esbuild-node10",
 	"version": "0.0.0",
-	"private": true,
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
 	"types": "./dist/dts/index.d.ts",
@@ -13,14 +12,15 @@
 		}
 	},
 	"publishConfig": {
-		"registry": "http://localhost:4873"
+		"registry": "http://verdaccio:4873",
+		"access": "public"
 	},
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"build": "zoboz build"
 	},
 	"devDependencies": {
-		"@zoboz/core": "latest",
+		"@zoboz/core": "*",
 		"@types/node": "22.10.5",
 		"typescript": "5.7.3"
 	}

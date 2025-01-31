@@ -5,6 +5,7 @@ VERDACCIO_CONFIG="$(dirname "$(realpath "$0")")/config.yaml"
 execute_inline() {
   docker run -it --rm --name verdaccio --user root \
     -p 4873:4873 \
+    --network zoboz-net \
     -v $VERDACCIO_CONFIG:/verdaccio/conf/config.yaml \
     verdaccio/verdaccio
 }
@@ -12,8 +13,11 @@ execute_inline() {
 execute_start() {
   docker run -it --rm --name verdaccio --user root -d \
     -p 4873:4873 \
+    --network zoboz-net \
     -v $VERDACCIO_CONFIG:/verdaccio/conf/config.yaml \
     verdaccio/verdaccio
+
+  docker network connect bridge verdaccio
 }
 
 execute_stop() {
