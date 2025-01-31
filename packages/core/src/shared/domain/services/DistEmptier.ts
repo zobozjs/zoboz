@@ -7,6 +7,7 @@ export class DistEmptier {
 	async remove(outdir: string): Promise<void> {
 		try {
 			await this.filesRepository.remove(outdir);
+			await this.filesRepository.mkdir(outdir);
 			logger.debug(`Emptied ${outdir}`);
 		} catch {
 			logger.debug(`Already empty ${outdir}`);
