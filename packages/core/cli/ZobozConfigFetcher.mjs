@@ -2,8 +2,8 @@ import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
 import * as url from "url";
-import { logger } from "../../dist/esm/shared/supporting/logger.js";
-import { doesNodeSupportModuleRegister } from "./nodeVersion.mjs";
+import { logger } from "../dist/esm/shared/supporting/logger.js";
+import { nodeVersion } from "./nodeVersion.mjs";
 
 export class ZobozConfigFetcher {
 	async fetch() {
@@ -35,7 +35,7 @@ export class ZobozConfigFetcher {
 
 class ZobozConfigTsFetcher {
 	async fetch(configPath) {
-		if (doesNodeSupportModuleRegister()) {
+		if (nodeVersion.doesSupportModuleRegister()) {
 			return await this.load_experimental(configPath);
 		}
 
@@ -63,7 +63,7 @@ class ZobozConfigTsFetcher {
 	async load_experimental(configPath) {
 		// @ts-expect-error It is still not available in the types, since it is only a Release Candidate
 		const { register } = await import("module");
-		register("./deps/tsload.mjs", url.pathToFileURL(import.meta.dirname));
+		register("./cli/tsload.mjs", url.pathToFileURL(import.meta.dirname));
 		const { default: userConfig } = await import(configPath);
 		return userConfig;
 	}
