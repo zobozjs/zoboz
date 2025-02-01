@@ -35,11 +35,11 @@ One of Zoboz's standout features: it reviews and refines your `package.json` for
 With Zoboz, setting up sub-path exports is straightforward. For example, the following configuration:
 
 ```typescript
-import { BuildConfig, tsc } from "@zoboz/core";
+import { BuildConfig, tsc, esbuild } from "@zoboz/core";
 
 export default new BuildConfig({
-	esm: tsc.esm(),
-	cjs: tsc.cjs(),
+	esm: esbuild.esm(), // tsc.esm() is also available
+	cjs: esbuild.cjs(), // tsc.cjs() is also available
 	dts: tsc.dts(),
 	srcDir: "./src",
 	distDir: "./dist",

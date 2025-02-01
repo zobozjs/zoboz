@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 execute_install() {
   npm install

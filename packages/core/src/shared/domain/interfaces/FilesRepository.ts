@@ -9,4 +9,5 @@ export interface FilesRepository {
 	read: (uri: string) => Promise<string>;
 	write: (uri: string, content: string) => Promise<void>;
 	listFilesRecursively: (uri: string) => Promise<string[]>;
+	mkdir(absolutePath: string): Promise<void>;
 }

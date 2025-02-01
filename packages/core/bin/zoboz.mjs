@@ -4,18 +4,18 @@ import * as fs from "fs";
 import * as path from "path";
 import { build } from "../dist/esm/index.js";
 import { logger } from "../dist/esm/shared/supporting/logger.js";
-import { ZobozConfigFetcher } from "./deps/ZobozConfigFetcher.mjs";
-import { doesNodeSupportTsConfig, nodeVersion } from "./deps/nodeVersion.mjs";
-import { program } from "./deps/program.mjs";
+import { ZobozConfigFetcher } from "../cli/ZobozConfigFetcher.mjs";
+import { nodeVersion } from "../cli/nodeVersion.mjs";
+import { program } from "../cli/program.mjs";
 
-logger.debug("Running zoboz on Node version:", nodeVersion);
+logger.debug("Running zoboz on Node version:", nodeVersion.versionString);
 
 program.registerCommand(
 	"init",
 	"generates a minimal zoboz.config.(ts|mjs) file in the package's root directory",
 	[],
 	async () => {
-		const extension = doesNodeSupportTsConfig() ? "ts" : "mjs";
+		const extension = nodeVersion.doesSupportTsBasedConfig() ? "ts" : "mjs";
 		const configPath = path.resolve(process.cwd(), `zoboz.config.${extension}`);
 
 		if (fs.existsSync(configPath)) {

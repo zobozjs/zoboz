@@ -1,7 +1,6 @@
 {
-	"name": "@level-ones/core-node10",
+	"name": "@level-ones/core-node16",
 	"version": "0.0.0",
-	"private": true,
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
 	"types": "./dist/dts/index.d.ts",
@@ -11,6 +10,10 @@
 			"require": "./dist/cjs/index.js",
 			"import": "./dist/esm/index.js"
 		}
+	},
+	"publishConfig": {
+		"registry": "http://verdaccio:4873",
+		"access": "public"
 	},
 	"scripts": {
 		"typecheck": "tsc --noEmit",

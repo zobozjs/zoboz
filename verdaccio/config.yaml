@@ -12,6 +12,9 @@ packages:
   '@zoboz/*':
     access: $all
     publish: $all
+  '@level-ones/*':
+    access: $all
+    publish: $all
   "**":
     access: $all
     publish: $all

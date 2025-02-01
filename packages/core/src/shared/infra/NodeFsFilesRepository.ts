@@ -3,6 +3,10 @@ import * as path from "path";
 import type { FilesRepository } from "../domain/interfaces/FilesRepository";
 
 export class NodeFsFilesRepository implements FilesRepository {
+	async mkdir(absolutePath: string): Promise<void> {
+		fs.mkdirSync(absolutePath, { recursive: true });
+	}
+
 	getAbsoluteUri(uri: string) {
 		return path.join(this.getPackageDir(), uri);
 	}

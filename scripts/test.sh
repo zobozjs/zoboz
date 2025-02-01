@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 execute_test() {
   npm -w @level-ones/core-bundler run build &&
