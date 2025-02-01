@@ -4,7 +4,7 @@ import type { UriReformatter } from "@shared/domain/interfaces/UriReformatter";
 import { OxcUriReformatter } from "@shared/domain/services/OxcUriReformatter";
 import type { EsmOutDir } from "../valueObjects/EsmOutDir";
 
-export class EsmReferenceLinter {
+export class EsmSpecifierFormatter {
 	private readonly uriReformatter: UriReformatter;
 
 	constructor(
@@ -16,7 +16,7 @@ export class EsmReferenceLinter {
 		this.uriReformatter = new OxcUriReformatter(outDir, srcDistMapper);
 	}
 
-	async lint(): Promise<void> {
+	async format(): Promise<void> {
 		for (const uri of this.fileUris) {
 			await this.changeReferencesInNode(uri);
 		}

@@ -4,7 +4,7 @@ import type { UriReformatter } from "@shared/domain/interfaces/UriReformatter";
 import { OxcUriReformatter } from "@shared/domain/services/OxcUriReformatter";
 import type { CjsOutDir } from "../valueObjects/CjsOutDir";
 
-export class CjsReferenceLinter {
+export class CjsSpecifierFormatter {
 	private readonly uriReformatter: UriReformatter;
 
 	constructor(
@@ -16,7 +16,7 @@ export class CjsReferenceLinter {
 		this.uriReformatter = new OxcUriReformatter(outDir, srcDistMapper);
 	}
 
-	async lint(): Promise<void> {
+	async format(): Promise<void> {
 		for (const uri of this.fileUris) {
 			await this.changeReferencesInNode(uri);
 		}
