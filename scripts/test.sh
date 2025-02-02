@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 execute_test() {
-  npm -w @level-ones/core-bundler run build &&
-    npm -w @level-ones/core-node10 run build &&
-    npm -w @level-ones/core-node16 run build &&
+  npm -w @level-ones/tsc-bundler run build &&
+    npm -w @level-ones/tsc-node10 run build &&
+    npm -w @level-ones/tsc-node16 run build &&
     npm -w @level-ones/esbuild-bundler run build &&
     npm -w @level-ones/esbuild-node10 run build &&
     npm -w @level-ones/esbuild-node16 run build &&

@@ -1,5 +1,5 @@
 {
-	"name": "@level-ones/core-node10",
+	"name": "@level-ones/tsc-node10",
 	"version": "0.0.0",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",

@@ -1,5 +1,5 @@
 {
-	"name": "@level-ones/core-node16",
+	"name": "@level-ones/tsc-bundler",
 	"version": "0.0.0",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",

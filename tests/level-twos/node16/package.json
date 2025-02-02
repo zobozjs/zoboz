@@ -14,9 +14,9 @@
 		"typescript": "5.7.3"
 	},
 	"dependencies": {
-		"@level-ones/core-bundler": "*",
-		"@level-ones/core-node10": "*",
-		"@level-ones/core-node16": "*",
+		"@level-ones/tsc-bundler": "*",
+		"@level-ones/tsc-node10": "*",
+		"@level-ones/tsc-node16": "*",
 		"@level-ones/esbuild-bundler": "*",
 		"@level-ones/esbuild-node10": "*",
 		"@level-ones/esbuild-node16": "*"

@@ -20,9 +20,9 @@ for platform in "linux/amd64" "linux/arm64"; do
         npm config set registry http://verdaccio:4873 &&
         echo '⏳ Testing   ($log_env)' >> /app/temp/test.docker.sh.results &&
         npm install -g typescript@$ts_version &&
-        cd /app/level-ones/core-bundler && eval \"$prepare_level_one\" &&
-        cd /app/level-ones/core-node10 && eval \"$prepare_level_one\" &&
-        cd /app/level-ones/core-node16 && eval \"$prepare_level_one\" &&
+        cd /app/level-ones/tsc-bundler && eval \"$prepare_level_one\" &&
+        cd /app/level-ones/tsc-node10 && eval \"$prepare_level_one\" &&
+        cd /app/level-ones/tsc-node16 && eval \"$prepare_level_one\" &&
         cd /app/level-ones/esbuild-bundler && eval \"$prepare_level_one\" &&
         cd /app/level-ones/esbuild-node10 && eval \"$prepare_level_one\" &&
         cd /app/level-ones/esbuild-node16 && eval \"$prepare_level_one\" &&

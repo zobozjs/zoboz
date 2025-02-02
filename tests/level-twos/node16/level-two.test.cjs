@@ -2,9 +2,9 @@
 const assert = require("node:assert");
 
 const packages = [
-	require("@level-ones/core-bundler"),
-	require("@level-ones/core-node10"),
-	require("@level-ones/core-node16"),
+	require("@level-ones/tsc-bundler"),
+	require("@level-ones/tsc-node10"),
+	require("@level-ones/tsc-node16"),
 	require("@level-ones/esbuild-bundler"),
 	require("@level-ones/esbuild-node10"),
 	require("@level-ones/esbuild-node16"),
