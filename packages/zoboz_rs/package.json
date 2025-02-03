@@ -1,0 +1,17 @@
+{
+	"name": "zoboz_rs",
+	"version": "0.0.0",
+	"main": "index.js",
+	"private": true,
+	"bin": {
+		"zoboz_rs": "./target/release/zoboz_rs"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"description": ""
+}

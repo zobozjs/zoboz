@@ -1,0 +1,25 @@
+use std::path::Path;
+
+#[derive(serde::Deserialize, Default)]
+pub struct PackageJson {
+    #[serde(rename = "type")]
+    pub type_field: Option<String>,
+}
+
+pub fn get_package_json_string(package_dir: &Path) -> String {
+    let package_json_path = package_dir.join("package.json");
+    let package_json_content = std::fs::read_to_string(package_json_path).unwrap_or_default();
+
+    package_json_content
+}
+
+pub fn get_package_json(package_dir: &Path) -> PackageJson {
+    let package_json_content = get_package_json_string(package_dir);
+    get_package_json_object(&package_json_content)
+}
+
+pub fn get_package_json_object(package_json_content: &str) -> PackageJson {
+    let package_json: PackageJson = serde_json::from_str(package_json_content).unwrap_or_default();
+
+    package_json
+}
