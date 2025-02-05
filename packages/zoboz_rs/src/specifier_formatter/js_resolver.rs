@@ -1,11 +1,11 @@
-use std::path::Path;
+use crate::shared::{tsconfig_reader::TsConfig, value_objects::AbsoluteOutDir};
 
-use super::tsconfig_reader;
+use super::value_objects::AbsoluteSrcDir;
 
 pub(super) fn create_resolver(
-    tsconfig: &tsconfig_reader::TsConfig,
-    src_dir: &Path,
-    out_dir: &Path,
+    tsconfig: &TsConfig,
+    src_dir: &AbsoluteSrcDir,
+    out_dir: &AbsoluteOutDir,
 ) -> oxc_resolver::Resolver {
     let aliases = get_aliases(tsconfig, src_dir, out_dir);
 
@@ -43,9 +43,9 @@ pub(super) fn create_resolver(
 }
 
 fn get_aliases(
-    tsconfig: &tsconfig_reader::TsConfig,
-    src_dir: &Path,
-    out_dir: &Path,
+    tsconfig: &TsConfig,
+    src_dir: &AbsoluteSrcDir,
+    out_dir: &AbsoluteOutDir,
 ) -> Vec<(String, Vec<oxc_resolver::AliasValue>)> {
     if tsconfig.compiler_options.base_url.is_empty() {
         return vec![];
@@ -65,7 +65,10 @@ fn get_aliases(
                     let url = base_url.join(x.trim_end_matches("/*"));
                     url.to_string_lossy()
                         // turn src_dir based absolute paths to out_dir based absolute paths
-                        .replace(src_dir.to_str().unwrap(), out_dir.to_str().unwrap())
+                        .replace(
+                            src_dir.value().to_str().unwrap(),
+                            out_dir.value().to_str().unwrap(),
+                        )
                         .into()
                 })
                 .collect::<Vec<_>>();

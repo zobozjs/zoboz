@@ -1,16 +1,16 @@
 use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use tempfile::{tempdir, TempDir};
 use zoboz_rs::{package_json_doctor, specifier_formatter};
 
 #[derive(Debug, Default, World)]
 pub struct TheWorld {
     pub tempdir: Option<TempDir>,
-    pub js_format: String,
-    pub absolute_src_dir: PathBuf,
-    pub absolute_out_dir: PathBuf,
+    pub dist_format: String,
+    pub absolute_src_dir: String,
+    pub absolute_out_dir: String,
     pub should_update_package_json: bool,
     pub package_json_doctor_result: Option<Result<(), String>>,
 }
@@ -68,8 +68,8 @@ fn a_file_named_with(world: &mut TheWorld, step: &Step, file_name: String) {
 }
 
 #[given(expr = "format is set to {string}")]
-fn format_is_set_to(world: &mut TheWorld, js_format: String) {
-    world.js_format = js_format;
+fn format_is_set_to(world: &mut TheWorld, dist_format: String) {
+    world.dist_format = dist_format;
 }
 
 #[given(expr = "source dir is set to {string}")]
@@ -78,7 +78,8 @@ fn source_dir_is_set_to(world: &mut TheWorld, relative_src_dir: String) {
         .join(relative_src_dir)
         .canonicalize()
         .unwrap()
-        .to_path_buf();
+        .to_string_lossy()
+        .to_string();
 }
 
 #[given(expr = "output dir is set to {string}")]
@@ -87,14 +88,19 @@ fn output_dir_is_set_to(world: &mut TheWorld, relative_out_dir: String) {
         .join(relative_out_dir)
         .canonicalize()
         .unwrap()
-        .to_path_buf();
+        .to_string_lossy()
+        .to_string();
 }
 
 #[when(expr = "the specifier formatter is run")]
 fn the_specifier_formatter_is_run(world: &mut TheWorld) {
     specifier_formatter::run_by_params(
-        &world.js_format,
-        &get_dir_path(world).canonicalize().unwrap(),
+        &world.dist_format,
+        &get_dir_path(world)
+            .canonicalize()
+            .unwrap()
+            .to_string_lossy()
+            .to_string(),
         &world.absolute_src_dir,
         &world.absolute_out_dir,
     );

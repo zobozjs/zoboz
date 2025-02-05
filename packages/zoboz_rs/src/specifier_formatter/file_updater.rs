@@ -38,6 +38,21 @@ pub(super) fn update_esm(
     }
 }
 
+pub(super) fn update_dts(
+    specifier_formatter: &SpecifierFormatter,
+    file_path: &Path,
+    file_content: &str,
+) -> Option<String> {
+    let new_content = update_requires_and_imports(specifier_formatter, file_path, file_content);
+    let new_content = update_froms(specifier_formatter, file_path, &new_content);
+
+    if new_content != file_content {
+        Some(new_content.into_owned())
+    } else {
+        None
+    }
+}
+
 fn update_requires_and_imports<'a>(
     specifier_formatter: &'a SpecifierFormatter,
     file_path: &'a Path,

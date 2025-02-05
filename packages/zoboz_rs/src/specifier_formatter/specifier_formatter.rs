@@ -1,6 +1,9 @@
 use std::path::Path;
 
-use crate::shared::utils;
+use crate::shared::{
+    utils,
+    value_objects::{AbsoluteOutDir, AbsoluteSrcDir, PackageDir},
+};
 
 use super::{js_resolver::create_resolver, tsconfig_reader};
 
@@ -11,13 +14,17 @@ pub(super) struct SpecifierFormatter {
 }
 
 impl SpecifierFormatter {
-    pub(super) fn new(package_dir: &Path, src_dir: &Path, out_dir: &Path) -> Self {
+    pub(super) fn new(
+        package_dir: &PackageDir,
+        src_dir: &AbsoluteSrcDir,
+        out_dir: &AbsoluteOutDir,
+    ) -> Self {
         let tsconfig = tsconfig_reader::get_tsconfig(package_dir);
         let resolver = create_resolver(&tsconfig, src_dir, out_dir);
 
         Self {
             resolver,
-            out_dir: out_dir.to_string_lossy().to_string(),
+            out_dir: out_dir.value().to_string_lossy().to_string(),
             absolute_base_url: get_absolute_base_url(&tsconfig, package_dir, src_dir, out_dir),
         }
     }
@@ -75,19 +82,23 @@ impl SpecifierFormatter {
 
 fn get_absolute_base_url(
     tsconfig: &tsconfig_reader::TsConfig,
-    package_dir: &Path,
-    src_dir: &Path,
-    out_dir: &Path,
+    package_dir: &PackageDir,
+    src_dir: &AbsoluteSrcDir,
+    out_dir: &AbsoluteOutDir,
 ) -> Option<String> {
     if tsconfig.compiler_options.base_url.is_empty() {
         return None;
     }
 
     let base_url = package_dir
+        .value()
         .join(&tsconfig.compiler_options.base_url)
         .to_string_lossy()
         // turn src_dir based absolute paths to out_dir based absolute paths
-        .replace(src_dir.to_str().unwrap(), out_dir.to_str().unwrap());
+        .replace(
+            src_dir.value().to_str().unwrap(),
+            out_dir.value().to_str().unwrap(),
+        );
 
     Some(base_url)
 }
