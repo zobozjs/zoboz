@@ -19,6 +19,7 @@ fn main() {
     let features = [
         "tests/features/specifier_formatter/cjs_specifier_formatter.feature",
         "tests/features/specifier_formatter/esm_specifier_formatter.feature",
+        "tests/features/specifier_formatter/dts_specifier_formatter.feature",
         "tests/features/package_json_doctor/field_type.feature",
     ];
 
@@ -108,6 +109,14 @@ fn the_specifier_formatter_is_run(world: &mut TheWorld) {
 
 #[then(expr = "the JS content for {string} should be:")]
 fn the_js_content_for_should_be(world: &mut TheWorld, step: &Step, file_name: String) {
+    assert_eq!(
+        read_file(world, &file_name).trim(),
+        get_docstring(step).trim()
+    );
+}
+
+#[then(expr = "the DTS content for {string} should be:")]
+fn the_dts_content_for_should_be(world: &mut TheWorld, step: &Step, file_name: String) {
     assert_eq!(
         read_file(world, &file_name).trim(),
         get_docstring(step).trim()

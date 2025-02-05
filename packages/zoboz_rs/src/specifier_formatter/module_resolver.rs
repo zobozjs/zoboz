@@ -19,6 +19,9 @@ pub(super) fn create_resolver(
         ".ts".to_string(),
         ".tsx".to_string(),
         ".json".to_string(),
+        ".ts".to_string(),
+        ".tsx".to_string(),
+        ".d.ts".to_string(),
     ];
     resolve_options.extension_alias = vec![
         (

@@ -11,7 +11,7 @@ use crate::shared::{
 mod cli_flags;
 mod file_updater;
 mod file_walker;
-mod js_resolver;
+mod module_resolver;
 mod specifier_formatter;
 
 pub fn run_by_args(args: Vec<String>) {

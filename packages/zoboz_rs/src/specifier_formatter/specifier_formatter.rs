@@ -5,7 +5,7 @@ use crate::shared::{
     value_objects::{AbsoluteOutDir, AbsoluteSrcDir, PackageDir},
 };
 
-use super::{js_resolver::create_resolver, tsconfig_reader};
+use super::{module_resolver::create_resolver, tsconfig_reader};
 
 pub(super) struct SpecifierFormatter {
     resolver: oxc_resolver::Resolver,
@@ -60,7 +60,11 @@ impl SpecifierFormatter {
             .resolve(source_dirname, specifier_for_resolver);
 
         if resolved.is_err() {
-            if !is_trying_base_url_already && self.absolute_base_url.is_some() {
+            if !is_trying_base_url_already
+                && self.absolute_base_url.is_some()
+                && !specifier.starts_with("./")
+                && !specifier.starts_with("../")
+            {
                 return self.format(dependent_path, specifier, true);
             }
 
@@ -76,7 +80,13 @@ impl SpecifierFormatter {
 
         let relative_path = utils::relative(dependent_dirname, resolved.path());
 
-        utils::ensure_relative_prefix(relative_path)
+        let relative_path = utils::ensure_relative_prefix(relative_path);
+
+        if relative_path.ends_with(".d.ts") {
+            relative_path.replace(".d.ts", ".js")
+        } else {
+            relative_path
+        }
     }
 }
 
