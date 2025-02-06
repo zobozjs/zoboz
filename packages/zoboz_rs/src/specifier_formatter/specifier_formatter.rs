@@ -2,7 +2,7 @@ use std::path::Path;
 
 use crate::shared::{
     utils,
-    value_objects::{AbsoluteOutputDir, AbsoluteSourceDir, PackageDir},
+    value_objects::{AbsoluteOutputDir, AbsolutePackageDir, AbsoluteSourceDir},
 };
 
 use super::{module_resolver::create_resolver, tsconfig_reader};
@@ -15,7 +15,7 @@ pub(super) struct SpecifierFormatter {
 
 impl SpecifierFormatter {
     pub(super) fn new(
-        package_dir: &PackageDir,
+        package_dir: &AbsolutePackageDir,
         src_dir: &AbsoluteSourceDir,
         out_dir: &AbsoluteOutputDir,
     ) -> Self {
@@ -92,7 +92,7 @@ impl SpecifierFormatter {
 
 fn get_absolute_base_url(
     tsconfig: &tsconfig_reader::TsConfig,
-    package_dir: &PackageDir,
+    package_dir: &AbsolutePackageDir,
     src_dir: &AbsoluteSourceDir,
     out_dir: &AbsoluteOutputDir,
 ) -> Option<String> {

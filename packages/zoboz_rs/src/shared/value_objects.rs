@@ -42,7 +42,7 @@ impl AbsoluteSourceDir {
         &self.0
     }
 
-    pub fn is_package_dir_child(&self, package_dir: &PackageDir) -> bool {
+    pub fn is_package_dir_child(&self, package_dir: &AbsolutePackageDir) -> bool {
         self.0.starts_with(package_dir.value())
     }
 }
@@ -67,17 +67,15 @@ impl AbsoluteOutputDir {
         &self.0
     }
 
-    pub fn is_package_dir_child(&self, package_dir: &PackageDir) -> bool {
+    pub fn is_package_dir_child(&self, package_dir: &AbsolutePackageDir) -> bool {
         self.0.starts_with(package_dir.value())
     }
 }
 
-// PackageDir
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct PackageDir(PathBuf);
+pub struct AbsolutePackageDir(PathBuf);
 
-impl PackageDir {
+impl AbsolutePackageDir {
     pub fn new(package_dir: &str) -> Result<Self, String> {
         let dir_path = PathBuf::from(package_dir);
         if dir_path.is_absolute() {

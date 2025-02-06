@@ -5,7 +5,7 @@ use specifier_formatter::SpecifierFormatter;
 
 use crate::shared::{
     tsconfig_reader,
-    value_objects::{self, AbsoluteOutputDir, AbsoluteSourceDir, OutputFormat, PackageDir},
+    value_objects::{self, AbsoluteOutputDir, AbsolutePackageDir, AbsoluteSourceDir, OutputFormat},
 };
 
 mod cli_flags;
@@ -14,7 +14,7 @@ mod file_walker;
 mod module_resolver;
 mod specifier_formatter;
 
-pub fn run_by_args(args: &[String]) {
+pub fn run_by_args(args: &[String]) -> Result<(), String> {
     let (output_format, absolute_package_dir, absolute_source_dir, absolute_output_dir) =
         get_params(args);
 
@@ -23,7 +23,7 @@ pub fn run_by_args(args: &[String]) {
         &absolute_package_dir,
         &absolute_source_dir,
         &absolute_output_dir,
-    );
+    )
 }
 
 pub fn run_by_params(
@@ -31,9 +31,9 @@ pub fn run_by_params(
     absolute_package_dir: &str,
     absolute_source_dir: &str,
     absolute_output_dir: &str,
-) {
+) -> Result<(), String> {
     let output_format = OutputFormat::new(output_format).unwrap();
-    let package_dir = PackageDir::new(absolute_package_dir).unwrap();
+    let package_dir = AbsolutePackageDir::new(absolute_package_dir).unwrap();
     let absolute_source_dir = AbsoluteSourceDir::new(absolute_source_dir).unwrap();
     let absolute_output_dir = AbsoluteOutputDir::new(absolute_output_dir).unwrap();
 
@@ -66,4 +66,6 @@ pub fn run_by_params(
         },
     )
     .unwrap();
+
+    Ok(())
 }

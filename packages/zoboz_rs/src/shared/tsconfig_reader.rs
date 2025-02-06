@@ -1,4 +1,4 @@
-use super::{utils, value_objects::PackageDir};
+use super::{utils, value_objects::AbsolutePackageDir};
 
 #[derive(serde::Deserialize, Default)]
 pub struct TsConfig {
@@ -14,7 +14,7 @@ pub struct CompilerOptions {
     pub paths: std::collections::HashMap<String, Vec<String>>,
 }
 
-pub fn get_tsconfig(package_dir: &PackageDir) -> TsConfig {
+pub fn get_tsconfig(package_dir: &AbsolutePackageDir) -> TsConfig {
     let tsconfig_path = package_dir.value().join("tsconfig.json");
     let tsconfig_content = std::fs::read_to_string(tsconfig_path).unwrap_or_default();
     let mut tsconfig: TsConfig = serde_json::from_str(&tsconfig_content).unwrap_or_default();
