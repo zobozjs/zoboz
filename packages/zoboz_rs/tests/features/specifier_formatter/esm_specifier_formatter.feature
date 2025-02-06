@@ -69,10 +69,10 @@ Feature: ES Module Specifier Formatter
       export { default as uniq } from './uniq';
       export { default as filter } from "./filter";
       """
-    And format is set to "esm"
-    And source dir is set to "src"
-    And output dir is set to "dist/esm"
-    When the specifier formatter is run
+    When the following command is executed:
+      """
+      format-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/esm --output-format esm
+      """
     Then the JS content for "dist/esm/index.js" should be:
       """
       import foo from './foo.js';

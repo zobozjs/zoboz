@@ -5,7 +5,7 @@ use specifier_formatter::SpecifierFormatter;
 
 use crate::shared::{
     tsconfig_reader,
-    value_objects::{self, AbsoluteOutputDir, AbsoluteSourceDir, DistFormat, PackageDir},
+    value_objects::{self, AbsoluteOutputDir, AbsoluteSourceDir, OutputFormat, PackageDir},
 };
 
 mod cli_flags;
@@ -15,11 +15,11 @@ mod module_resolver;
 mod specifier_formatter;
 
 pub fn run_by_args(args: &[String]) {
-    let (dist_format, absolute_package_dir, absolute_source_dir, absolute_output_dir) =
+    let (output_format, absolute_package_dir, absolute_source_dir, absolute_output_dir) =
         get_params(args);
 
     run_by_params(
-        &dist_format,
+        &output_format,
         &absolute_package_dir,
         &absolute_source_dir,
         &absolute_output_dir,
@@ -27,22 +27,17 @@ pub fn run_by_args(args: &[String]) {
 }
 
 pub fn run_by_params(
-    dist_format: &str,
+    output_format: &str,
     absolute_package_dir: &str,
     absolute_source_dir: &str,
     absolute_output_dir: &str,
 ) {
-    println!(
-        "Running specifier formatter with dist format: {}, source dir: {}, output dir: {}",
-        dist_format, absolute_source_dir, absolute_output_dir
-    );
-
-    let dist_format = DistFormat::new(dist_format).unwrap();
+    let output_format = OutputFormat::new(output_format).unwrap();
     let package_dir = PackageDir::new(absolute_package_dir).unwrap();
     let absolute_source_dir = AbsoluteSourceDir::new(absolute_source_dir).unwrap();
     let absolute_output_dir = AbsoluteOutputDir::new(absolute_output_dir).unwrap();
 
-    let extensions: &[&str] = match dist_format.value() {
+    let extensions: &[&str] = match output_format.value() {
         "esm" => &["js", "jsx", "mjs", "mjsx"],
         "cjs" => &["js", "jsx", "cjs", "cjsx"],
         "dts" => &["ts", "tsx"],
@@ -63,7 +58,7 @@ pub fn run_by_params(
     walk_files_recursively(
         &absolute_output_dir.value(),
         extensions,
-        &|file_path, file_content| match dist_format.value() {
+        &|file_path, file_content| match output_format.value() {
             "esm" => update_esm(&specifier_formatter, file_path, file_content),
             "cjs" => update_cjs(&specifier_formatter, file_path, file_content),
             "dts" => update_dts(&specifier_formatter, file_path, file_content),

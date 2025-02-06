@@ -66,12 +66,9 @@ Feature: CommonJS Specifier Formatter
       module.exports.uniq = require('./uniq');
       module.exports.filter = require('./filter');
       """
-    And format is set to "cjs"
-    And source dir is set to "src"
-    And output dir is set to "dist/cjs"
     When the following command is executed:
       """
-      format-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/cjs --dist-format cjs
+      format-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/cjs --output-format cjs
       """
     Then the JS content for "dist/cjs/index.js" should be:
       """

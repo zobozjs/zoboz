@@ -3,12 +3,12 @@ use cucumber::{given, then, when, World};
 use std::fs;
 use std::path::Path;
 use tempfile::{tempdir, TempDir};
-use zoboz_rs::{handle_command, package_json_doctor, specifier_formatter, tokenize_input};
+use zoboz_rs::{handle_command, package_json_doctor, tokenize_input};
 
 #[derive(Debug, Default, World)]
 pub struct TheWorld {
     pub tempdir: Option<TempDir>,
-    pub dist_format: String,
+    pub output_format: String,
     pub absolute_source_dir: String,
     pub absolute_output_dir: String,
     pub should_update_package_json: bool,
@@ -69,8 +69,8 @@ fn a_file_named_with(world: &mut TheWorld, step: &Step, file_name: String) {
 }
 
 #[given(expr = "format is set to {string}")]
-fn format_is_set_to(world: &mut TheWorld, dist_format: String) {
-    world.dist_format = dist_format;
+fn format_is_set_to(world: &mut TheWorld, output_format: String) {
+    world.output_format = output_format;
 }
 
 #[given(expr = "source dir is set to {string}")]
@@ -91,20 +91,6 @@ fn output_dir_is_set_to(world: &mut TheWorld, relative_out_dir: String) {
         .unwrap()
         .to_string_lossy()
         .to_string();
-}
-
-#[when(expr = "the specifier formatter is run")]
-fn the_specifier_formatter_is_run(world: &mut TheWorld) {
-    specifier_formatter::run_by_params(
-        &world.dist_format,
-        &get_dir_path(world)
-            .canonicalize()
-            .unwrap()
-            .to_string_lossy()
-            .to_string(),
-        &world.absolute_source_dir,
-        &world.absolute_output_dir,
-    );
 }
 
 #[then(expr = "the JS content for {string} should be:")]

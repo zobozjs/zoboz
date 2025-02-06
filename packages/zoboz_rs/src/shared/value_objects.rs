@@ -3,16 +3,16 @@ use std::path::PathBuf;
 use crate::shared::utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct DistFormat(String);
+pub struct OutputFormat(String);
 
-impl DistFormat {
-    pub fn new(dist_format: &str) -> Result<Self, String> {
-        if dist_format == "cjs" || dist_format == "esm" || dist_format == "dts" {
-            Ok(Self(dist_format.to_string()))
+impl OutputFormat {
+    pub fn new(output_format: &str) -> Result<Self, String> {
+        if output_format == "cjs" || output_format == "esm" || output_format == "dts" {
+            Ok(Self(output_format.to_string()))
         } else {
             Err(format!(
-                "DistFormat '{}' is is not among valid options: 'esm','cjs', 'dts'",
-                dist_format
+                "OutputFormat '{}' is is not among valid options: 'esm','cjs', 'dts'",
+                output_format
             ))
         }
     }

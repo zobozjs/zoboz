@@ -76,10 +76,10 @@ Feature: Declaration Module Specifier Formatter
       export { default as uniq } from './uniq';
       export { default as filter } from "./filter";
       """
-    And format is set to "dts"
-    And source dir is set to "src"
-    And output dir is set to "dist/dts"
-    When the specifier formatter is run
+    When the following command is executed:
+      """
+      format-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/dts --output-format dts
+      """
     Then the DTS content for "dist/dts/index.d.ts" should be:
       """
       import foo from './foo.js';
