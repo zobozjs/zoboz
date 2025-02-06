@@ -38,14 +38,20 @@ Feature: Declaration Module Specifier Formatter
       // absolute path imports based on on tsconfig.json baseUrl
       import baz from 'baz';
       // alias imports based on tsconfig.json paths
-      import utils from '@utils';
+      import utils from
+        '@utils';
       
       import('../lazy');
+      import
+        ('../lazy');
       
       const require = createRequire(import.meta.url);
       
       // alias imports based on tsconfig.json paths
       require('@utils/uniq');
+      require(
+        '@utils/uniq'
+      );
       
       export const bar = 'bar';
       """
@@ -90,14 +96,20 @@ Feature: Declaration Module Specifier Formatter
       // absolute path imports based on on tsconfig.json baseUrl
       import baz from '../baz.js';
       // alias imports based on tsconfig.json paths
-      import utils from '../utils/index.js';
+      import utils from
+        '../utils/index.js';
       
       import('../lazy.js');
+      import
+        ('../lazy.js');
       
       const require = createRequire(import.meta.url);
       
       // alias imports based on tsconfig.json paths
       require('../utils/uniq.js');
+      require(
+        '../utils/uniq.js'
+      );
       
       export const bar = 'bar';
       """
