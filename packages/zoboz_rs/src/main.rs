@@ -1,22 +1,39 @@
-use zoboz_rs::specifier_formatter;
+use std::io::{stdin, stdout, Write};
+
+use zoboz_rs::{handle_command, tokenize_input};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 {
-        match args[1].as_str() {
-            "format-specifiers" => {
-                specifier_formatter::run_by_args(args);
-            }
-            "verify-package-json" => {
-                println!("okay I will");
-            }
-            _ => {
-                println!("Invalid command: {}", args[1]);
-            }
-        }
+        handle_command(&args[1..]);
     } else {
-        println!(
-            "No command asked for, available commands are: format-specifiers, verify-package-json"
-        );
+        console_mode();
+    }
+}
+
+fn console_mode() {
+    println!("Welcome to Zoboz CLI");
+    println!("Available commands:");
+    println!("  format-specifiers");
+    println!("  verify-package-json");
+    println!("  exit");
+
+    loop {
+        print!("zoboz $ ");
+        stdout().flush().unwrap();
+        let mut input = String::new();
+        stdin().read_line(&mut input).unwrap();
+        let input = input.trim();
+        let args = tokenize_input(input);
+
+        if args.is_empty() {
+            continue;
+        }
+
+        if args[0] == "exit" {
+            break;
+        }
+
+        handle_command(&args);
     }
 }

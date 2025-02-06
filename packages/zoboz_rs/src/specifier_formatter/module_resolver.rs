@@ -1,11 +1,11 @@
-use crate::shared::{tsconfig_reader::TsConfig, value_objects::AbsoluteOutDir};
+use crate::shared::{tsconfig_reader::TsConfig, value_objects::AbsoluteOutputDir};
 
-use super::value_objects::AbsoluteSrcDir;
+use super::value_objects::AbsoluteSourceDir;
 
 pub(super) fn create_resolver(
     tsconfig: &TsConfig,
-    src_dir: &AbsoluteSrcDir,
-    out_dir: &AbsoluteOutDir,
+    src_dir: &AbsoluteSourceDir,
+    out_dir: &AbsoluteOutputDir,
 ) -> oxc_resolver::Resolver {
     let aliases = get_aliases(tsconfig, src_dir, out_dir);
 
@@ -47,8 +47,8 @@ pub(super) fn create_resolver(
 
 fn get_aliases(
     tsconfig: &TsConfig,
-    src_dir: &AbsoluteSrcDir,
-    out_dir: &AbsoluteOutDir,
+    src_dir: &AbsoluteSourceDir,
+    out_dir: &AbsoluteOutputDir,
 ) -> Vec<(String, Vec<oxc_resolver::AliasValue>)> {
     if tsconfig.compiler_options.base_url.is_empty() {
         return vec![];

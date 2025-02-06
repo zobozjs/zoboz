@@ -3,14 +3,14 @@ use cucumber::{given, then, when, World};
 use std::fs;
 use std::path::Path;
 use tempfile::{tempdir, TempDir};
-use zoboz_rs::{package_json_doctor, specifier_formatter};
+use zoboz_rs::{handle_command, package_json_doctor, specifier_formatter, tokenize_input};
 
 #[derive(Debug, Default, World)]
 pub struct TheWorld {
     pub tempdir: Option<TempDir>,
     pub dist_format: String,
-    pub absolute_src_dir: String,
-    pub absolute_out_dir: String,
+    pub absolute_source_dir: String,
+    pub absolute_output_dir: String,
     pub should_update_package_json: bool,
     pub package_json_doctor_result: Option<Result<(), String>>,
 }
@@ -75,7 +75,7 @@ fn format_is_set_to(world: &mut TheWorld, dist_format: String) {
 
 #[given(expr = "source dir is set to {string}")]
 fn source_dir_is_set_to(world: &mut TheWorld, relative_src_dir: String) {
-    world.absolute_src_dir = get_dir_path(world)
+    world.absolute_source_dir = get_dir_path(world)
         .join(relative_src_dir)
         .canonicalize()
         .unwrap()
@@ -85,7 +85,7 @@ fn source_dir_is_set_to(world: &mut TheWorld, relative_src_dir: String) {
 
 #[given(expr = "output dir is set to {string}")]
 fn output_dir_is_set_to(world: &mut TheWorld, relative_out_dir: String) {
-    world.absolute_out_dir = get_dir_path(world)
+    world.absolute_output_dir = get_dir_path(world)
         .join(relative_out_dir)
         .canonicalize()
         .unwrap()
@@ -102,8 +102,8 @@ fn the_specifier_formatter_is_run(world: &mut TheWorld) {
             .unwrap()
             .to_string_lossy()
             .to_string(),
-        &world.absolute_src_dir,
-        &world.absolute_out_dir,
+        &world.absolute_source_dir,
+        &world.absolute_output_dir,
     );
 }
 
@@ -177,4 +177,11 @@ fn the_result_is_error_and_equals_the_following_text(world: &mut TheWorld, step:
     } else {
         panic!("The result for package_doctor is not here yet.");
     }
+}
+
+#[when(expr = "the following command is executed:")]
+fn the_following_command_is_executed(_world: &mut TheWorld, step: &Step) {
+    let command = get_docstring(step);
+    let command = command.replace("$scenario_dir", get_dir_path(_world).to_str().unwrap());
+    handle_command(&tokenize_input(&command));
 }

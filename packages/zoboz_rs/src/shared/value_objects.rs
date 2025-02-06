@@ -23,17 +23,17 @@ impl DistFormat {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct AbsoluteSrcDir(PathBuf);
+pub struct AbsoluteSourceDir(PathBuf);
 
-impl AbsoluteSrcDir {
-    pub fn new(absolute_src_dir: &str) -> Result<Self, String> {
-        let dir_path = PathBuf::from(absolute_src_dir);
+impl AbsoluteSourceDir {
+    pub fn new(absolute_dir: &str) -> Result<Self, String> {
+        let dir_path = PathBuf::from(absolute_dir);
         if dir_path.is_absolute() {
             Ok(Self(utils::canonical_from_buf(dir_path.to_path_buf())))
         } else {
             Err(format!(
-                "AbsoluteSrcDir '{}' is not an absolute path",
-                absolute_src_dir
+                "AbsoluteSourceDir '{}' is not an absolute path",
+                absolute_dir
             ))
         }
     }
@@ -48,17 +48,17 @@ impl AbsoluteSrcDir {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct AbsoluteOutDir(PathBuf);
+pub struct AbsoluteOutputDir(PathBuf);
 
-impl AbsoluteOutDir {
-    pub fn new(absolute_src_dir: &str) -> Result<Self, String> {
-        let dir_path = PathBuf::from(absolute_src_dir);
+impl AbsoluteOutputDir {
+    pub fn new(absolute_dir: &str) -> Result<Self, String> {
+        let dir_path = PathBuf::from(absolute_dir);
         if dir_path.is_absolute() {
             Ok(Self(utils::canonical_from_buf(dir_path.to_path_buf())))
         } else {
             Err(format!(
-                "AbsoluteOutDir '{}' is not an absolute path",
-                absolute_src_dir
+                "AbsoluteOutputDir '{}' is not an absolute path",
+                absolute_dir
             ))
         }
     }
