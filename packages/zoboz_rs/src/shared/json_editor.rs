@@ -18,13 +18,14 @@ pub enum ChangeType {
 }
 
 pub fn apply_change_sets(json_str: &str, change_sets: Vec<ChangeSet>) -> String {
+    // This is causing issues with the order of the keys in the JSON
     let mut json_value: Value = serde_json::from_str(json_str).expect("Invalid JSON");
 
     for change_set in change_sets {
         apply_change_set(&mut json_value, change_set);
     }
 
-    serde_json::to_string(&json_value).expect("Failed to serialize JSON")
+    serde_json::to_string_pretty(&json_value).expect("Failed to serialize JSON")
 }
 
 fn apply_change_set(json_value: &mut Value, change_set: ChangeSet) {
@@ -50,6 +51,7 @@ fn apply_change(json_value: &mut Value, change: Change) {
     match change.change_type {
         ChangeType::Add | ChangeType::Update => {
             if let Some(val) = change.value {
+                // This is causing issues with the order of the keys in the JSON
                 current
                     .as_object_mut()
                     .expect("Target is not an object")
