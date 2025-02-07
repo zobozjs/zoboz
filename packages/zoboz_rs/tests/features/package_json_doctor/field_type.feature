@@ -63,7 +63,10 @@ Feature: Ensure field "type" is not present
         "name": "test",
         "version": "1.0.0",
         "type": "whatever",
-        "main": "dist/cjs/index.js"
+        "main": "dist/cjs/index.js",
+        "dependencies": {
+          "dep1": "1.0.0"
+        }
       }
       """
     When the following command is executed:
@@ -75,6 +78,9 @@ Feature: Ensure field "type" is not present
         {
           "name": "test",
           "version": "1.0.0",
-          "main": "dist/cjs/index.js"
+          "main": "dist/cjs/index.js",
+          "dependencies": {
+            "dep1": "1.0.0"
+          }
         }
       """

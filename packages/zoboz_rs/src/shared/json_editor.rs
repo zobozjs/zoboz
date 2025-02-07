@@ -62,7 +62,7 @@ fn apply_change(json_value: &mut Value, change: Change) {
             current
                 .as_object_mut()
                 .expect("Target is not an object")
-                .remove(*final_key);
+                .shift_remove(*final_key);
         }
     };
 }
