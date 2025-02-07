@@ -1,15 +1,12 @@
 use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
+use helpers::{
+    get_dir_path, get_docstring, initiate_tempdir, read_file, reformat_json, write_file, TheWorld,
+};
 use std::fs;
-use std::path::Path;
-use tempfile::{tempdir, TempDir};
 use zoboz_rs::{handle_command, tokenize_input};
 
-#[derive(Debug, Default, World)]
-pub struct TheWorld {
-    pub tempdir: Option<TempDir>,
-    pub command_result: Option<Result<(), String>>,
-}
+mod helpers;
 
 fn main() {
     let features = [
@@ -22,40 +19,6 @@ fn main() {
     for feature in features.iter() {
         futures::executor::block_on(TheWorld::run(feature));
     }
-}
-
-fn get_docstring(step: &Step) -> String {
-    step.docstring().cloned().unwrap_or_default()
-}
-
-fn get_dir_path(world: &TheWorld) -> &Path {
-    world.tempdir.as_ref().unwrap().path()
-}
-
-fn write_file(world: &TheWorld, file_name: &str, content: &str) {
-    let path = get_dir_path(world).join(file_name);
-    write_with_dirs(&path, content);
-}
-
-fn write_with_dirs(path: &Path, content: &str) {
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent).unwrap();
-    }
-    fs::write(path, content).unwrap();
-}
-
-fn read_file(world: &TheWorld, file_name: &str) -> String {
-    let path = get_dir_path(world).join(file_name);
-    fs::read_to_string(path).unwrap()
-}
-
-fn initiate_tempdir(world: &mut TheWorld) {
-    world.tempdir = Some(tempdir().unwrap());
-}
-
-fn reformat_json(json: &str) -> String {
-    let value: serde_json::Value = serde_json::from_str(json).unwrap();
-    serde_json::to_string_pretty(&value).unwrap()
 }
 
 #[given(expr = "there is an npm package with:")]
