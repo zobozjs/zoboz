@@ -48,7 +48,7 @@ Feature: Declaration Module Specifier Formatter
       const require = createRequire(import.meta.url);
       
       // alias imports based on tsconfig.json paths
-      require('@utils/uniq');
+      require('@utils/uniq.js');
       require(
         '@utils/uniq'
       );
