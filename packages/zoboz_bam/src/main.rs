@@ -3,7 +3,7 @@ use std::{
     process,
 };
 
-use zoboz_rs::{handle_command, tokenize_input};
+use zoboz_bam::{handle_command, tokenize_input};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -18,10 +18,10 @@ fn main() {
 }
 
 fn console_mode() {
-    println!("Welcome to Zoboz CLI");
-    println!("Available commands:");
-    println!("  reformat-specifiers");
-    println!("  verify-package-json");
+    println!("Zoboz Bam v{}", env!("CARGO_PKG_VERSION"));
+    println!("Available Commands:");
+    println!("  reformat-specifiers --absolute-package-dir string --absolute-source-dir string --absolute-output-dir string --output-format dts|esm|cjs");
+    println!("  verify-package-json --absolute-package-dir string [--can-update-package-json]");
     println!("  exit");
 
     loop {

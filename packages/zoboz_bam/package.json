@@ -1,10 +1,10 @@
 {
-	"name": "zoboz_rs",
+	"name": "zoboz_bam",
 	"version": "0.0.0",
 	"main": "index.js",
 	"private": true,
 	"bin": {
-		"zoboz_rs": "./target/release/zoboz_rs"
+		"zoboz_bam": "./target/release/zoboz_bam"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"

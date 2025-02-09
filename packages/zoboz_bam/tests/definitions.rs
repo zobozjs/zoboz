@@ -4,7 +4,7 @@ use helpers::{
     get_dir_path, get_docstring, initiate_tempdir, read_file, reformat_json, write_file, TheWorld,
 };
 use std::fs;
-use zoboz_rs::{handle_command, tokenize_input};
+use zoboz_bam::{handle_command, tokenize_input};
 
 mod helpers;
 
