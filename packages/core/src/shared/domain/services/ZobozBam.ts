@@ -70,7 +70,7 @@ export class ZobozBam {
 		}
 
 		const zobozBamProcess = spawn(
-			"/Users/dariush/repos/zoboz/packages/zoboz_bam/target/release/zoboz_bam",
+			"/Users/dariush/repos/zoboz/packages/zoboz-bam/target/release/zoboz-bam",
 			[],
 			{
 				stdio: ["pipe", "pipe", "inherit"],
@@ -89,7 +89,7 @@ export class ZobozBam {
 			let response = "";
 			const onData = (chunk) => {
 				response += chunk.toString();
-				// based on zoboz_bam, it means it's ready for the next command
+				// based on zoboz-bam, it means it's ready for the next command
 				if (response.endsWith("zoboz $ ")) {
 					zobozBamProcess.stdout.removeListener("data", onData);
 					resolve();

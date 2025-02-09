@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"private": true,
 	"bin": {
-		"zoboz_bam": "./target/release/zoboz_bam"
+		"zoboz-bam": "./target/release/zoboz-bam"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"

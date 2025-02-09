@@ -19,19 +19,19 @@
 // rustup target add aarch64-pc-windows-msvc && cargo build --release --target aarch64-pc-windows-msvc
 // rustup target add x86_64-pc-windows-msvc && cargo build --release --target x86_64-pc-windows-msvc
 
-// `pwd`/target/aarch64-apple-darwin/release/zoboz_bam
-// `pwd`/target/x86_64-apple-darwin/release/zoboz_bam
-// docker run -it --rm --platform linux/arm64 -v `pwd`/target/aarch64-unknown-linux-musl/release:/app ubuntu /app/zoboz_bam
-// docker run -it --rm --platform linux/amd64 -v `pwd`/target/x86_64-unknown-linux-musl/release:/app ubuntu /app/zoboz_bam
-// ${pwd}/target/aarch64-pc-windows-msvc/release/zoboz_bam.exe
-// ${pwd}/target/x86_64-pc-windows-msvc/release/zoboz_bam.exe
+// `pwd`/target/aarch64-apple-darwin/release/zoboz-bam
+// `pwd`/target/x86_64-apple-darwin/release/zoboz-bam
+// docker run -it --rm --platform linux/arm64 -v `pwd`/target/aarch64-unknown-linux-musl/release:/app ubuntu /app/zoboz-bam
+// docker run -it --rm --platform linux/amd64 -v `pwd`/target/x86_64-unknown-linux-musl/release:/app ubuntu /app/zoboz-bam
+// ${pwd}/target/aarch64-pc-windows-msvc/release/zoboz-bam.exe
+// ${pwd}/target/x86_64-pc-windows-msvc/release/zoboz-bam.exe
 
-// cp target/aarch64-apple-darwin/release/zoboz_bam packages/zoboz_bam_darwin_arm64/zoboz_bam_darwin_arm64
-// cp target/x86_64-apple-darwin/release/zoboz_bam packages/zoboz_bam_darwin_x64/zoboz_bam_darwin_x64
-// cp target/aarch64-unknown-linux-musl/release/zoboz_bam packages/zoboz_bam_linux_arm64/zoboz_bam_linux_arm64
-// cp target/x86_64-unknown-linux-musl/release/zoboz_bam packages/zoboz_bam_linux_x64/zoboz_bam_linux_x64
-// cp target/aarch64-pc-windows-msvc/release/zoboz_bam.exe packages/zoboz_bam_win32_arm64/zoboz_bam_win32_arm64.exe
-// cp target/x86_64-pc-windows-msvc/release/zoboz_bam.exe packages/zoboz_bam_win32_x64/zoboz_bam_win32_x64.exe
+// cp target/aarch64-apple-darwin/release/zoboz-bam packages/zoboz-bam-darwin-arm64/zoboz-bam-darwin-arm64
+// cp target/x86_64-apple-darwin/release/zoboz-bam packages/zoboz-bam-darwin-x64/zoboz-bam-darwin-x64
+// cp target/aarch64-unknown-linux-musl/release/zoboz-bam packages/zoboz-bam-linux-arm64/zoboz-bam-linux-arm64
+// cp target/x86_64-unknown-linux-musl/release/zoboz-bam packages/zoboz-bam-linux-x64/zoboz-bam-linux-x64
+// cp target/aarch64-pc-windows-msvc/release/zoboz-bam.exe packages/zoboz-bam-win32-arm64/zoboz-bam-win32-arm64.exe
+// cp target/x86_64-pc-windows-msvc/release/zoboz-bam.exe packages/zoboz-bam-win32-x64/zoboz-bam-win32-x64.exe
 
 import fs from "fs";
 import path from "path";
@@ -40,42 +40,42 @@ const packages = [
 	{
 		name: "@zoboz/rs-darwin-arm64",
 		target: "aarch64-apple-darwin",
-		binary: "zoboz_bam_darwin_arm64",
+		binary: "zoboz-bam-darwin-arm64",
 		cpu: "arm64",
 		os: "darwin",
 	},
 	{
 		name: "@zoboz/rs-win32-arm64",
 		target: "aarch64-pc-windows-msvc",
-		binary: "zoboz_bam_win32_arm64.exe",
+		binary: "zoboz-bam-win32-arm64.exe",
 		cpu: "arm64",
 		os: "win32",
 	},
 	{
 		name: "@zoboz/rs-linux-arm64",
 		target: "aarch64-unknown-linux-musl",
-		binary: "zoboz_bam_linux_arm64",
+		binary: "zoboz-bam-linux-arm64",
 		cpu: "arm64",
 		os: "linux",
 	},
 	{
 		name: "@zoboz/rs-darwin-x64",
 		target: "x86_64-apple-darwin",
-		binary: "zoboz_bam_darwin_x64",
+		binary: "zoboz-bam-darwin-x64",
 		cpu: "x64",
 		os: "darwin",
 	},
 	{
 		name: "@zoboz/rs-win32-x64",
 		target: "x86_64-pc-windows-msvc",
-		binary: "zoboz_bam_win32_x64.exe",
+		binary: "zoboz-bam-win32-x64.exe",
 		cpu: "x64",
 		os: "win32",
 	},
 	{
 		name: "@zoboz/rs-linux-x64",
 		target: "x86_64-unknown-linux-musl",
-		binary: "zoboz_bam_linux_x64",
+		binary: "zoboz-bam-linux-x64",
 		cpu: "x64",
 		os: "linux",
 	},
