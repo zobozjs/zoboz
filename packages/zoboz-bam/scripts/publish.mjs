@@ -14,8 +14,6 @@
 // cargo zigbuild --release --target x86_64-pc-windows-msvc
 
 // possibly safer ways to build
-// docker run -it --rm --platform linux/arm64 -v `pwd`:/app rust bash -c "cd /app && rustup target add aarch64-unknown-linux-musl && cargo build --release --target aarch64-unknown-linux-musl"
-// docker run -it --rm --platform linux/amd64 -v `pwd`:/app rust bash -c "cd /app && rustup target add x86_64-unknown-linux-musl && cargo build --release --target x86_64-unknown-linux-musl"
 // rustup target add aarch64-pc-windows-msvc && cargo build --release --target aarch64-pc-windows-msvc
 // rustup target add x86_64-pc-windows-msvc && cargo build --release --target x86_64-pc-windows-msvc
 

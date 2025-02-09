@@ -1,17 +1,19 @@
 {
 	"name": "@zoboz/bam",
 	"version": "1.2.0",
-	"main": "index.js",
-	"private": true,
-	"bin": {
-		"zoboz-bam": "./target/release/zoboz-bam"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
+	"description": "",
 	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"type": "commonjs",
-	"description": ""
+	"author": "Dariush Alipour<drsh.alipour@gmail.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dariushalipour/zoboz.git"
+	},
+	"bin": {
+		"zoboz-bam": "./bin/zoboz-bam.mjs"
+	},
+	"files": ["bin"],
+	"scripts": {
+		"build": "./scripts/build.sh"
+	}
 }
