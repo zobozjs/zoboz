@@ -50,24 +50,10 @@ export class ZobozRs {
 
 	private async runCommand(args: string[]): Promise<void> {
 		const handleReady = (zobozRsProcess) => {
-			const promise = new Promise((resolve, reject) => {
-				const commandString = `${args.join(" ")}\n`;
-				zobozRsProcess.stdin.write(commandString);
+			const readyPromise = this.getReadyPromise(zobozRsProcess);
+			zobozRsProcess.stdin.write(`${args.join(" ")}\n`);
 
-				let response = "";
-				const onData = (chunk) => {
-					response += chunk.toString();
-					// based on zoboz_rs, it means it's ready for the next command
-					if (response.endsWith("zoboz $ ")) {
-						zobozRsProcess.stdout.off("data", onData);
-						resolve(null);
-					}
-				};
-
-				zobozRsProcess.stdout.on("data", onData);
-			});
-
-			return promise.then(
+			return readyPromise.then(
 				() => zobozRsProcess,
 				() => zobozRsProcess,
 			);
@@ -91,20 +77,26 @@ export class ZobozRs {
 			},
 		);
 
-		const promise = new Promise((resolve, reject) => {
+		this.zobozRsProcessPromise = this.getReadyPromise(zobozRsProcess).then(
+			() => zobozRsProcess,
+		);
+
+		return this.zobozRsProcessPromise;
+	}
+
+	private getReadyPromise(zobozRsProcess: ZobozRsProcess): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			let response = "";
 			const onData = (chunk) => {
 				response += chunk.toString();
 				// based on zoboz_rs, it means it's ready for the next command
 				if (response.endsWith("zoboz $ ")) {
 					zobozRsProcess.stdout.removeListener("data", onData);
-					resolve(null);
+					resolve();
 				}
 			};
 
 			zobozRsProcess.stdout.addListener("data", onData);
 		});
-
-		return promise.then(() => zobozRsProcess);
 	}
 }
