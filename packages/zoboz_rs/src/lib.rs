@@ -1,11 +1,11 @@
 pub mod package_json_doctor;
 pub mod shared;
-pub mod specifier_formatter;
+pub mod specifiers_reformatter;
 
 pub fn handle_command(args: &[String]) -> Result<(), String> {
     let command = args[0].as_str();
     match command {
-        "reformat-specifiers" => specifier_formatter::run_by_args(args),
+        "reformat-specifiers" => specifiers_reformatter::run_by_args(args),
         "verify-package-json" => package_json_doctor::run_by_args(args),
         _ => Err(format!("Invalid command: {}", command)),
     }

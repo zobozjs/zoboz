@@ -7,13 +7,13 @@ use crate::shared::{
 
 use super::{module_resolver::create_resolver, tsconfig_reader};
 
-pub(super) struct SpecifierFormatter {
+pub(super) struct SpecifiersReformatter {
     resolver: oxc_resolver::Resolver,
     out_dir: String,
     absolute_base_url: Option<String>,
 }
 
-impl SpecifierFormatter {
+impl SpecifiersReformatter {
     pub(super) fn new(
         package_dir: &AbsolutePackageDir,
         src_dir: &AbsoluteSourceDir,

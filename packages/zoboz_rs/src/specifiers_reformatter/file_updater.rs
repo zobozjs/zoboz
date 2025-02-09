@@ -2,7 +2,7 @@ use std::path::Path;
 
 use lazy_static::lazy_static;
 
-use super::specifier_formatter::SpecifierFormatter;
+use super::specifiers_reformatter::SpecifiersReformatter;
 
 lazy_static! {
     // NOTE: This regex won't work if 'require' is aliased or renamed using createRequire.
@@ -13,11 +13,11 @@ lazy_static! {
 }
 
 pub(super) fn update_cjs(
-    specifier_formatter: &SpecifierFormatter,
+    specifiers_reformatter: &SpecifiersReformatter,
     file_path: &Path,
     file_content: &str,
 ) -> Option<String> {
-    let new_content = update_requires_and_imports(specifier_formatter, file_path, file_content);
+    let new_content = update_requires_and_imports(specifiers_reformatter, file_path, file_content);
     if new_content != file_content {
         Some(new_content.into_owned())
     } else {
@@ -26,12 +26,12 @@ pub(super) fn update_cjs(
 }
 
 pub(super) fn update_esm(
-    specifier_formatter: &SpecifierFormatter,
+    specifiers_reformatter: &SpecifiersReformatter,
     file_path: &Path,
     file_content: &str,
 ) -> Option<String> {
-    let new_content = update_requires_and_imports(specifier_formatter, file_path, file_content);
-    let new_content = update_froms(specifier_formatter, file_path, &new_content);
+    let new_content = update_requires_and_imports(specifiers_reformatter, file_path, file_content);
+    let new_content = update_froms(specifiers_reformatter, file_path, &new_content);
 
     if new_content != file_content {
         Some(new_content.into_owned())
@@ -41,12 +41,12 @@ pub(super) fn update_esm(
 }
 
 pub(super) fn update_dts(
-    specifier_formatter: &SpecifierFormatter,
+    specifiers_reformatter: &SpecifiersReformatter,
     file_path: &Path,
     file_content: &str,
 ) -> Option<String> {
-    let new_content = update_requires_and_imports(specifier_formatter, file_path, file_content);
-    let new_content = update_froms(specifier_formatter, file_path, &new_content);
+    let new_content = update_requires_and_imports(specifiers_reformatter, file_path, file_content);
+    let new_content = update_froms(specifiers_reformatter, file_path, &new_content);
 
     if new_content != file_content {
         Some(new_content.into_owned())
@@ -56,7 +56,7 @@ pub(super) fn update_dts(
 }
 
 fn update_requires_and_imports<'a>(
-    specifier_formatter: &'a SpecifierFormatter,
+    specifiers_reformatter: &'a SpecifiersReformatter,
     file_path: &'a Path,
     file_content: &'a str,
 ) -> std::borrow::Cow<'a, str> {
@@ -65,7 +65,7 @@ fn update_requires_and_imports<'a>(
             "{}{}{}{}",
             &caps[1],
             &caps[2],
-            specifier_formatter.format(&file_path, &caps[3], false),
+            specifiers_reformatter.format(&file_path, &caps[3], false),
             &caps[4]
         )
     });
@@ -74,7 +74,7 @@ fn update_requires_and_imports<'a>(
 }
 
 fn update_froms<'a>(
-    specifier_formatter: &'a SpecifierFormatter,
+    specifiers_reformatter: &'a SpecifiersReformatter,
     file_path: &'a Path,
     file_content: &'a str,
 ) -> std::borrow::Cow<'a, str> {
@@ -83,7 +83,7 @@ fn update_froms<'a>(
             "{}{}{}{}",
             &caps[1],
             &caps[2],
-            specifier_formatter.format(&file_path, &caps[3], false),
+            specifiers_reformatter.format(&file_path, &caps[3], false),
             &caps[4]
         )
     });
