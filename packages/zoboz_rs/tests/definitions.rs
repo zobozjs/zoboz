@@ -13,7 +13,7 @@ fn main() {
         "tests/features/specifiers_reformatter/cjs_specifiers_reformatter.feature",
         "tests/features/specifiers_reformatter/esm_specifiers_reformatter.feature",
         "tests/features/specifiers_reformatter/dts_specifiers_reformatter.feature",
-        "tests/features/package_json_doctor/field_type.feature",
+        "tests/features/package_json_verifier/type_field_remover.feature",
     ];
 
     for feature in features.iter() {
