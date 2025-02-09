@@ -64,18 +64,23 @@ export class ZobozBam {
 		return this.zobozBamProcessPromise.then(() => {});
 	}
 
-	private getProcess(): Promise<ZobozBamProcess> {
+	private async getProcess(): Promise<ZobozBamProcess> {
 		if (this.zobozBamProcessPromise) {
 			return this.zobozBamProcessPromise;
 		}
 
-		const zobozBamProcess = spawn(
-			"/Users/dariush/repos/zoboz/packages/zoboz-bam/target/release/zoboz-bam",
-			[],
-			{
-				stdio: ["pipe", "pipe", "inherit"],
-			},
-		);
+		const zobozBamPath =
+			typeof require !== "undefined"
+				? require.resolve("zoboz-bam")
+				: await import("module").then((module) =>
+						(module.default || module)
+							.createRequire(import.meta.url)
+							.resolve("zoboz-bam"),
+					);
+
+		const zobozBamProcess = spawn(zobozBamPath, [], {
+			stdio: ["pipe", "pipe", "inherit"],
+		});
 
 		this.zobozBamProcessPromise = this.getReadyPromise(zobozBamProcess).then(
 			() => zobozBamProcess,
