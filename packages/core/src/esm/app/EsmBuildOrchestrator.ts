@@ -3,6 +3,7 @@ import type { EsmConfig } from "@shared/domain/interfaces/EsmConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 import { BuildOrchestratorResult } from "@shared/domain/valueObjects/BuildOrchestratorResult.js";
 import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
@@ -11,7 +12,6 @@ import { logger } from "@shared/supporting/logger.js";
 import { EsmPackageJsonExpectationFactory } from "../domain/services/EsmPackageJsonExpectationFactory.js";
 import { EsmSrcDistMapper } from "../domain/services/EsmSrcDistMapper.js";
 import { EsmOutDir } from "../domain/valueObjects/EsmOutDir.js";
-import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 
 export class EsmBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: EsmOutDir;

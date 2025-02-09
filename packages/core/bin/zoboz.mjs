@@ -2,11 +2,11 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { build } from "../dist/esm/index.js";
-import { logger } from "../dist/esm/shared/supporting/logger.js";
 import { ZobozConfigFetcher } from "../cli/ZobozConfigFetcher.mjs";
 import { nodeVersion } from "../cli/nodeVersion.mjs";
 import { program } from "../cli/program.mjs";
+import { build } from "../dist/esm/index.js";
+import { logger } from "../dist/esm/shared/supporting/logger.js";
 
 logger.debug("Running zoboz on Node version:", nodeVersion.versionString);
 

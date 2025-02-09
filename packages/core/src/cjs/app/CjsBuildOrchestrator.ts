@@ -3,6 +3,7 @@ import type { CjsConfig } from "@shared/domain/interfaces/CjsConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 import { BuildOrchestratorResult } from "@shared/domain/valueObjects/BuildOrchestratorResult.js";
 import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
@@ -11,7 +12,6 @@ import { logger } from "@shared/supporting/logger.js";
 import { CjsPackageJsonExpectationFactory } from "../domain/services/CjsPackageJsonExpectationFactory.js";
 import { CjsSrcDistMapper } from "../domain/services/CjsSrcDistMapper.js";
 import { CjsOutDir } from "../domain/valueObjects/CjsOutDir.js";
-import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 
 export class CjsBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: CjsOutDir;
