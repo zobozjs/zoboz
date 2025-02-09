@@ -50,7 +50,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
 
-		this.zobozRs.reformatSpecifiers({
+		await this.zobozRs.reformatSpecifiers({
 			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
 			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
 			outputFormat: "dts",

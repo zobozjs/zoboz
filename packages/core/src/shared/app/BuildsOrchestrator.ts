@@ -1,3 +1,4 @@
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 import * as process from "process";
 import { PackageJsonVerificationError } from "../domain/errors/PackageJsonVerificationError.js";
 import type { BuildOrchestrator } from "../domain/interfaces/BuildOrchestrator.js";
@@ -6,7 +7,10 @@ import { PackageJsonExpectation } from "../domain/valueObjects/PackageJsonExpect
 import { logger } from "../supporting/logger.js";
 
 export class BuildsOrchestrator {
-	constructor(private readonly orchestrators: BuildOrchestrator[]) {
+	constructor(
+		private readonly zobozRs: ZobozRs,
+		private readonly orchestrators: BuildOrchestrator[],
+	) {
 		if (orchestrators.length === 0) {
 			throw new Error("No orchestrators provided");
 		}
@@ -23,6 +27,7 @@ export class BuildsOrchestrator {
 				await packageJsonExpectation.verifyPackageJson();
 			}
 
+			await this.zobozRs.exit();
 			logger.success("zoboz build complete");
 		} catch (error) {
 			if (error instanceof PackageJsonVerificationError) {

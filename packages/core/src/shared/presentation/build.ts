@@ -58,5 +58,5 @@ export async function build(
 		process.exit(1);
 	}
 
-	new BuildsOrchestrator(orchestrators).build(shouldUpdatePackageJson);
+	new BuildsOrchestrator(zobozRs, orchestrators).build(shouldUpdatePackageJson);
 }

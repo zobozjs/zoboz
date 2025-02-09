@@ -51,7 +51,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 			logger: logger,
 		});
 
-		this.zobozRs.reformatSpecifiers({
+		await this.zobozRs.reformatSpecifiers({
 			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
 			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
 			outputFormat: "cjs",
