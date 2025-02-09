@@ -1,7 +1,7 @@
 {
 	"name": "@zoboz/bam",
 	"version": "1.2.0",
-	"description": "",
+	"description": "A blazing-fast, standalone Rust-powered tool for reformatting specifiers and verifying package.json files with zero setup.",
 	"keywords": [],
 	"author": "Dariush Alipour<drsh.alipour@gmail.com>",
 	"license": "MIT",
@@ -12,6 +12,7 @@
 	"bin": {
 		"zoboz-bam": "./bin/zoboz-bam.mjs"
 	},
+	"main": "./bin/zoboz-bam.mjs",
 	"files": ["bin"],
 	"scripts": {
 		"build": "./scripts/build.sh"

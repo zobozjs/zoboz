@@ -1,5 +1,7 @@
 import { type ChildProcessByStdio, spawn } from "child_process";
+import { createRequire } from "module";
 import type { Readable, Writable } from "stream";
+import { execPath } from "process";
 
 export type SpecifiersReformatterConfig = {
 	absoluteSourceDir: string;
@@ -69,18 +71,19 @@ export class ZobozBam {
 			return this.zobozBamProcessPromise;
 		}
 
-		const zobozBamPath =
+		const requireFunc =
 			typeof require !== "undefined"
-				? require.resolve("zoboz-bam")
-				: await import("module").then((module) =>
-						(module.default || module)
-							.createRequire(import.meta.url)
-							.resolve("zoboz-bam"),
-					);
+				? require
+				: // @ts-ignore
+					createRequire(import.meta.url);
 
-		const zobozBamProcess = spawn(zobozBamPath, [], {
-			stdio: ["pipe", "pipe", "inherit"],
-		});
+		const zobozBamProcess = spawn(
+			execPath,
+			[requireFunc.resolve("@zoboz/bam")],
+			{
+				stdio: ["pipe", "pipe", "inherit"],
+			},
+		);
 
 		this.zobozBamProcessPromise = this.getReadyPromise(zobozBamProcess).then(
 			() => zobozBamProcess,

@@ -9,3 +9,5 @@ export type {
 	Builder,
 	BuildParams,
 } from "@shared/domain/interfaces/Builder.js";
+
+export { deepMerge } from "@shared/supporting/deepMerge";

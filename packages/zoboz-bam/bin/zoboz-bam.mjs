@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { platform, arch } from "os";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import { existsSync } from "fs";
 import { spawnSync } from "child_process";
+import { existsSync } from "fs";
+import { arch, platform } from "os";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,9 +47,13 @@ if (!existsSync(binaryPath)) {
 	process.exit(1);
 }
 
-const { status, error } = spawnSync(binaryPath, process.argv.slice(2), {
-	stdio: "inherit",
-});
+const scriptIndex = process.argv.findIndex((arg) => arg.includes("zoboz-bam"));
+
+const { status, error } = spawnSync(
+	binaryPath,
+	process.argv.slice(scriptIndex + 1),
+	{ stdio: "inherit" },
+);
 
 if (error) {
 	console.error(`Failed to start the binary: ${error.message}`);

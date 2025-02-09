@@ -46,6 +46,6 @@
 	"dependencies": {
 		"esbuild": "0.24.2",
 		"oxc-resolver": "4.0.0",
-		"@zoboz/bam": "*"
+		"@zoboz/bam": "1.2.0"
 	}
 }
