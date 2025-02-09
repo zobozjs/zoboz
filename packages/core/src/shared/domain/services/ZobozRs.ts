@@ -7,6 +7,10 @@ export type SpecifiersReformatterConfig = {
 	outputFormat: "dts" | "esm" | "cjs";
 };
 
+export type PackageJsonVerifierConfig = {
+	canUpdatePackageJson: boolean;
+};
+
 type ZobozRsProcess = ChildProcessByStdio<Writable, Readable, null>;
 
 export class ZobozRs {
@@ -26,6 +30,17 @@ export class ZobozRs {
 			"--output-format",
 			config.outputFormat,
 		]);
+	}
+
+	async verifyPackageJson(config: PackageJsonVerifierConfig): Promise<void> {
+		return this.runCommand(
+			[
+				"verify-package-json",
+				"--absolute-package-dir",
+				this.absolutePackageDir,
+				config.canUpdatePackageJson ? "--can-update-package-json" : "",
+			].filter(Boolean),
+		);
 	}
 
 	async exit(): Promise<void> {

@@ -27,6 +27,10 @@ export class BuildsOrchestrator {
 				await packageJsonExpectation.verifyPackageJson();
 			}
 
+			await this.zobozRs.verifyPackageJson({
+				canUpdatePackageJson: shouldUpdatePackageJson,
+			});
+
 			await this.zobozRs.exit();
 			logger.success("zoboz build complete");
 		} catch (error) {
