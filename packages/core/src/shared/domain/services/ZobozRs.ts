@@ -83,32 +83,28 @@ export class ZobozRs {
 			return this.zobozRsProcessPromise;
 		}
 
-		this.zobozRsProcessPromise = new Promise<ZobozRsProcess>(
-			(resolve, reject) => {
-				const zobozRsProcess = spawn(
-					"/Users/dariush/repos/zoboz/packages/zoboz_rs/target/release/zoboz_rs",
-					[],
-					{
-						stdio: ["pipe", "pipe", "inherit"],
-					},
-				);
-
-				zobozRsProcess.on("error", (error) => {
-					this.zobozRsProcessPromise = null;
-					reject(error);
-				});
-
-				zobozRsProcess.on("exit", (code) => {
-					this.zobozRsProcessPromise = null;
-					if (code !== 0) {
-						reject(new Error(`Zoboz exited with code ${code}`));
-					}
-				});
-
-				resolve(zobozRsProcess);
+		const zobozRsProcess = spawn(
+			"/Users/dariush/repos/zoboz/packages/zoboz_rs/target/release/zoboz_rs",
+			[],
+			{
+				stdio: ["pipe", "pipe", "inherit"],
 			},
 		);
 
-		return this.zobozRsProcessPromise;
+		const promise = new Promise((resolve, reject) => {
+			let response = "";
+			const onData = (chunk) => {
+				response += chunk.toString();
+				// based on zoboz_rs, it means it's ready for the next command
+				if (response.endsWith("zoboz $ ")) {
+					zobozRsProcess.stdout.removeListener("data", onData);
+					resolve(null);
+				}
+			};
+
+			zobozRsProcess.stdout.addListener("data", onData);
+		});
+
+		return promise.then(() => zobozRsProcess);
 	}
 }
