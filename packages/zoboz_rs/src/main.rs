@@ -9,7 +9,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 {
         handle_command(&args[1..]).unwrap_or_else(|e| {
-            println!("{}", e);
+            eprintln!("{}", e);
             process::exit(1);
         });
     } else {
@@ -40,6 +40,6 @@ fn console_mode() {
             break;
         }
 
-        handle_command(&args).unwrap_or_else(|e| println!("{}", e));
+        handle_command(&args).unwrap_or_else(|e| eprintln!("{}", e));
     }
 }
