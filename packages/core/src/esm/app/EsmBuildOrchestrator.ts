@@ -3,7 +3,7 @@ import type { EsmConfig } from "@shared/domain/interfaces/EsmConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
-import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
+import type { ZobozBam } from "@shared/domain/services/ZobozBam.js";
 import { BuildOrchestratorResult } from "@shared/domain/valueObjects/BuildOrchestratorResult.js";
 import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
@@ -20,7 +20,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 	private readonly esmSrcDistMapper: EsmSrcDistMapper;
 
 	constructor(
-		private readonly zobozRs: ZobozRs,
+		private readonly zobozBam: ZobozBam,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
@@ -52,7 +52,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 			logger: logger,
 		});
 
-		await this.zobozRs.reformatSpecifiers({
+		await this.zobozBam.reformatSpecifiers({
 			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
 			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
 			outputFormat: "esm",

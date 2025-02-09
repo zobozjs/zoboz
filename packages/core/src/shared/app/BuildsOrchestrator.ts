@@ -1,4 +1,4 @@
-import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
+import type { ZobozBam } from "@shared/domain/services/ZobozBam.js";
 import * as process from "process";
 import { PackageJsonVerificationError } from "../domain/errors/PackageJsonVerificationError.js";
 import type { BuildOrchestrator } from "../domain/interfaces/BuildOrchestrator.js";
@@ -8,7 +8,7 @@ import { logger } from "../supporting/logger.js";
 
 export class BuildsOrchestrator {
 	constructor(
-		private readonly zobozRs: ZobozRs,
+		private readonly zobozBam: ZobozBam,
 		private readonly orchestrators: BuildOrchestrator[],
 	) {
 		if (orchestrators.length === 0) {
@@ -27,11 +27,11 @@ export class BuildsOrchestrator {
 				await packageJsonExpectation.verifyPackageJson();
 			}
 
-			await this.zobozRs.verifyPackageJson({
+			await this.zobozBam.verifyPackageJson({
 				canUpdatePackageJson: shouldUpdatePackageJson,
 			});
 
-			await this.zobozRs.exit();
+			await this.zobozBam.exit();
 			logger.success("zoboz build complete");
 		} catch (error) {
 			if (error instanceof PackageJsonVerificationError) {

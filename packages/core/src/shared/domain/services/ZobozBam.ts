@@ -11,10 +11,10 @@ export type PackageJsonVerifierConfig = {
 	canUpdatePackageJson: boolean;
 };
 
-type ZobozRsProcess = ChildProcessByStdio<Writable, Readable, null>;
+type ZobozBamProcess = ChildProcessByStdio<Writable, Readable, null>;
 
-export class ZobozRs {
-	private zobozRsProcessPromise: null | Promise<ZobozRsProcess>;
+export class ZobozBam {
+	private zobozBamProcessPromise: null | Promise<ZobozBamProcess>;
 
 	constructor(private readonly absolutePackageDir: string) {}
 
@@ -45,58 +45,58 @@ export class ZobozRs {
 
 	async exit(): Promise<void> {
 		await this.runCommand(["exit"]);
-		this.zobozRsProcessPromise = null;
+		this.zobozBamProcessPromise = null;
 	}
 
 	private async runCommand(args: string[]): Promise<void> {
-		const handleReady = (zobozRsProcess) => {
-			const readyPromise = this.getReadyPromise(zobozRsProcess);
-			zobozRsProcess.stdin.write(`${args.join(" ")}\n`);
+		const handleReady = (zobozBamProcess) => {
+			const readyPromise = this.getReadyPromise(zobozBamProcess);
+			zobozBamProcess.stdin.write(`${args.join(" ")}\n`);
 
 			return readyPromise.then(
-				() => zobozRsProcess,
-				() => zobozRsProcess,
+				() => zobozBamProcess,
+				() => zobozBamProcess,
 			);
 		};
 
-		this.zobozRsProcessPromise = this.getProcess().then(handleReady);
+		this.zobozBamProcessPromise = this.getProcess().then(handleReady);
 
-		return this.zobozRsProcessPromise.then(() => {});
+		return this.zobozBamProcessPromise.then(() => {});
 	}
 
-	private getProcess(): Promise<ZobozRsProcess> {
-		if (this.zobozRsProcessPromise) {
-			return this.zobozRsProcessPromise;
+	private getProcess(): Promise<ZobozBamProcess> {
+		if (this.zobozBamProcessPromise) {
+			return this.zobozBamProcessPromise;
 		}
 
-		const zobozRsProcess = spawn(
-			"/Users/dariush/repos/zoboz/packages/zoboz_rs/target/release/zoboz_rs",
+		const zobozBamProcess = spawn(
+			"/Users/dariush/repos/zoboz/packages/zoboz_bam/target/release/zoboz_bam",
 			[],
 			{
 				stdio: ["pipe", "pipe", "inherit"],
 			},
 		);
 
-		this.zobozRsProcessPromise = this.getReadyPromise(zobozRsProcess).then(
-			() => zobozRsProcess,
+		this.zobozBamProcessPromise = this.getReadyPromise(zobozBamProcess).then(
+			() => zobozBamProcess,
 		);
 
-		return this.zobozRsProcessPromise;
+		return this.zobozBamProcessPromise;
 	}
 
-	private getReadyPromise(zobozRsProcess: ZobozRsProcess): Promise<void> {
+	private getReadyPromise(zobozBamProcess: ZobozBamProcess): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			let response = "";
 			const onData = (chunk) => {
 				response += chunk.toString();
-				// based on zoboz_rs, it means it's ready for the next command
+				// based on zoboz_bam, it means it's ready for the next command
 				if (response.endsWith("zoboz $ ")) {
-					zobozRsProcess.stdout.removeListener("data", onData);
+					zobozBamProcess.stdout.removeListener("data", onData);
 					resolve();
 				}
 			};
 
-			zobozRsProcess.stdout.addListener("data", onData);
+			zobozBamProcess.stdout.addListener("data", onData);
 		});
 	}
 }
