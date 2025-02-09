@@ -9,9 +9,9 @@ import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
 import { EsmPackageJsonExpectationFactory } from "../domain/services/EsmPackageJsonExpectationFactory.js";
-import { EsmSpecifierFormatter } from "../domain/services/EsmSpecifierFormatter.js";
 import { EsmSrcDistMapper } from "../domain/services/EsmSrcDistMapper.js";
 import { EsmOutDir } from "../domain/valueObjects/EsmOutDir.js";
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 
 export class EsmBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: EsmOutDir;
@@ -20,6 +20,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 	private readonly esmSrcDistMapper: EsmSrcDistMapper;
 
 	constructor(
+		private readonly zobozRs: ZobozRs,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
@@ -27,7 +28,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new EsmOutDir(this.filesRepository, distDir);
+		this.outDir = new EsmOutDir(distDir);
 		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
 		this.esmSrcDistMapper = new EsmSrcDistMapper(srcDir, this.outDir);
 
@@ -44,20 +45,18 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 		await this.distEmptier.remove(this.outDir.uri);
 
 		await builder.build({
+			filesRepository: this.filesRepository,
 			srcDir: this.srcDir,
 			exportsConfig: this.exportsConfig,
 			outDir: this.outDir,
 			logger: logger,
 		});
 
-		const outDirFiles = await this.listAllFilesInOutDir();
-
-		await new EsmSpecifierFormatter(
-			this.filesRepository,
-			outDirFiles,
-			this.outDir,
-			this.esmSrcDistMapper,
-		).format();
+		this.zobozRs.reformatSpecifiers({
+			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
+			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
+			outputFormat: "esm",
+		});
 
 		await this.typeEnforcer.enforce("module", this.outDir);
 
@@ -70,9 +69,5 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 		logger.debug(`Built ESM Module: ${endTime - startTime}ms`);
 
 		return result;
-	}
-
-	private async listAllFilesInOutDir() {
-		return await this.filesRepository.listFilesRecursively(this.outDir.uri);
 	}
 }

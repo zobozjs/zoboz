@@ -9,12 +9,14 @@ import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
 import { DtsPackageJsonExpectationFactory } from "../domain/services/DtsPackageJsonExpectationFactory.js";
 import { DtsOutDir } from "../domain/valueObjects/DtsOutDir.js";
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 
 export class DtsBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: DtsOutDir;
 	private readonly packageJsonExpectationFactory: DtsPackageJsonExpectationFactory;
 
 	constructor(
+		private readonly zobozRs: ZobozRs,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
@@ -22,7 +24,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new DtsOutDir(this.filesRepository, distDir);
+		this.outDir = new DtsOutDir(distDir);
 		this.packageJsonExpectationFactory = new DtsPackageJsonExpectationFactory(
 			this.filesRepository,
 			this.exportsConfig,
@@ -36,6 +38,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 		const builder = this.dtsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
 		await builder.build({
+			filesRepository: this.filesRepository,
 			srcDir: this.srcDir,
 			exportsConfig: this.exportsConfig,
 			outDir: this.outDir,
@@ -46,6 +49,12 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 			await this.packageJsonExpectationFactory.create();
 
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
+
+		this.zobozRs.reformatSpecifiers({
+			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
+			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
+			outputFormat: "dts",
+		});
 
 		const endTime = Date.now();
 		logger.debug(`Built Declarations: ${endTime - startTime}ms`);

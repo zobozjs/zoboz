@@ -68,7 +68,7 @@ Feature: CommonJS Specifier Formatter
       """
     When the following command is executed:
       """
-      format-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/cjs --output-format cjs
+      reformat-specifiers --absolute-package-dir $scenario_dir --absolute-source-dir $scenario_dir/src --absolute-output-dir $scenario_dir/dist/cjs --output-format cjs
       """
     Then the JS content for "dist/cjs/index.js" should be:
       """

@@ -1,6 +1,6 @@
 import type { BuildConfig } from "@shared/domain/valueObjects/BuildConfig.js";
 import { logger } from "@shared/supporting/logger.js";
-import { filesRepository } from "container.js";
+import { filesRepository, zobozRs } from "container.js";
 import * as process from "process";
 import { CjsBuildOrchestrator } from "../../cjs/app/CjsBuildOrchestrator.js";
 import { DtsBuildOrchestrator } from "../../dts/app/DtsBuildOrchestrator.js";
@@ -15,8 +15,19 @@ export async function build(
 	const distEmptier = new DistEmptier(filesRepository);
 
 	const orchestrators = [
+		config.dts &&
+			new DtsBuildOrchestrator(
+				zobozRs,
+				filesRepository,
+				distEmptier,
+				config.exports,
+				config.dts,
+				config.srcDir,
+				config.distDir,
+			),
 		config.esm &&
 			new EsmBuildOrchestrator(
+				zobozRs,
 				filesRepository,
 				distEmptier,
 				config.exports,
@@ -26,19 +37,11 @@ export async function build(
 			),
 		config.cjs &&
 			new CjsBuildOrchestrator(
+				zobozRs,
 				filesRepository,
 				distEmptier,
 				config.exports,
 				config.cjs,
-				config.srcDir,
-				config.distDir,
-			),
-		config.dts &&
-			new DtsBuildOrchestrator(
-				filesRepository,
-				distEmptier,
-				config.exports,
-				config.dts,
 				config.srcDir,
 				config.distDir,
 			),

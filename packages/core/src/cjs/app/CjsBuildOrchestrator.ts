@@ -8,11 +8,10 @@ import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import { logger } from "@shared/supporting/logger.js";
-import { nodeProcessCommandRunner } from "container.js";
 import { CjsPackageJsonExpectationFactory } from "../domain/services/CjsPackageJsonExpectationFactory.js";
-import { CjsSpecifierFormatter } from "../domain/services/CjsSpecifierFormatter.js";
 import { CjsSrcDistMapper } from "../domain/services/CjsSrcDistMapper.js";
 import { CjsOutDir } from "../domain/valueObjects/CjsOutDir.js";
+import type { ZobozRs } from "@shared/domain/services/ZobozRs.js";
 
 export class CjsBuildOrchestrator implements BuildOrchestrator {
 	private readonly outDir: CjsOutDir;
@@ -21,6 +20,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 	private readonly cjsSrcDistMapper: CjsSrcDistMapper;
 
 	constructor(
+		private readonly zobozRs: ZobozRs,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
@@ -28,7 +28,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new CjsOutDir(this.filesRepository, distDir);
+		this.outDir = new CjsOutDir(distDir);
 		this.typeEnforcer = new TypeEnforcer(this.filesRepository);
 		this.cjsSrcDistMapper = new CjsSrcDistMapper(srcDir, this.outDir);
 		this.packageJsonExpectationFactory = new CjsPackageJsonExpectationFactory(
@@ -44,15 +44,18 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		await this.distEmptier.remove(this.outDir.uri);
 
 		await builder.build({
+			filesRepository: this.filesRepository,
 			srcDir: this.srcDir,
 			exportsConfig: this.exportsConfig,
 			outDir: this.outDir,
 			logger: logger,
 		});
 
-		const outDirFiles = await this.listAllFilesInOutDir();
-
-		await this.formatSpecifiers(outDirFiles);
+		this.zobozRs.reformatSpecifiers({
+			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
+			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
+			outputFormat: "cjs",
+		});
 
 		await this.typeEnforcer.enforce("commonjs", this.outDir);
 
@@ -65,31 +68,5 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		logger.debug(`Built CommonJS: ${endTime - startTime}ms`);
 
 		return result;
-	}
-
-	private async formatSpecifiers(outDirFiles: string[]) {
-		await nodeProcessCommandRunner.run(
-			[
-				// this will have compatibility issues with older versions of node, and also with windows
-				"zoboz_rs",
-				"format-specifiers",
-				"--format cjs",
-				"--absolute-src-dir",
-				this.filesRepository.getAbsoluteUri(this.srcDir.uri),
-				"--absolute-out-dir",
-				this.filesRepository.getAbsoluteUri(this.outDir.uri),
-			].join(" "),
-		);
-
-		// await new CjsSpecifierFormatter(
-		// 	this.filesRepository,
-		// 	outDirFiles,
-		// 	this.outDir,
-		// 	this.cjsSrcDistMapper,
-		// ).format();
-	}
-
-	private async listAllFilesInOutDir() {
-		return await this.filesRepository.listFilesRecursively(this.outDir.uri);
 	}
 }

@@ -20,7 +20,7 @@ fn main() {
 fn console_mode() {
     println!("Welcome to Zoboz CLI");
     println!("Available commands:");
-    println!("  format-specifiers");
+    println!("  reformat-specifiers");
     println!("  verify-package-json");
     println!("  exit");
 
