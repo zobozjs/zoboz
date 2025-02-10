@@ -2,47 +2,19 @@
 
 import { spawnSync } from "child_process";
 import { existsSync } from "fs";
+import { createRequire } from "module";
 import { arch, platform } from "os";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
 
-const binaries = {
-	darwin: {
-		x64: "zoboz-bam-darwin-x64",
-		arm64: "zoboz-bam-darwin-arm64",
-	},
-	linux: {
-		x64: "zoboz-bam-linux-x64",
-		arm64: "zoboz-bam-linux-arm64",
-	},
-	win32: {
-		x64: "zoboz-bam-win32-x64.exe",
-		arm64: "zoboz-bam-win32-arm64.exe",
-	},
-};
+const hostOs = platform();
+const hostCpu = arch();
 
-const currentPlatform = platform();
-const currentArch = arch();
+const binaryPath = require.resolve(`@zoboz/bam-bin-${hostOs}-${hostCpu}`);
 
-if (!binaries[currentPlatform] || !binaries[currentPlatform][currentArch]) {
+if (!binaryPath) {
 	console.error(
-		`Unsupported platform/architecture: ${currentPlatform} ${currentArch}. Please check the documentation for supported environments.`,
-	);
-	process.exit(1);
-}
-
-const binaryPath = join(
-	__dirname,
-	"binaries",
-	binaries[currentPlatform][currentArch],
-);
-
-if (!existsSync(binaryPath)) {
-	console.error(
-		`Binary not found at path: ${binaryPath}. Please ensure the binary is correctly placed and has execution permissions.`,
+		`Unsupported OS/CPU: ${hostOs}/${hostCpu}. Please check the documentation for supported environments.`,
 	);
 	process.exit(1);
 }

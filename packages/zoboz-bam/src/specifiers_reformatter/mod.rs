@@ -16,7 +16,7 @@ mod specifiers_reformatter;
 
 pub fn run_by_args(args: &[String]) -> Result<(), String> {
     let (output_format, absolute_package_dir, absolute_source_dir, absolute_output_dir) =
-        get_params(args);
+        get_params(args)?;
 
     run_by_params(
         &output_format,
@@ -32,10 +32,10 @@ pub fn run_by_params(
     absolute_source_dir: &str,
     absolute_output_dir: &str,
 ) -> Result<(), String> {
-    let output_format = OutputFormat::new(output_format).unwrap();
-    let package_dir = AbsolutePackageDir::new(absolute_package_dir).unwrap();
-    let absolute_source_dir = AbsoluteSourceDir::new(absolute_source_dir).unwrap();
-    let absolute_output_dir = AbsoluteOutputDir::new(absolute_output_dir).unwrap();
+    let output_format = OutputFormat::new(output_format)?;
+    let package_dir = AbsolutePackageDir::new(absolute_package_dir)?;
+    let absolute_source_dir = AbsoluteSourceDir::new(absolute_source_dir)?;
+    let absolute_output_dir = AbsoluteOutputDir::new(absolute_output_dir)?;
 
     let extensions: &[&str] = match output_format.value() {
         "esm" => &["js", "jsx", "mjs", "mjsx"],

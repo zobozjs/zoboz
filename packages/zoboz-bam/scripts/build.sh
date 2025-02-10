@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-rm -rf ~/repos/zoboz/packages/zoboz-bam/bin/binaries/*
+rm -rf ~/repos/zoboz/packages/zoboz-bam/binaries/*
 
 ./scripts/build_macos.sh
 ./scripts/build_linux.sh

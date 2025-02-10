@@ -1,19 +1,16 @@
-pub(super) fn get_params(args: &[String]) -> (String, String, String, String) {
-    let output_format = get_output_format(&args).unwrap_or_else(|e| panic!("Error: {}", e));
+pub(super) fn get_params(args: &[String]) -> Result<(String, String, String, String), String> {
+    let output_format = get_output_format(&args)?;
 
-    let absolute_package_dir =
-        get_absolute_package_dir(&args).unwrap_or_else(|e| panic!("Error: {}", e));
-    let absolute_source_dir =
-        get_absolute_source_dir(&args).unwrap_or_else(|e| panic!("Error: {}", e));
-    let absolute_output_dir =
-        get_absolute_output_dir(&args).unwrap_or_else(|e| panic!("Error: {}", e));
+    let absolute_package_dir = get_absolute_package_dir(&args)?;
+    let absolute_source_dir = get_absolute_source_dir(&args)?;
+    let absolute_output_dir = get_absolute_output_dir(&args)?;
 
-    (
+    Ok((
         output_format,
         absolute_package_dir,
         absolute_source_dir,
         absolute_output_dir,
-    )
+    ))
 }
 
 fn get_output_format(args: &[String]) -> Result<String, String> {

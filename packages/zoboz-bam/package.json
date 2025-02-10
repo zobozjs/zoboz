@@ -10,11 +10,20 @@
 		"url": "git+https://github.com/dariushalipour/zoboz.git"
 	},
 	"bin": {
-		"zoboz-bam": "./bin/zoboz-bam.mjs"
+		"zoboz-bam": "bin/zoboz-bam.mjs"
 	},
 	"main": "./bin/zoboz-bam.mjs",
 	"files": ["bin"],
 	"scripts": {
-		"build": "./scripts/build.sh"
+		"build-binaries": "./scripts/build.sh",
+		"publish-binaries": "./scripts/publish-binaries.mjs"
+	},
+	"optionalDependencies": {
+		"@zoboz/bam-bin-darwin-arm64": "1.2.0",
+		"@zoboz/bam-bin-win32-arm64": "1.2.0",
+		"@zoboz/bam-bin-linux-arm64": "1.2.0",
+		"@zoboz/bam-bin-darwin-x64": "1.2.0",
+		"@zoboz/bam-bin-win32-x64": "1.2.0",
+		"@zoboz/bam-bin-linux-x64": "1.2.0"
 	}
 }

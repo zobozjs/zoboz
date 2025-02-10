@@ -71,13 +71,23 @@ When Zoboz improves, so do your libraries. Updates to Zoboz automatically enhanc
 
 ---
 
-## **Feature Compatibility Table**
+## ** Compatibility Table (Development Environment) **
 The following table applies to the development phase of your package. Consumers of your package can rely on even older versions of Node.js if you do not use features unavailable in older versions. Essentially, your package determines Node.js compatibility for its users.
+
+### Features
 
 | Feature            | Node Version | For Older Node Versions        |
 | ------------------ | ------------ | ------------------------------ |
 | `zoboz.config.ts`  | >= 16        | Use `zoboz.config.mjs` instead |
 | `zoboz.config.mjs` | >= 14        | --                             |
+
+### OS & CPU Compatibility
+
+| Operating System | arm64          | x64            |
+| ---------------- | -------------- | -------------- |
+| MacOS            | ✅ Fully Native | ✅ Fully Native |
+| Linux            | ✅ Fully Native | ✅ Fully Native |
+| Windows          | ✅ Fully Native | ✅ Fully Native |
 
 ---
 

@@ -53,7 +53,7 @@ export class ZobozBam {
 	private async runCommand(args: string[]): Promise<void> {
 		const handleReady = (zobozBamProcess) => {
 			const readyPromise = this.getReadyPromise(zobozBamProcess);
-			zobozBamProcess.stdin.write(`${args.join(" ")}\n`);
+			zobozBamProcess.stdin.write(this.formatCommand(args));
 
 			return readyPromise.then(
 				() => zobozBamProcess,
@@ -64,6 +64,10 @@ export class ZobozBam {
 		this.zobozBamProcessPromise = this.getProcess().then(handleReady);
 
 		return this.zobozBamProcessPromise.then(() => {});
+	}
+
+	private formatCommand(args: string[]): string {
+		return `${args.join(" ").replace(/\\/g, "\\\\")}\n`;
 	}
 
 	private async getProcess(): Promise<ZobozBamProcess> {

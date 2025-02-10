@@ -1,10 +1,9 @@
-pub(super) fn get_params(args: &[String]) -> (String, bool) {
-    let absolute_package_dir =
-        get_absolute_package_dir(&args).unwrap_or_else(|e| panic!("Error: {}", e));
+pub(super) fn get_params(args: &[String]) -> Result<(String, bool), String> {
+    let absolute_package_dir = get_absolute_package_dir(&args)?;
 
     let can_update_package_json = get_can_update_package_json(args);
 
-    (absolute_package_dir, can_update_package_json)
+    Ok((absolute_package_dir, can_update_package_json))
 }
 
 fn get_absolute_package_dir(args: &[String]) -> Result<String, String> {
