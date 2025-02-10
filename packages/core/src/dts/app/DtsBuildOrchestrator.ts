@@ -2,6 +2,7 @@ import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestra
 import type { DtsConfig } from "@shared/domain/interfaces/DtsConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
+import type { ZobozBam } from "@shared/domain/services/ZobozBam.js";
 import { BuildOrchestratorResult } from "@shared/domain/valueObjects/BuildOrchestratorResult.js";
 import type { DistDir } from "@shared/domain/valueObjects/DistDir.js";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig.js";
@@ -15,6 +16,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 	private readonly packageJsonExpectationFactory: DtsPackageJsonExpectationFactory;
 
 	constructor(
+		private readonly zobozBam: ZobozBam,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
@@ -22,7 +24,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new DtsOutDir(this.filesRepository, distDir);
+		this.outDir = new DtsOutDir(distDir);
 		this.packageJsonExpectationFactory = new DtsPackageJsonExpectationFactory(
 			this.filesRepository,
 			this.exportsConfig,
@@ -36,6 +38,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 		const builder = this.dtsConfig.getBuilder();
 		await this.distEmptier.remove(this.outDir.uri);
 		await builder.build({
+			filesRepository: this.filesRepository,
 			srcDir: this.srcDir,
 			exportsConfig: this.exportsConfig,
 			outDir: this.outDir,
@@ -46,6 +49,12 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 			await this.packageJsonExpectationFactory.create();
 
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
+
+		await this.zobozBam.reformatSpecifiers({
+			absoluteSourceDir: this.filesRepository.getAbsoluteUri(this.srcDir.uri),
+			absoluteOutputDir: this.filesRepository.getAbsoluteUri(this.outDir.uri),
+			outputFormat: "dts",
+		});
 
 		const endTime = Date.now();
 		logger.debug(`Built Declarations: ${endTime - startTime}ms`);

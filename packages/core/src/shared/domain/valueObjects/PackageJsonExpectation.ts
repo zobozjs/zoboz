@@ -165,18 +165,6 @@ export class PackageJsonExpectation {
 		const text = await this.filesRepository.read(packageJsonUri);
 		const packageJson = JSON.parse(text);
 
-		if (packageJson.type !== undefined) {
-			logger.warn(
-				[
-					'package.json currently contains "type" field which threats compatibility of the package.',
-					"If you do not have to use it, consider removing it.",
-					'To briefly disclose its harmfulness, think of the lost meaning of field "main" and "module" fields.',
-					'When "type" is set to "module", possibly "main" is ignored and solely "module" is used instead.',
-					'When "type" is set to "commonjs", possibly "module" is ignored and solely "main" is used instead.',
-				].join("\n"),
-			);
-		}
-
 		return packageJson;
 	}
 

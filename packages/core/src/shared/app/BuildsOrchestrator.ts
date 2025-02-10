@@ -1,3 +1,4 @@
+import type { ZobozBam } from "@shared/domain/services/ZobozBam.js";
 import * as process from "process";
 import { PackageJsonVerificationError } from "../domain/errors/PackageJsonVerificationError.js";
 import type { BuildOrchestrator } from "../domain/interfaces/BuildOrchestrator.js";
@@ -6,7 +7,10 @@ import { PackageJsonExpectation } from "../domain/valueObjects/PackageJsonExpect
 import { logger } from "../supporting/logger.js";
 
 export class BuildsOrchestrator {
-	constructor(private readonly orchestrators: BuildOrchestrator[]) {
+	constructor(
+		private readonly zobozBam: ZobozBam,
+		private readonly orchestrators: BuildOrchestrator[],
+	) {
 		if (orchestrators.length === 0) {
 			throw new Error("No orchestrators provided");
 		}
@@ -23,6 +27,11 @@ export class BuildsOrchestrator {
 				await packageJsonExpectation.verifyPackageJson();
 			}
 
+			await this.zobozBam.verifyPackageJson({
+				canUpdatePackageJson: shouldUpdatePackageJson,
+			});
+
+			await this.zobozBam.exit();
 			logger.success("zoboz build complete");
 		} catch (error) {
 			if (error instanceof PackageJsonVerificationError) {

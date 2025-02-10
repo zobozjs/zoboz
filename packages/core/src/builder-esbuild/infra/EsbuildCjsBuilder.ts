@@ -3,22 +3,36 @@ import type {
 	Builder,
 } from "@shared/domain/interfaces/Builder.js";
 import * as esbuild from "esbuild";
+import type { BuildOptions } from "esbuild";
+import { deepMerge } from "extend.js";
 import * as process from "process";
 import type { EsbuildOptions } from "../domain/interfaces/EsbuildOptions.js";
 
 export class EsbuildCjsBuilder implements Builder {
 	constructor(private readonly buildOptions?: EsbuildOptions) {}
 
-	async build({ srcDir, outDir, logger }: BuildParams): Promise<void> {
+	async build({
+		filesRepository,
+		srcDir,
+		outDir,
+		logger,
+	}: BuildParams): Promise<void> {
 		logger.pending(`Building CommonJS by esbuild to ${outDir.uri}`);
 
-		await esbuild.build({
-			absWorkingDir: process.cwd(),
-			entryPoints: [`./${srcDir.uri}/**/*.ts`, `./${srcDir.uri}/**/*.tsx`],
-			outdir: outDir.absoluteUri,
-			format: "cjs",
-			platform: "node",
-			...(this.buildOptions || {}),
-		});
+		const finalBuildOptions = deepMerge<BuildOptions>(
+			{
+				absWorkingDir: process.cwd(),
+				entryPoints: [`./${srcDir.uri}/**/*.ts`, `./${srcDir.uri}/**/*.tsx`],
+				outdir: filesRepository.getAbsoluteUri(outDir.uri),
+				format: "cjs",
+				platform: "node",
+				logOverride: {
+					"empty-glob": "silent",
+				},
+			},
+			this.buildOptions || {},
+		);
+
+		await esbuild.build(finalBuildOptions);
 	}
 }

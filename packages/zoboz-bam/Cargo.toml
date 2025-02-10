@@ -1,0 +1,21 @@
+[package]
+name = "zoboz-bam"
+version = "1.2.0"
+edition = "2021"
+
+[dependencies]
+oxc_resolver = "4.0.0"
+regex = "1"
+lazy_static = "1"
+serde = "1"
+serde_json = { version = "1", features = ["preserve_order"] }
+shell-words = "1"
+
+[dev-dependencies]
+tempfile = "3"
+cucumber = "0.20"
+futures = "0.3"
+
+[[test]]
+name = "definitions"
+harness = false      # allows Cucumber to print output instead of libtest
