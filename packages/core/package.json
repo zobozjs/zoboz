@@ -10,8 +10,8 @@
 		"type": "git",
 		"url": "git+https://github.com/dariushalipour/zoboz.git"
 	},
+	"private": false,
 	"publishConfig": {
-		"registry": "http://localhost:4873",
 		"access": "public"
 	},
 	"files": ["dist/", "bin/", "cli/"],

@@ -105,6 +105,10 @@ function generatePackageJson(pkg) {
 	return {
 		name: pkg.name,
 		version: mainPackageVersion,
+		private: false,
+		publishConfig: {
+			access: "public",
+		},
 		repository: {
 			type: "git",
 			url: "git+https://github.com/dariushalipour/zoboz.git",

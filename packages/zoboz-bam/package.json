@@ -9,6 +9,10 @@
 		"type": "git",
 		"url": "git+https://github.com/dariushalipour/zoboz.git"
 	},
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"bin": {
 		"zoboz-bam": "bin/zoboz-bam.mjs"
 	},
