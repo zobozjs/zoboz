@@ -88,17 +88,10 @@ for (const pkg of packages) {
 
 function executeNpmPublish(packageDir) {
 	const npm = platform === "win32" ? "npm.cmd" : "npm";
-	spawnSync(
-		npm,
-		[
-			"publish",
-			`--registry=${env.PUBLISH_REGISTRY ?? "PUBLISH_REGISTRY_missing"}`,
-		],
-		{
-			cwd: packageDir,
-			stdio: "inherit",
-		},
-	);
+	spawnSync(npm, ["publish"], {
+		cwd: packageDir,
+		stdio: "inherit",
+	});
 }
 
 function generatePackageJson(pkg) {
