@@ -7,7 +7,7 @@ npm -w @zoboz/bam run build-binaries
 ./verdaccio/run.sh --start >/dev/null
 PUBLISH_REGISTRY=http://localhost:4873 npm -w @zoboz/bam run publish-binaries
 npm -w @zoboz/bam publish --registry http://localhost:4873
-npm install
+npm install --registry http://localhost:4873
 npm -w @zoboz/core run build
 ./verdaccio/run.sh --stop >/dev/null
 
@@ -36,7 +36,7 @@ for platform in "linux/amd64" "linux/arm64"; do
         cd /app/level-twos/bundler && rm -rf eval \"$test_level_two\" &&
         cd /app/level-twos/node10 && rm -rf eval \"$test_level_two\" &&
         cd /app/level-twos/node16 && rm -rf eval \"$test_level_two\" &&
-        echo '🍃 Done      ($log_env)' >> /app/temp/test.docker.sh.results ||
+        echo '⚡️ Done      ($log_env)' >> /app/temp/test.docker.sh.results ||
         echo '🌶️ Failed    ($log_env)' >> /app/temp/test.docker.sh.results
       "
       docker run -it --rm \

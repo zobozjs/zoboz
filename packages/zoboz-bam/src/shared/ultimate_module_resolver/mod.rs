@@ -1,44 +1,72 @@
 use std::path::Path;
 
-use crate::shared::{
-    utils,
+use oxc_module_resolver::create_oxc_module_resolver;
+
+use super::{
+    tsconfig_reader::{self, TsConfig},
     value_objects::{AbsoluteOutputDir, AbsolutePackageDir, AbsoluteSourceDir},
 };
 
-use super::{module_resolver::create_resolver, tsconfig_reader};
+mod oxc_module_resolver;
 
-pub(super) struct SpecifiersReformatter {
+pub struct UltimateModuleResolver {
     resolver: oxc_resolver::Resolver,
-    out_dir: String,
     absolute_base_url: Option<String>,
 }
 
-impl SpecifiersReformatter {
-    pub(super) fn new(
+impl UltimateModuleResolver {
+    pub fn new(
         package_dir: &AbsolutePackageDir,
         src_dir: &AbsoluteSourceDir,
         out_dir: &AbsoluteOutputDir,
     ) -> Self {
         let tsconfig = tsconfig_reader::get_tsconfig(package_dir);
-        let resolver = create_resolver(&tsconfig, src_dir, out_dir);
+        let resolver = create_oxc_module_resolver(&tsconfig, src_dir, out_dir);
 
         Self {
             resolver,
-            out_dir: out_dir.value().to_string_lossy().to_string(),
             absolute_base_url: get_absolute_base_url(&tsconfig, package_dir, src_dir, out_dir),
         }
     }
 
-    pub(super) fn format(
+    pub fn resolve_package_json_path(
+        &self,
+        dependent_dir: &Path,
+        dependency_package_name: &str,
+    ) -> Result<String, String> {
+        let resolution = self
+            .resolver
+            .resolve(dependent_dir, &dependency_package_name);
+
+        match resolution {
+            Err(_) => return Err("RESOLVE_FAILED".to_string()),
+            Ok(resolution) => {
+                if resolution.package_json().is_none() {
+                    return Err("PACKAGE_JSON_NOT_FOUND".to_string());
+                }
+
+                let package_json_path = resolution
+                    .package_json()
+                    .unwrap()
+                    .realpath
+                    .to_string_lossy()
+                    .to_string();
+
+                Ok(package_json_path)
+            }
+        }
+    }
+
+    pub fn resolve(
         &self,
         dependent_path: &Path,
         specifier: &str,
         is_trying_base_url_already: bool,
-    ) -> String {
+    ) -> Result<String, String> {
         let dependent_dirname: Option<&str> = dependent_path.parent().and_then(|p| p.to_str());
 
         if dependent_dirname.is_none() {
-            return specifier.to_string();
+            return Err("DIRNAME_NOT_FOUND".to_string());
         }
 
         let dependent_dirname = dependent_dirname.unwrap();
@@ -65,33 +93,20 @@ impl SpecifiersReformatter {
                 && !specifier.starts_with("./")
                 && !specifier.starts_with("../")
             {
-                return self.format(dependent_path, specifier, true);
+                return self.resolve(dependent_path, specifier, true);
             }
 
-            return specifier.to_string();
+            return Err("RESOLVE_FAILED".to_string());
         }
 
         let resolved = resolved.unwrap();
-        let resolved_path = resolved.path().to_string_lossy();
 
-        if !resolved_path.starts_with(self.out_dir.as_str()) {
-            return specifier.to_string();
-        }
-
-        let relative_path = utils::relative(dependent_dirname, resolved.path());
-
-        let relative_path = utils::ensure_relative_prefix(relative_path);
-
-        if relative_path.ends_with(".d.ts") {
-            relative_path.replace(".d.ts", ".js")
-        } else {
-            relative_path
-        }
+        return Ok(resolved.path().to_string_lossy().to_string());
     }
 }
 
 fn get_absolute_base_url(
-    tsconfig: &tsconfig_reader::TsConfig,
+    tsconfig: &TsConfig,
     package_dir: &AbsolutePackageDir,
     src_dir: &AbsoluteSourceDir,
     out_dir: &AbsoluteOutputDir,

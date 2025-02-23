@@ -8,7 +8,7 @@ export const logger = {
 		console.log("pending".padStart(padding, " "), "::", message, ...messages);
 	},
 	success: (message: string, ...messages: string[]) => {
-		console.log("success".padStart(padding, " "), "🌱", message, ...messages);
+		console.log("success".padStart(padding, " "), "⚡️", message, ...messages);
 	},
 	error: (message: string, ...messages: string[]) => {
 		console.error("error".padStart(padding, " "), "🌶️", message, ...messages);

@@ -14,6 +14,7 @@ fn main() {
         "tests/features/specifiers_reformatter/esm_specifiers_reformatter.feature",
         "tests/features/specifiers_reformatter/dts_specifiers_reformatter.feature",
         "tests/features/package_json_verifier/type_field_remover.feature",
+        "tests/features/package_json_verifier/runtime_dependencies_assurer.feature",
     ];
 
     for feature in features.iter() {
@@ -24,12 +25,20 @@ fn main() {
 #[given(expr = "there is an npm package with:")]
 fn there_is_a_npm_package_with(world: &mut TheWorld, step: &Step) {
     initiate_tempdir(world);
-    write_file(world, "package.json", &get_docstring(step));
+    a_json_file_named_with(world, step, "package.json".to_string());
 }
 
 #[given(expr = "there is a file named {string} with:")]
 fn a_file_named_with(world: &mut TheWorld, step: &Step, file_name: String) {
     write_file(world, file_name.as_str(), &get_docstring(step));
+}
+
+#[given(expr = "there is a JSON file named {string} with:")]
+fn a_json_file_named_with(world: &mut TheWorld, step: &Step, file_name: String) {
+    let json_content = get_docstring(step);
+    // If you find a better way to validate only, switch to that
+    let _value: serde_json::Value = serde_json::from_str(&json_content).unwrap();
+    write_file(world, file_name.as_str(), &json_content);
 }
 
 #[then(expr = "the JS content for {string} should be:")]
@@ -89,6 +98,11 @@ fn the_result_is_error_and_equals_the_following_text(world: &mut TheWorld, step:
 #[when(expr = "the following command is executed:")]
 fn the_following_command_is_executed(world: &mut TheWorld, step: &Step) {
     let command = get_docstring(step);
-    let command = command.replace("$scenario_dir", get_dir_path(world).to_str().unwrap());
+    let scenario_dir = get_dir_path(world)
+        .to_str()
+        .unwrap()
+        .replace(r"\", r"\\") // win32 path fix
+        .to_string();
+    let command = command.replace("$scenario_dir", &scenario_dir);
     world.command_result = Some(handle_command(&tokenize_input(&command)));
 }

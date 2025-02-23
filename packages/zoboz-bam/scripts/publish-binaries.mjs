@@ -3,7 +3,7 @@
 import { spawnSync } from "child_process";
 import fs from "fs";
 import path from "path";
-import { platform, env } from "process";
+import { env, platform } from "process";
 
 const packages = [
 	{
@@ -88,10 +88,19 @@ for (const pkg of packages) {
 
 function executeNpmPublish(packageDir) {
 	const npm = platform === "win32" ? "npm.cmd" : "npm";
-	spawnSync(npm, ["publish"], {
-		cwd: packageDir,
-		stdio: "inherit",
-	});
+	spawnSync(
+		npm,
+		[
+			"publish",
+			...("PUBLISH_REGISTRY" in env
+				? ["--registry", env.PUBLISH_REGISTRY]
+				: []),
+		],
+		{
+			cwd: packageDir,
+			stdio: "inherit",
+		},
+	);
 }
 
 function generatePackageJson(pkg) {
@@ -104,7 +113,7 @@ function generatePackageJson(pkg) {
 		},
 		repository: {
 			type: "git",
-			url: "git+https://github.com/dariushalipour/zoboz.git",
+			url: "git+https://github.com/zobozjs/zoboz.git",
 		},
 		license: "MIT",
 		preferUnplugged: true,

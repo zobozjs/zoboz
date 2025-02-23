@@ -9,6 +9,12 @@ Feature: Ensure field "type" is not present
         "main": "dist/cjs/index.js"
       }
       """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      exports.foo = 'bar';
+      """
     When the following command is executed:
       """
       verify-package-json --absolute-package-dir $scenario_dir
@@ -24,11 +30,18 @@ Feature: Ensure field "type" is not present
         "main": "dist/cjs/index.js"
       }
       """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      exports.foo = 'bar';
+      """
     When the following command is executed:
       """
       verify-package-json --absolute-package-dir $scenario_dir --can-update-package-json
       """
-    Then the JSON content for "package.json" should be:
+    Then the result is ok
+    And the JSON content for "package.json" should be:
       """
         {
           "name": "test",
@@ -47,13 +60,19 @@ Feature: Ensure field "type" is not present
         "main": "dist/cjs/index.js"
       }
       """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      exports.foo = 'bar';
+      """
     When the following command is executed:
       """
-      verify-package-json --absolute-package-dir $scenario_dir
+      verify-package-json --absolute-package-dir $scenario_dir $scenario_dir
       """
     Then the result is error and equals the following text:
       """
-      Field `type` in package.json should not exist. https://github.com/dariushalipour/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/README.md
+      Field `type` in package.json should not exist. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/type_field_remover/README.md
       """
 
   Scenario: When field "type" is present, in fix-mode, it will get removed from package.json
@@ -63,24 +82,25 @@ Feature: Ensure field "type" is not present
         "name": "test",
         "version": "1.0.0",
         "type": "whatever",
-        "main": "dist/cjs/index.js",
-        "dependencies": {
-          "dep1": "1.0.0"
-        }
+        "main": "dist/cjs/index.js"
       }
+      """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      exports.foo = 'bar';
       """
     When the following command is executed:
       """
       verify-package-json --absolute-package-dir $scenario_dir --can-update-package-json
       """
-    Then the JSON content for "package.json" should be:
+    Then the result is ok
+    And the JSON content for "package.json" should be:
       """
         {
           "name": "test",
           "version": "1.0.0",
-          "main": "dist/cjs/index.js",
-          "dependencies": {
-            "dep1": "1.0.0"
-          }
+          "main": "dist/cjs/index.js"
         }
       """
