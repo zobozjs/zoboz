@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Roboto_Mono, Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
 const robotoSans = Roboto({
@@ -10,16 +10,6 @@ const robotoSans = Roboto({
 
 const robotoMono = Roboto_Mono({
 	variable: "--font-roboto-mono",
-	subsets: ["latin"],
-});
-
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
 	subsets: ["latin"],
 });
 
@@ -39,8 +29,6 @@ export default function RootLayout({
 				className={[
 					robotoSans.variable,
 					robotoMono.variable,
-					// geistSans.variable,
-					// geistMono.variable,
 					"antialiased",
 				].join(" ")}
 			>

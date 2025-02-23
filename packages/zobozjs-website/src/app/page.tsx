@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { BookHeartIcon, Code, Link, Terminal, Zap } from "lucide-react";
-import { ModeColumn } from "./ModeColumn";
+import Image from "next/image";
 import { Anchor } from "./Anchor";
+import { ModeColumn } from "./ModeColumn";
 
 export default function Home() {
 	return (
