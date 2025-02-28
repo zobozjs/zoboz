@@ -1,3 +1,7 @@
+---
+title: 'avoid-pkg-imports'
+sidebar_position: 2
+---
 # Why You Should Avoid the `imports` Field in `package.json`
 
 If your package supports TypeScript declaration files (`.d.ts`), ES modules (`.mjs`/`.js`), and CommonJS (`.cjs`), using the `imports` field in `package.json` can create unnecessary complexity and compatibility issues.
