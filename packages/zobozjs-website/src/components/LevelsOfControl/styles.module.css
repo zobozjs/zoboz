@@ -1,6 +1,6 @@
 .container {
   text-align: center;
-  padding: 2rem 0;
+  padding: 2rem 16px;
 }
 
 .title {
@@ -10,9 +10,9 @@
 }
 
 .description {
-  max-width: 600px;
   margin: 0 auto 2rem;
-  /* color: var(--ifm-color-secondary); */
+  max-width: 1000px;
+  text-align: start;
 }
 
 .grid {
