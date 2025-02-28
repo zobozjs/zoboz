@@ -11,7 +11,7 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
 	{
-		title: "Release-Ready Package Metadata",
+		title: "✅ Release-Ready Package Metadata",
 		Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
 		description: (
 			<>
@@ -23,18 +23,18 @@ const FeatureList: FeatureItem[] = [
 		),
 	},
 	{
-		title: "Blazing-Fast & Rust-Powered",
+		title: "🔥 Blazing-Fast & Rust-Powered",
 		Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
 		description: (
 			<>
-				Built with Rust for raw speed, ZobozJS analyzes and fixes package issues
+				Built with Rust for raw speed, Zoboz analyzes and fixes package issues
 				in milliseconds. It’s faster than anything you’ve used before, with zero
 				bloat and instant feedback.
 			</>
 		),
 	},
 	{
-		title: "Universal & Future-Proof",
+		title: "💎 Universal & Future-Proof",
 		Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
 		description: (
 			<>
@@ -50,9 +50,9 @@ const FeatureList: FeatureItem[] = [
 function Feature({ title, Svg, description }: FeatureItem) {
 	return (
 		<div className={clsx("col col--4")}>
-			<div className="text--center">
+			{/* <div className="text--center">
 				<Svg className={styles.featureSvg} role="img" />
-			</div>
+			</div> */}
 			<div className="text--center padding-horiz--md">
 				<Heading as="h3">{title}</Heading>
 				<p>{description}</p>
