@@ -1,0 +1,8 @@
+{
+	"label": "Learn",
+	"position": 3,
+	"link": {
+		"type": "generated-index",
+		"description": "Understand the best practices for building and structuring npm packages. The Learn section provides in-depth explanations of the principles Zoboz enforces, helping you manually apply them or customize your setup beyond automation."
+	}
+}
