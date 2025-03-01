@@ -1,46 +1,32 @@
-.container {
-  text-align: center;
-  padding: 2rem 16px;
-}
-
 .title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
 }
 
 .description {
-  margin: 0 auto 2rem;
-  max-width: 1000px;
-  text-align: start;
+	margin: 0 auto 2rem;
+	max-width: 1000px;
+	text-align: start;
 }
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.5rem;
 }
 
 .card {
-  background: var(--ifm-background-surface-color);
-  padding: 1.5rem;
-  border-radius: 10px;
-  max-width: 350px;
-  text-align: left;
-  box-shadow: var(--ifm-global-shadow-lw);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--ifm-global-shadow-md);
+	padding: 1.5rem;
+	max-width: 350px;
+	text-align: left;
 }
 
 .cardTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+	font-size: 1.25rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
 }
 
 /* Add these styles to styles.module.css */

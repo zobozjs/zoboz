@@ -31,25 +31,29 @@ const levels = [
 
 export function LevelsOfControl() {
 	return (
-		<section className={styles.container}>
-			<h2 className={styles.title}>🎚️ Choose Your Level of Control</h2>
-			<p className={styles.description}>
+		<section>
+			<h2 className="container">🎚️ Choose Your Level of Control</h2>
+			<p className="container padding-bottom--lg">
 				Zoboz adapts to your workflow. Whether you want a fully automated
 				solution, a flexible post-build enhancer, or complete manual control,
 				you decide how much support you need.
 			</p>
-			<div className={styles.grid}>
-				{levels.map((level, index) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-					<div key={index} className={clsx(styles.card)}>
-						<h3 className={styles.cardTitle}>{level.level}</h3>
-						<h4>{level.approach}</h4>
-						<p>{level.description}</p>
-						<a href={level.docsLink} className={styles.docButton}>
-							{level.ctaTitle}
-						</a>
-					</div>
-				))}
+			<div className="container padding-bottom--xl">
+				<div className="row">
+					{levels.map((level, index) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						<div key={index} className="col col--4">
+							<div>
+								<h3 className="margin-bottom--none">{level.level}</h3>
+								<h4>{level.approach}</h4>
+								<p>{level.description}</p>
+								<a href={level.docsLink} className={styles.docButton}>
+									{level.ctaTitle}
+								</a>
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 		</section>
 	);
