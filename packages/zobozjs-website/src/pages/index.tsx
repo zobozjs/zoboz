@@ -34,8 +34,7 @@ function HomepageHeader() {
 					</div>
 					<div className="col col--6 text--left">
 						<CodeBlock language="typescript">
-							{`
-// zoboz.config.ts
+							{`// zoboz.config.ts
 
 import { BuildConfig, tsc, esbuild } from "@zoboz/core"
 
@@ -48,8 +47,7 @@ export default new BuildConfig({
   exports: {
     ".": "./src/index.ts",
   },
-})
-        `}
+})`}
 						</CodeBlock>
 						<CodeBlock language="bash">
 							{"npx zoboz build --update-package-json"}
