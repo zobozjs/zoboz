@@ -1,5 +1,4 @@
 import Heading from "@theme/Heading";
-import clsx from "clsx";
 import type { ReactNode } from "react";
 import styles from "./styles.module.css";
 
@@ -49,14 +48,12 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({ title, Svg, description }: FeatureItem) {
 	return (
-		<div className={clsx("col col--4")}>
+		<div className="col col--4">
 			{/* <div className="text--center">
 				<Svg className={styles.featureSvg} role="img" />
 			</div> */}
-			<div className="padding-horiz--md">
-				<Heading as="h3">{title}</Heading>
-				<p>{description}</p>
-			</div>
+			<Heading as="h3">{title}</Heading>
+			<p>{description}</p>
 		</div>
 	);
 }

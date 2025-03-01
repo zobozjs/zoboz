@@ -1,9 +1,9 @@
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import CodeBlock from "@theme/CodeBlock";
 import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
-import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 import type { ReactNode } from "react";
 
@@ -49,10 +49,10 @@ export default new BuildConfig({
     ".": "./src/index.ts",
   },
 })
-
-// Zoboz will build your package
-// and handle package.json fields
         `}
+						</CodeBlock>
+						<CodeBlock language="bash">
+							{"＄ npx zoboz build --update-package-json"}
 						</CodeBlock>
 					</div>
 				</div>
