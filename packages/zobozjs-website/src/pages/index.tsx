@@ -52,7 +52,7 @@ export default new BuildConfig({
         `}
 						</CodeBlock>
 						<CodeBlock language="bash">
-							{"＄ npx zoboz build --update-package-json"}
+							{"npx zoboz build --update-package-json"}
 						</CodeBlock>
 					</div>
 				</div>
