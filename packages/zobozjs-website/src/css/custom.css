@@ -49,3 +49,13 @@ h3 {
 h4 {
 	font-weight: normal;
 }
+
+.items-center {
+	display: flex;
+	align-items: center;
+}
+
+.justify-center {
+	display: flex;
+	justify-content: center;
+}
