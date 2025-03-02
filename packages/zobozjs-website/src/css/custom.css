@@ -50,6 +50,50 @@ h4 {
 	font-weight: normal;
 }
 
+@keyframes floatUpDown--md {
+	0%,
+	100% {
+		transform: translateY(5px);
+	}
+	50% {
+		transform: translateY(-5px);
+	}
+}
+
+.floating {
+	animation: floatUpDown--md 3s ease-in-out infinite;
+}
+
+.homepage-logo {
+	width: 128px;
+	margin-bottom: -15px;
+	animation: floatUpDown--md 3s ease-in-out infinite;
+}
+
+.navbar__logo {
+	position: relative;
+	z-index: 0;
+}
+
+.navbar__logo::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	height: 100%;
+	background-color: var(--ifm-color-primary);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 0;
+}
+
+.navbar__logo img {
+	display: block;
+	position: relative;
+	z-index: 1;
+}
+
 .items-center {
 	display: flex;
 	align-items: center;

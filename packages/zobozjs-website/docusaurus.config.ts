@@ -5,7 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-	title: "🐐 zoboz.js",
+	title: "zoboz.js",
 	tagline: "src → d.ts + esm + cjs",
 	favicon: "img/favicon.ico",
 
@@ -70,7 +70,12 @@ const config: Config = {
 		// Replace with your project's social card
 		image: "img/docusaurus-social-card.jpg",
 		navbar: {
-			title: "🐐 zoboz.js",
+			logo: {
+				alt: "Zoboz Logo",
+				src: "img/logo.svg",
+				className: "topbar-logo",
+			},
+			title: "zoboz.js",
 			items: [
 				{
 					type: "docSidebar",

@@ -18,6 +18,11 @@ function HomepageHeader() {
 				<div className="row">
 					<div className="col col--6 margin-vert--lg items-center justify-center">
 						<div>
+							<img
+								className="homepage-logo"
+								src="img/logo.svg"
+								alt="Zoboz Logo"
+							/>
 							<Heading as="h1" className="hero__title">
 								{siteConfig.title}
 							</Heading>
