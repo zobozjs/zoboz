@@ -72,7 +72,7 @@ const config: Config = {
 		navbar: {
 			logo: {
 				alt: "Zoboz Logo",
-				src: "img/logo.svg",
+				src: "img/favicon.ico",
 				className: "topbar-logo",
 			},
 			title: "zoboz.js",
