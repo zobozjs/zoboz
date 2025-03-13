@@ -67,8 +67,7 @@ const config: Config = {
 	],
 
 	themeConfig: {
-		// Replace with your project's social card
-		image: "img/docusaurus-social-card.jpg",
+		image: "img/open_graph.jpg",
 		navbar: {
 			logo: {
 				alt: "Zoboz Logo",
