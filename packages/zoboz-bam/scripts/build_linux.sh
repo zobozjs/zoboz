@@ -1,7 +1,7 @@
 echo "Building for Linux" &&
   rm -rf ~/repos/zoboz/packages/zoboz-bam/target &&
   docker run -it --rm --platform linux/arm64 \
-    -v $(pwd):/app rust \
+    -v $(pwd):/app rust:1.85-bullseye \
     bash -c "
     cd /app &&
     rustup update &&
@@ -12,7 +12,7 @@ echo "Building for Linux" &&
 " &&
   rm -rf ~/repos/zoboz/packages/zoboz-bam/target &&
   docker run -it --rm --platform linux/amd64 \
-    -v $(pwd):/app rust \
+    -v $(pwd):/app rust:1.85-bullseye \
     bash -c "
     cd /app &&
     rustup update &&
