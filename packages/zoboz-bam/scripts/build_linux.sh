@@ -4,8 +4,9 @@ echo "Building for Linux" &&
     -v $(pwd):/app rust \
     bash -c "
     cd /app &&
-    cargo test &&
+    rustup update &&
     rustup target add aarch64-unknown-linux-musl &&
+    cargo test &&
     cargo build --release --target aarch64-unknown-linux-musl &&
     cp /app/target/aarch64-unknown-linux-musl/release/zoboz-bam /app/binaries/zoboz-bam-linux-arm64
 " &&
@@ -14,8 +15,9 @@ echo "Building for Linux" &&
     -v $(pwd):/app rust \
     bash -c "
     cd /app &&
-    cargo test &&
+    rustup update &&
     rustup target add x86_64-unknown-linux-musl &&
+    cargo test &&
     cargo build --release --target x86_64-unknown-linux-musl &&
     cp /app/target/x86_64-unknown-linux-musl/release/zoboz-bam /app/binaries/zoboz-bam-linux-x64
 "
