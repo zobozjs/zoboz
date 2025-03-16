@@ -31,8 +31,8 @@ Then(
 		this.assertFilesExist(files);
 
 		for (const file of files) {
-			console.log(`file ${file} ------------------------------------`);
-			console.log(this.readFile(file));
+			const content = this.readFile(file);
+			console.log(`file ${file} ------------\n${content}`);
 		}
 	},
 );

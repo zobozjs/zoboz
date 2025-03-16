@@ -79,7 +79,6 @@ export class ZobozCoreWorld extends World {
 		} catch (error) {
 			const [_stdinput, _stdout, stderr] = error.output;
 			this.stderr = stderr.toString();
-			console.log(this.stderr);
 		}
 	}
 

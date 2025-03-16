@@ -26,7 +26,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `package-not-available` is not listed in package.json field `dependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md
+      Runtime dependency `package-not-available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is not directly listed at all,
@@ -56,7 +56,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `@package-not/available` is not listed in package.json field `dependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md
+      Runtime dependency `@package-not/available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is directly listed in dependencies,
@@ -182,7 +182,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `@package-not/listed` is not listed in package.json field `dependencies` or `peerDependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md
+      Runtime dependency `@package-not/listed` is not listed in package.json field `dependencies` or `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is not directly listed at all,
@@ -322,7 +322,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `@package-not/listed` is listed in package.json field `devDependencies`. It should be moved to `dependencies` or get duplicated to `peerDependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md
+      Runtime dependency `@package-not/listed` is listed in package.json field `devDependencies`. It should be moved to `dependencies` or get duplicated to `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is listed in devDependencies,

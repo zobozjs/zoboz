@@ -19,7 +19,7 @@ Feature: Output Base Directory
       """
     And they wrote in "src/index.ts" the following content:
       """
-      export const greetin = "hello, world!";
+      export const greeting = "hello, world!";
       """
     And they in package.json set "scripts.build" to "zoboz build --can-update-package-json"
     When they run "npm run build"
@@ -50,23 +50,26 @@ Feature: Output Base Directory
       """
       {
         "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
           "resolveJsonModule": true
         }
       }
       """
     And they wrote in "out-of-src.json" the following content:
       """
-      {"name": "world"}
+      {"name": "outer-world"}
       """
-    And they wrote in "out-of-src.ts" the following content:
+    And they wrote in "src/inside-src.json" the following content:
       """
-      export { name } from "./out-of-src.json";
+      {"name": "inner-world"}
       """
     And they wrote in "src/index.ts" the following content:
       """
-      import { name } from "../out-of-src.json";
+      import * as outsider from "../out-of-src.json" with { type: "json" };
+      import * as insider from "./inside-src.json" with { type: "json" };
       
-      export const greeting = `hello, ${name}!`;
+      export const greeting = `hello, ${insider.name}! or shall I say ${outsider.name}?`;
       """
     And they in package.json set "scripts.build" to "zoboz build --can-update-package-json"
     When they run "npm run build"
@@ -75,7 +78,3 @@ Feature: Output Base Directory
       | dist/esm/index.js   |
       | dist/cjs/index.js   |
       | dist/dts/index.d.ts |
-    # Then the command should fail with the following output:
-    #   """
-    #   Error: ENOENT: no such file or directory, open '/path/to/package/src/out-of-src.json'
-    #   """

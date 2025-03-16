@@ -27,6 +27,7 @@ export class EsbuildEsmBuilder implements Builder {
 					`./${srcDir.uri}/**/*.tsx`,
 					`./${srcDir.uri}/**/*.json`,
 				],
+				outbase: filesRepository.getAbsoluteUri(srcDir.uri),
 				outdir: filesRepository.getAbsoluteUri(outDir.uri),
 				format: "esm",
 				platform: "node",
