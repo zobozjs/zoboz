@@ -56,15 +56,15 @@ program.registerCommand(
 	"Build the project using zoboz.config.(ts|mjs)",
 	[
 		{
-			flag: "--update-package-json",
-			name: "updatePackageJson",
+			flag: "--can-update-package-json",
+			name: "canUpdatePackageJson",
 			description: "Updates package.json if needed. CAUTION: Do not use in CI",
 		},
 	],
 	async (options) => {
 		const config = await new ZobozConfigFetcher().fetch();
 		logger.debug("Loaded config:", config);
-		await build(config, options.updatePackageJson);
+		await build(config, options.canUpdatePackageJson);
 	},
 );
 

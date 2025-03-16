@@ -25,6 +25,9 @@ pub(super) fn create_oxc_module_resolver(
         ".ts".to_string(),
         ".tsx".to_string(),
         ".d.ts".to_string(),
+        ".json".to_string(),
+        ".node".to_string(),
+        ".wasm".to_string(),
     ];
     resolve_options.extension_alias = vec![
         (
@@ -36,6 +39,7 @@ pub(super) fn create_oxc_module_resolver(
                 ".tsx".to_string(),
             ],
         ),
+        (".json".to_string(), vec![".js".to_string()]),
         (
             ".jsx".to_string(),
             vec![".jsx".to_string(), ".tsx".to_string()],

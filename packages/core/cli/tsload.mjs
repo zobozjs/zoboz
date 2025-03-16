@@ -16,6 +16,10 @@ const resolver = new ResolverFactory({
 });
 
 export async function resolve(specifier, context, nextResolve) {
+	if (!context.parentURL) {
+		return nextResolve(specifier, context, nextResolve);
+	}
+
 	const parentURL = asUrl(context.parentURL);
 
 	try {

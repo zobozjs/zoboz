@@ -1,11 +1,11 @@
 ---
-title: 'missing-runtime-deps'
+title: 'specify-runtime-deps'
 sidebar_position: 2
 ---
 
 # Why Runtime Dependencies Belong in `dependencies` or `peerDependencies`
 
-Your package has runtime dependencies that are either missing from `package.json` or incorrectly listed under `devDependencies`.
+If you're here because of an error, your package is using runtime dependencies that are either missing from `package.json` or incorrectly listed under `devDependencies`, or your package is directly using a transitive dependency.
 
 ## Why Is This a Problem?
 

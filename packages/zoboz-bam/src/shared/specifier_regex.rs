@@ -5,5 +5,5 @@ lazy_static! {
     pub static ref RE_REQUIRE_OR_IMPORT: regex::Regex =
         regex::Regex::new(r#"\b(require|import)(\s*\(\s*['"])(.+?)(['"]\s*\))"#).unwrap();
     pub static ref RE_FROM: regex::Regex =
-        regex::Regex::new(r#"\b(from)(\s*['"])(.+?)(['"])"#).unwrap();
+        regex::Regex::new(r#"\b(from)(\s*['"])(.+?)(['"])(\s*(?:with|assert)\s*\{[^}]*\})?"#).unwrap();
 }

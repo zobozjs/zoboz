@@ -38,7 +38,7 @@ fn handle_misplaced_dependency(
     change_sets: &mut Vec<ChangeSet>,
 ) {
     let misplaced_dependency_message: String = format!(
-      "Runtime dependency `{}` is listed in package.json field `devDependencies`. It should be moved to `dependencies` or get duplicated to `peerDependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md", specifier
+      "Runtime dependency `{}` is listed in package.json field `devDependencies`. It should be moved to `dependencies` or get duplicated to `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps", specifier
   );
 
     let version = package_json
@@ -71,7 +71,7 @@ fn handle_unlisted_dependency(
     change_sets: &mut Vec<ChangeSet>,
 ) {
     let unlisted_dependency_message = format!(
-      "Runtime dependency `{}` is not listed in package.json field `dependencies` or `peerDependencies`. https://github.com/zobozjs/zoboz/blob/main/packages/zoboz-bam/src/package_json_verifier/runtime_dependencies_assurer/README.md", specifier);
+      "Runtime dependency `{}` is not listed in package.json field `dependencies` or `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps", specifier);
 
     let directory = absolute_package_dir.value();
 

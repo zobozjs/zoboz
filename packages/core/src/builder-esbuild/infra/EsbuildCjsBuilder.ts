@@ -22,7 +22,12 @@ export class EsbuildCjsBuilder implements Builder {
 		const finalBuildOptions = deepMerge<BuildOptions>(
 			{
 				absWorkingDir: process.cwd(),
-				entryPoints: [`./${srcDir.uri}/**/*.ts`, `./${srcDir.uri}/**/*.tsx`],
+				entryPoints: [
+					`./${srcDir.uri}/**/*.ts`,
+					`./${srcDir.uri}/**/*.tsx`,
+					`./${srcDir.uri}/**/*.json`,
+				],
+				outbase: filesRepository.getAbsoluteUri(srcDir.uri),
 				outdir: filesRepository.getAbsoluteUri(outDir.uri),
 				format: "cjs",
 				platform: "node",

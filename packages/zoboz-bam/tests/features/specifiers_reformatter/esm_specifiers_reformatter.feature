@@ -31,6 +31,14 @@ Feature: ES Module Specifier Formatter
       """
       export default 'foo';
       """
+    And there is a file named "dist/esm/metadata.js" with:
+      """
+      export { environment: 'development' };
+      """
+    And there is a file named "dist/esm/everjson.json" with:
+      """
+      { "environment": "development" }
+      """
     And there is a file named "dist/esm/bar/index.js" with:
       """
       import { createRequire } from 'module';
@@ -38,6 +46,12 @@ Feature: ES Module Specifier Formatter
       import baz from 'baz';
       // alias imports based on tsconfig.json paths
       import utils from '@utils';
+      // after reformatting, the import should be just js without import attributes
+      import metadata from '../metadata.json' with { type: 'json' };
+      // after reformatting, import attirbutes shortens
+      import metadatti from '../metadata.js' with { hash:'123', type: 'json', foo: 'bar' };
+      // after reformatting, this should be left as is
+      import everjson from '../everjson.json' with { type: 'json' };
       
       import('../lazy');
       
@@ -93,6 +107,12 @@ Feature: ES Module Specifier Formatter
       import baz from '../baz.js';
       // alias imports based on tsconfig.json paths
       import utils from '../utils/index.js';
+      // after reformatting, the import should be just js without import attributes
+      import metadata from '../metadata.js';
+      // after reformatting, import attirbutes shortens
+      import metadatti from '../metadata.js' with {hash:'123',foo:'bar'};
+      // after reformatting, this should be left as is
+      import everjson from '../everjson.json' with { type: 'json' };
       
       import('../lazy.js');
       

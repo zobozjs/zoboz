@@ -31,6 +31,14 @@ Feature: CommonJS Specifier Formatter
       """
       module.exports = 'foo';
       """
+    And there is a file named "dist/cjs/metadata.js" with:
+      """
+      module.exports = { environment: 'development' };
+      """
+    And there is a file named "dist/cjs/everjson.json" with:
+      """
+      { "environment": "development" }
+      """
     And there is a file named "dist/cjs/bar/index.js" with:
       """
       const baz = require('../baz');
@@ -42,6 +50,11 @@ Feature: CommonJS Specifier Formatter
       // alias imports based on tsconfig.json paths
       require('@utils');
       require('@utils/uniq');
+      
+      // after reformatting, the require should be js instead of json
+      require('../metadata.json');
+      // after reformatting, require should stay as is, since it is an actual json file
+      require('../everjson.json');
       
       module.exports = 'bar';
       """
@@ -94,6 +107,11 @@ Feature: CommonJS Specifier Formatter
       // alias imports based on tsconfig.json paths
       require('../utils/index.js');
       require('../utils/uniq.js');
+      
+      // after reformatting, the require should be js instead of json
+      require('../metadata.js');
+      // after reformatting, require should stay as is, since it is an actual json file
+      require('../everjson.json');
       
       module.exports = 'bar';
       """

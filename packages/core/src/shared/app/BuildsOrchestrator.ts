@@ -17,20 +17,18 @@ export class BuildsOrchestrator {
 		}
 	}
 
-	async build(shouldUpdatePackageJson: boolean) {
+	async build(canUpdatePackageJson: boolean) {
 		try {
 			const results = await this.buildAllOrchestrators();
 			const packageJsonExpectation = this.mergePackageJsonExpectations(results);
 
-			if (shouldUpdatePackageJson) {
+			if (canUpdatePackageJson) {
 				await packageJsonExpectation.updatePackageJson();
 			} else {
 				await packageJsonExpectation.verifyPackageJson();
 			}
 
-			await this.zobozBam.verifyPackageJson({
-				canUpdatePackageJson: shouldUpdatePackageJson,
-			});
+			await this.zobozBam.verifyPackageJson({ canUpdatePackageJson });
 
 			await this.zobozBam.exit();
 			logger.success("zoboz build complete");

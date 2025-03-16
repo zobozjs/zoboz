@@ -51,6 +51,7 @@ export class TscDtsBuilder implements Builder {
 				noEmit: false,
 				declaration: true,
 				emitDeclarationOnly: true,
+				rootDir: srcDir.uri,
 				outDir: outDir,
 			},
 		};
