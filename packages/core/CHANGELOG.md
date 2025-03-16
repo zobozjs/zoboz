@@ -12,3 +12,4 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - CLI does not swallow tsc commands' and esbuild commands' errors anymore. Helping users fix the issue arised.
+- esbuild builders do not ignore .json files from "srcDir" anymore.
