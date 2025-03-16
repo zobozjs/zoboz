@@ -29,11 +29,6 @@ Then(
 	function (this: ZobozCoreWorld, filesTable: DataTable) {
 		const files = filesTable.rows().map((x) => x[0]);
 		this.assertFilesExist(files);
-
-		for (const file of files) {
-			const content = this.readFile(file);
-			console.log(`file ${file} ------------\n${content}`);
-		}
 	},
 );
 
