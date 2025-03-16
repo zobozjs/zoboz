@@ -10,7 +10,7 @@ import { DistEmptier } from "../domain/services/DistEmptier.js";
 
 export async function build(
 	config: BuildConfig,
-	shouldUpdatePackageJson: boolean,
+	canUpdatePackageJson: boolean,
 ): Promise<void> {
 	const distEmptier = new DistEmptier(filesRepository);
 
@@ -61,7 +61,7 @@ export async function build(
 	const buildsOrchestrator = new BuildsOrchestrator(zobozBam, orchestrators);
 
 	try {
-		await buildsOrchestrator.build(shouldUpdatePackageJson);
+		await buildsOrchestrator.build(canUpdatePackageJson);
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		logger.error("Build failed:", errorMessage);

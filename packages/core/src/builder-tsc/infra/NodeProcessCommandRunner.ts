@@ -5,6 +5,11 @@ import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 export class NodeProcessCommandRunner implements CommandRunner {
 	run(command: string) {
 		logger.pending(`Running command: ${command}`);
-		child_process.execSync(command, { stdio: "inherit" });
+		try {
+			child_process.execSync(command, { stdio: "pipe" });
+		} catch (error) {
+			const [, stderr] = error.output;
+			throw new Error(`${error.message} -- ${stderr.toString()}`);
+		}
 	}
 }
