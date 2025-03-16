@@ -75,13 +75,23 @@ fn update_froms<'a>(
 ) -> std::borrow::Cow<'a, str> {
     let new_content =
         specifier_regex::RE_FROM.replace_all(&file_content, |caps: &regex::Captures| {
-            format!(
-                "{}{}{}{}",
-                &caps[1],
-                &caps[2],
-                reformatter.reformat(&file_path, &caps[3]),
-                &caps[4]
-            )
+            let specifier = reformatter.reformat(&file_path, &caps[3]);
+            // caps[5] is the import attributes
+            if caps.get(5).is_none() {
+                return format!("{}{}{}{}", &caps[1], &caps[2], specifier, &caps[4]);
+            }
+
+            // if the resolved specifier is a js file but the import attribute has type: 'json' then drop the type attribute
+            if (caps[5].contains("type: \"json\"") || caps[5].contains("type: 'json'"))
+                && specifier.ends_with(".js")
+            {
+                format!("{}{}{}{}", &caps[1], &caps[2], specifier, &caps[4])
+            } else {
+                format!(
+                    "{}{}{}{}{}",
+                    &caps[1], &caps[2], specifier, &caps[4], &caps[5]
+                )
+            }
         });
 
     new_content
