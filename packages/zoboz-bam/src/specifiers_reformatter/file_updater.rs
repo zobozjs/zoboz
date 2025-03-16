@@ -1,8 +1,16 @@
+use lazy_static::lazy_static;
 use std::path::Path;
 
 use crate::shared::specifier_regex;
 
 use super::reformatter::Reformatter;
+
+lazy_static! {
+    static ref RE_TYPE_JSON: regex::Regex =
+        regex::Regex::new(r#"(\btype\s*:\s*['"]json['"])"#).unwrap();
+    static ref RE_EMPTY_IMPORT_ATTRIBUTES: regex::Regex =
+        regex::Regex::new(r#"\s*\b(?:with|assert)\s*\{\s*\}"#).unwrap();
+}
 
 pub(super) fn update_cjs(
     reformatter: &Reformatter,
@@ -82,16 +90,38 @@ fn update_froms<'a>(
             }
 
             // if the resolved specifier is a js file but the import attribute has type: 'json' then drop the type attribute
-            if (caps[5].contains("type: \"json\"") || caps[5].contains("type: 'json'"))
-                && specifier.ends_with(".js")
-            {
-                format!("{}{}{}{}", &caps[1], &caps[2], specifier, &caps[4])
-            } else {
-                format!(
+            let is_json_type_and_js_file = (caps[5].contains("type: \"json\"")
+                || caps[5].contains("type: 'json'"))
+                && specifier.ends_with(".js");
+
+            if !is_json_type_and_js_file {
+                return format!(
                     "{}{}{}{}{}",
                     &caps[1], &caps[2], specifier, &caps[4], &caps[5]
-                )
+                );
             }
+
+            let shortened_import_attributes = caps[5]
+                .replace("type: \"json\"", "")
+                .replace("type: 'json'", "")
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace(" ", "")
+                .replace("\t", "")
+                .replace(",,", ",")
+                .replace("with{", " with {")
+                .replace("assert{", " assert {")
+                .replace("{,", "{")
+                .replace(",}", "}");
+
+            if RE_EMPTY_IMPORT_ATTRIBUTES.is_match(&shortened_import_attributes) {
+                return format!("{}{}{}{}", &caps[1], &caps[2], specifier, &caps[4]);
+            }
+
+            return format!(
+                "{}{}{}{}{}",
+                &caps[1], &caps[2], specifier, &caps[4], &shortened_import_attributes
+            );
         });
 
     new_content
