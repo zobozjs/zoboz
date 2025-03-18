@@ -20,7 +20,11 @@ impl Reformatter {
         Self {
             ultimate_module_resolver,
             package_dir: package_dir.value().to_string_lossy().to_string(),
-            node_modules: format!("{}/node_modules", package_dir.value().to_string_lossy()),
+            node_modules: package_dir
+                .value()
+                .join("node_modules")
+                .to_string_lossy()
+                .to_string(),
         }
     }
 
