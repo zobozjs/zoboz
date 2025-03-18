@@ -2,8 +2,8 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import {
 	type IWorldOptions,
-	setWorldConstructor,
 	World,
+	setWorldConstructor,
 } from "@cucumber/cucumber";
 import tmp from "tmp";
 import { PackageManager } from "./PackageManager.js";
@@ -31,9 +31,7 @@ export class ZobozCoreWorld extends World {
 	}
 
 	initPackage() {
-		this.packageManager.init();
-		this.packageManager.installTypescript();
-		this.packageManager.installZobozCore(this.parameters.zobozCoreTarballPath);
+		this.packageManager.init(this.parameters.zobozCoreTarballPath);
 	}
 
 	runBuildWithUpdatePackageJson() {

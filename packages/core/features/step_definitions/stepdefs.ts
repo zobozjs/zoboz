@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { Given, When, Then, type DataTable } from "@cucumber/cucumber";
+import { type DataTable, Given, Then, When } from "@cucumber/cucumber";
 import type { ZobozCoreWorld } from "../support/ZobozCoreWorld.js";
 
 Given("the user created a new package", function (this: ZobozCoreWorld) {
