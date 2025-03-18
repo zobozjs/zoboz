@@ -2,30 +2,30 @@ import assert from "node:assert";
 import { type DataTable, Given, Then, When } from "@cucumber/cucumber";
 import type { ZobozCoreWorld } from "../support/ZobozCoreWorld.js";
 
-Given("the user created a new package", function (this: ZobozCoreWorld) {
+Given("a new package is created", function (this: ZobozCoreWorld) {
 	this.initPackage();
 });
 
 Given(
-	"they wrote in {string} the following content:",
+	"file {string} reads as:",
 	function (this: ZobozCoreWorld, filePath: string, fileContent: string) {
 		this.writeFile(filePath, fileContent);
 	},
 );
 
 Given(
-	"they in package.json set {string} to {string}",
+	"package.json sets {string} to {string}",
 	function (this: ZobozCoreWorld, key: string, value: string) {
 		this.setPackageJsonContent(key, value);
 	},
 );
 
-When("they run {string}", function (this: ZobozCoreWorld, command: string) {
+When("command {string} runs", function (this: ZobozCoreWorld, command: string) {
 	this.runCommand(command);
 });
 
 Then(
-	"the following files should be created:",
+	"the following files should exist:",
 	function (this: ZobozCoreWorld, filesTable: DataTable) {
 		const files = filesTable.rows().map((x) => x[0]);
 		this.assertFilesExist(files);
@@ -33,7 +33,7 @@ Then(
 );
 
 Then(
-	"the file {string} should have the following content:",
+	"file {string} should read as:",
 	function (this: ZobozCoreWorld, filePath: string, fileContent: string) {
 		const content = this.readFile(filePath);
 		assert.strictEqual(content.trim(), fileContent.trim());
@@ -41,7 +41,7 @@ Then(
 );
 
 Then(
-	"the file {string} should contain {string}",
+	"file {string} should contain {string}",
 	function (this: ZobozCoreWorld, filePath: string, keyword: string) {
 		const content = this.readFile(filePath);
 		if (!content.includes(keyword)) {

@@ -71,7 +71,7 @@ When Zoboz improves, so do your libraries. Updates to Zoboz automatically enhanc
 
 ---
 
-## ** Compatibility Table (Development Environment) **
+## Compatibility Table (Development Environment)
 The following table applies to the development phase of your package. Consumers of your package can rely on even older versions of Node.js if you do not use features unavailable in older versions. Essentially, your package determines Node.js compatibility for its users.
 
 ### Features
