@@ -6,8 +6,24 @@ Feature: CommonJS Specifier Formatter
       {
         "name": "test",
         "version": "1.0.0",
-        "main": "dist/cjs/index.js"
+        "main": "dist/cjs/index.js",
+        "dependencies": {
+          "external": "1.0.0"
+        }
       }
+      """
+    And the package has a directory named "node_modules"
+    And there is a file named "node_modules/external/package.json" with:
+      """
+      {
+        "name": "external",
+        "version": "1.0.0",
+        "main": "index.js"
+      }
+      """
+    And there is a file named "node_modules/external/index.js" with:
+      """
+      module.exports = 'external';
       """
     And the package has a directory named "src"
     And the package has a directory named "dist/cjs"
@@ -24,6 +40,10 @@ Feature: CommonJS Specifier Formatter
       """
     And there is a file named "dist/cjs/index.js" with:
       """
+      // dependencies should not be touched
+      const external = require('external');
+      // files from within the package but outside of the source directory will be remapped
+      const pkg = require('../package.json');
       const foo = require('./foo');
       const bar = require("./bar");
       """
@@ -89,6 +109,10 @@ Feature: CommonJS Specifier Formatter
       """
     Then the JS content for "dist/cjs/index.js" should be:
       """
+      // dependencies should not be touched
+      const external = require('external');
+      // files from within the package but outside of the source directory will be remapped
+      const pkg = require('../../package.json');
       const foo = require('./foo.js');
       const bar = require("./bar/index.js");
       """

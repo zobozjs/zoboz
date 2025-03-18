@@ -12,6 +12,14 @@ mod oxc_module_resolver;
 pub struct UltimateModuleResolver {
     resolver: oxc_resolver::Resolver,
     absolute_base_url: Option<String>,
+    src_dir: String,
+    out_dir: String,
+}
+
+pub enum ResolverStrategy {
+    Regular,
+    WithBaseUrl,
+    WithSrcGhost,
 }
 
 impl UltimateModuleResolver {
@@ -26,6 +34,8 @@ impl UltimateModuleResolver {
         Self {
             resolver,
             absolute_base_url: get_absolute_base_url(&tsconfig, package_dir, src_dir, out_dir),
+            src_dir: src_dir.value().to_string_lossy().to_string(),
+            out_dir: out_dir.value().to_string_lossy().to_string(),
         }
     }
 
@@ -61,7 +71,7 @@ impl UltimateModuleResolver {
         &self,
         dependent_path: &Path,
         specifier: &str,
-        is_trying_base_url_already: bool,
+        resolver_strategy: ResolverStrategy,
     ) -> Result<String, String> {
         let dependent_dirname: Option<&str> = dependent_path.parent().and_then(|p| p.to_str());
 
@@ -71,37 +81,59 @@ impl UltimateModuleResolver {
 
         let dependent_dirname = dependent_dirname.unwrap();
 
-        let source_dirname = if is_trying_base_url_already {
-            self.absolute_base_url.as_ref().unwrap().as_str()
-        } else {
-            dependent_dirname
-        };
-
-        let specifier_for_resolver = if is_trying_base_url_already {
-            &format!("./{}", specifier)
-        } else {
-            specifier
+        let (source_dirname, specifier_for_resolver) = match resolver_strategy {
+            ResolverStrategy::Regular => (dependent_dirname.to_string(), specifier.to_string()),
+            ResolverStrategy::WithBaseUrl => (
+                self.absolute_base_url.as_ref().unwrap().to_string(),
+                format!("./{}", specifier),
+            ),
+            ResolverStrategy::WithSrcGhost => (
+                dependent_dirname.replace(&self.out_dir, &self.src_dir),
+                specifier.to_string(),
+            ),
         };
 
         let resolved = self
             .resolver
-            .resolve(source_dirname, specifier_for_resolver);
+            .resolve(source_dirname.clone(), &specifier_for_resolver);
 
-        if resolved.is_err() {
-            if !is_trying_base_url_already
-                && self.absolute_base_url.is_some()
-                && !specifier.starts_with("./")
-                && !specifier.starts_with("../")
-            {
-                return self.resolve(dependent_path, specifier, true);
+        match resolved {
+            Err(resolve_error) => {
+                match resolver_strategy {
+                    ResolverStrategy::Regular => {
+                        // is relative specifier
+                        if specifier.starts_with("./") || specifier.starts_with("../") {
+                            // try to resolve with imaginary source as base url
+                            return self.resolve(
+                                dependent_path,
+                                specifier,
+                                ResolverStrategy::WithSrcGhost,
+                            );
+                        }
+
+                        // is absolute specifier
+                        if self.absolute_base_url.is_some() {
+                            return self.resolve(
+                                dependent_path,
+                                specifier,
+                                ResolverStrategy::WithBaseUrl,
+                            );
+                        }
+
+                        return Err(resolve_error.to_string());
+                    }
+                    ResolverStrategy::WithBaseUrl => {
+                        return Err(resolve_error.to_string());
+                    }
+                    ResolverStrategy::WithSrcGhost => {
+                        return Err(resolve_error.to_string());
+                    }
+                }
             }
-
-            return Err("RESOLVE_FAILED".to_string());
+            Ok(resolved) => {
+                return Ok(resolved.path().to_string_lossy().to_string());
+            }
         }
-
-        let resolved = resolved.unwrap();
-
-        return Ok(resolved.path().to_string_lossy().to_string());
     }
 }
 

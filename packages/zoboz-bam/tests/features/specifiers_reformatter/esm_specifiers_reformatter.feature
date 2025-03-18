@@ -6,8 +6,24 @@ Feature: ES Module Specifier Formatter
       {
         "name": "test",
         "version": "1.0.0",
-        "module": "dist/esm/index.js"
+        "module": "dist/esm/index.js",
+        "dependencies": {
+          "external": "1.0.0"
+        }
       }
+      """
+    And the package has a directory named "node_modules"
+    And there is a file named "node_modules/external/package.json" with:
+      """
+      {
+        "name": "external",
+        "version": "1.0.0",
+        "module": "index.js"
+      }
+      """
+    And there is a file named "node_modules/external/index.js" with:
+      """
+      export default 'external';
       """
     And the package has a directory named "src"
     And the package has a directory named "dist/esm"
@@ -24,6 +40,10 @@ Feature: ES Module Specifier Formatter
       """
     And there is a file named "dist/esm/index.js" with:
       """
+      // dependencies should not be touched
+      import external from 'external';
+      // files from within the package but outside of the source directory will be remapped
+      import pkg from '../package.json' with { type: 'json' };
       import foo from './foo';
       import { bar } from "./bar";
       """
@@ -93,6 +113,10 @@ Feature: ES Module Specifier Formatter
       """
     Then the JS content for "dist/esm/index.js" should be:
       """
+      // dependencies should not be touched
+      import external from 'external';
+      // files from within the package but outside of the source directory will be remapped
+      import pkg from '../../package.json' with { type: 'json' };
       import foo from './foo.js';
       import { bar } from "./bar/index.js";
       """

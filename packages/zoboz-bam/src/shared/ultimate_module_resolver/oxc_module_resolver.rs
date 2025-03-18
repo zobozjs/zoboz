@@ -39,7 +39,10 @@ pub(super) fn create_oxc_module_resolver(
                 ".tsx".to_string(),
             ],
         ),
-        (".json".to_string(), vec![".js".to_string()]),
+        (
+            ".json".to_string(),
+            vec![".json".to_string(), ".js".to_string()],
+        ),
         (
             ".jsx".to_string(),
             vec![".jsx".to_string(), ".tsx".to_string()],

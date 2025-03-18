@@ -52,7 +52,7 @@ pub fn run_by_params(
         &absolute_output_dir,
     );
 
-    let reformatter = Reformatter::new(resolver, &absolute_output_dir);
+    let reformatter = Reformatter::new(resolver, &absolute_package_dir);
 
     walk_files_recursively(
         &absolute_output_dir.value(),
