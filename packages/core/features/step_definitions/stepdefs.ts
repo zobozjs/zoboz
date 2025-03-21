@@ -53,6 +53,18 @@ Then(
 );
 
 Then(
+	"file {string} should not contain {string}",
+	function (this: ZobozCoreWorld, filePath: string, keyword: string) {
+		const content = this.readFile(filePath);
+		if (content.includes(keyword)) {
+			throw new Error(
+				`keyword {${keyword}} exists in file content: """\n${content}"""`,
+			);
+		}
+	},
+);
+
+Then(
 	"the command should fail with the following output:",
 	function (this: ZobozCoreWorld, errorOutput: string) {
 		const stderr = this.getStderr();
