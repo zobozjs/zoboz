@@ -38,7 +38,7 @@
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"build": "node ./scripts/build.mjs",
-		"test": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./cli/tsload.mjs\", pathToFileURL(\"./\"));' --test tests/index.test.ts"
+		"test": "cucumber-js"
 	},
 	"devDependencies": {
 		"@cucumber/cucumber": "^11.2.0",

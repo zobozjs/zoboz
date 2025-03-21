@@ -1,6 +1,7 @@
 {
 	"default": {
 		"import": ["features/**/*.ts"],
+		"loader": ["./cli/tsload.mjs"],
 		"formatOptions": {
 			"snippetInterface": "synchronous"
 		}
