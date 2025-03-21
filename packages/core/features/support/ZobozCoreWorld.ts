@@ -8,21 +8,13 @@ import {
 import tmp from "tmp";
 import { PackageManager } from "./PackageManager.js";
 
-type ParametersType = {
-	zobozCoreTarballPath: string;
-};
-
 export class ZobozCoreWorld extends World {
 	private stderr: null | string = null;
 	private readonly packageDir: string;
 	private readonly packageManager: PackageManager;
 
-	constructor(public readonly options: IWorldOptions<ParametersType>) {
+	constructor(options: IWorldOptions) {
 		super(options);
-
-		if (!options.parameters.zobozCoreTarballPath) {
-			throw new Error("zobozCoreTarballPath is not set");
-		}
 
 		tmp.setGracefulCleanup();
 		this.packageDir = tmp.dirSync({ unsafeCleanup: true }).name;
@@ -30,8 +22,8 @@ export class ZobozCoreWorld extends World {
 		this.packageManager = new PackageManager(this.packageDir);
 	}
 
-	initPackage() {
-		this.packageManager.init(this.parameters.zobozCoreTarballPath);
+	initPackage(zobozCoreTarballPath: string) {
+		this.packageManager.init(zobozCoreTarballPath);
 	}
 
 	runBuildWithUpdatePackageJson() {

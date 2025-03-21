@@ -1,9 +1,28 @@
 import assert from "node:assert";
-import { type DataTable, Given, Then, When } from "@cucumber/cucumber";
+import {
+	AfterAll,
+	Before,
+	BeforeAll,
+	type DataTable,
+	Given,
+	Then,
+	When,
+} from "@cucumber/cucumber";
+import { ZobozCorePacker } from "../support/ZobozCorePacker.js";
 import type { ZobozCoreWorld } from "../support/ZobozCoreWorld.js";
 
+const zobozCorePacker = new ZobozCorePacker();
+
+BeforeAll(() => {
+	zobozCorePacker.pack();
+});
+
+AfterAll(() => {
+	zobozCorePacker.drop();
+});
+
 Given("a new package is created", function (this: ZobozCoreWorld) {
-	this.initPackage();
+	this.initPackage(zobozCorePacker.getTarballPath());
 });
 
 Given(
