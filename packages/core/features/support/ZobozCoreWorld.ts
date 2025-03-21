@@ -65,10 +65,8 @@ export class ZobozCoreWorld extends World {
 		}
 	}
 
-	setPackageJsonContent(key: string, value: string) {
-		child_process.execSync(`npm pkg set "${key}"="${value}"`, {
-			cwd: this.packageDir,
-		});
+	setInPackageJson(key: string, value: string) {
+		this.packageManager.setInPackageJson(key, value);
 	}
 
 	runCommand(command: string) {

@@ -25,6 +25,8 @@ Feature: Generate Output Files
     When command "npm run build" runs
     Then the following files should exist:
       | file-path           |
+      | package.json        |
+      | src/index.ts        |
       | dist/esm/index.js   |
       | dist/cjs/index.js   |
       | dist/dts/index.d.ts |

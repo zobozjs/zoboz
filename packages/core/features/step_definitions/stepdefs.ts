@@ -16,7 +16,7 @@ Given(
 Given(
 	"package.json sets {string} to {string}",
 	function (this: ZobozCoreWorld, key: string, value: string) {
-		this.setPackageJsonContent(key, value);
+		this.setInPackageJson(key, value);
 	},
 );
 

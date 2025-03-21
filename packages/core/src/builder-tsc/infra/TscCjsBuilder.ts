@@ -59,6 +59,10 @@ export class TscCjsBuilder implements Builder {
 	}
 
 	private generateRandomString() {
-		return Math.random().toString(36).substring(7);
+		if (typeof crypto === "undefined") {
+			return Math.random().toString(36).substring(7);
+		}
+
+		return crypto.randomUUID();
 	}
 }

@@ -10,12 +10,18 @@ export class PackageManager {
 			[
 				"pnpm init",
 				"npm pkg set packageManager=pnpm@9.15.4",
-				`pnpm add -D --offline typescript@5.8.2 ${zobozCoreTarballPath}`,
+				`pnpm add -D --prefer-offline typescript@5.8.2 ${zobozCoreTarballPath}`,
 			].join(" && "),
 			{ cwd: this.packageDir },
 		);
 
 		this.createTsConfigTs();
+	}
+
+	setInPackageJson(key: string, value: string) {
+		child_process.execSync(`npm pkg set "${key}"="${value}"`, {
+			cwd: this.packageDir,
+		});
 	}
 
 	private createTsConfigTs() {
