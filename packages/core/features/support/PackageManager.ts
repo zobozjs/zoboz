@@ -6,14 +6,31 @@ export class PackageManager {
 	constructor(private packageDir: string) {}
 
 	init(zobozCoreTarballPath: string) {
-		child_process.execSync(
-			[
-				"pnpm init",
-				"npm pkg set packageManager=pnpm@9.15.4",
-				`pnpm add -D --prefer-offline typescript@5.8.2 ${zobozCoreTarballPath}`,
-			].join(" && "),
-			{ cwd: this.packageDir },
+		fs.writeFileSync(
+			path.join(this.packageDir, "package.json"),
+			JSON.stringify(
+				{
+					name: "my-package",
+					version: "1.0.0",
+					main: "index.js",
+					scripts: {},
+					keywords: [],
+					author: "",
+					license: "ISC",
+					packageManager: "pnpm@9.15.4",
+					devDependencies: {
+						"@zoboz/core": `file:${zobozCoreTarballPath}`,
+						typescript: "5.8.2",
+					},
+				},
+				null,
+				2,
+			),
 		);
+
+		child_process.execSync("pnpm install --prefer-offline", {
+			cwd: this.packageDir,
+		});
 
 		this.createTsConfigTs();
 	}
