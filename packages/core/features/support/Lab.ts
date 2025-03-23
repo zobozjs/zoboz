@@ -6,37 +6,37 @@ import {
 	setWorldConstructor,
 } from "@cucumber/cucumber";
 import tmp from "tmp";
-import { PackageManager } from "./PackageManager.js";
+import { ScenarioPackage } from "./ScenarioPackage.js";
 
-export class Lab extends World {
+type ParametersType = { pilotTarballPath: string };
+
+export class Lab extends World<ParametersType> {
 	private stderr: null | string = null;
-	private readonly packageDir: string;
-	private readonly packageManager: PackageManager;
+	private readonly scenarioTempDir: string;
+	private readonly scenarioPackage: ScenarioPackage;
 
-	constructor(options: IWorldOptions) {
+	constructor(options: IWorldOptions<ParametersType>) {
 		super(options);
-
 		tmp.setGracefulCleanup();
-		this.packageDir = tmp.dirSync({ unsafeCleanup: true }).name;
-
-		this.packageManager = new PackageManager(this.packageDir);
+		this.scenarioTempDir = tmp.dirSync({ unsafeCleanup: true }).name;
+		this.scenarioPackage = new ScenarioPackage(this.scenarioTempDir);
 	}
 
-	initPackage(zobozCoreTarballPath: string) {
-		this.packageManager.init(zobozCoreTarballPath);
+	initPackage() {
+		this.scenarioPackage.init(this.parameters.pilotTarballPath);
 	}
 
 	runBuildWithUpdatePackageJson() {
-		child_process.execSync("npm run build", { cwd: this.packageDir });
+		child_process.execSync("npm run build", { cwd: this.scenarioTempDir });
 	}
 
 	writeFile(filePath: string, fileContent: string) {
 		this.createDirectoryIfAbsent(filePath);
-		fs.writeFileSync(`${this.packageDir}/${filePath}`, fileContent);
+		fs.writeFileSync(`${this.scenarioTempDir}/${filePath}`, fileContent);
 	}
 
 	readFile(filePath: string) {
-		return fs.readFileSync(`${this.packageDir}/${filePath}`, {
+		return fs.readFileSync(`${this.scenarioTempDir}/${filePath}`, {
 			encoding: "utf-8",
 		});
 	}
@@ -44,13 +44,13 @@ export class Lab extends World {
 	private createDirectoryIfAbsent(filePath: string) {
 		const dir = filePath.split("/").slice(0, -1).join("/");
 		if (dir) {
-			fs.mkdirSync(`${this.packageDir}/${dir}`, { recursive: true });
+			fs.mkdirSync(`${this.scenarioTempDir}/${dir}`, { recursive: true });
 		}
 	}
 
 	assertFilesExist(files: string[]) {
 		for (const file of files) {
-			const filePath = `${this.packageDir}/${file}`;
+			const filePath = `${this.scenarioTempDir}/${file}`;
 			if (!fs.existsSync(filePath)) {
 				throw new Error(`File ${filePath} does not exist`);
 			}
@@ -58,12 +58,15 @@ export class Lab extends World {
 	}
 
 	setInPackageJson(key: string, value: string) {
-		this.packageManager.setInPackageJson(key, value);
+		this.scenarioPackage.setInPackageJson(key, value);
 	}
 
 	runCommand(command: string) {
 		try {
-			child_process.execSync(command, { cwd: this.packageDir, stdio: "pipe" });
+			child_process.execSync(command, {
+				cwd: this.scenarioTempDir,
+				stdio: "pipe",
+			});
 		} catch (error) {
 			const [_stdinput, _stdout, stderr] = error.output;
 			this.stderr = stderr.toString();

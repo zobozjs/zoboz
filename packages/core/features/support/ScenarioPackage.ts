@@ -2,12 +2,12 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-export class PackageManager {
-	constructor(private packageDir: string) {}
+export class ScenarioPackage {
+	constructor(private scenarioPackageDir: string) {}
 
 	init(zobozCoreTarballPath: string) {
 		fs.writeFileSync(
-			path.join(this.packageDir, "package.json"),
+			path.join(this.scenarioPackageDir, "package.json"),
 			JSON.stringify(
 				{
 					name: "my-package",
@@ -28,23 +28,22 @@ export class PackageManager {
 			),
 		);
 
-		child_process.execSync("pnpm install --prefer-offline", {
-			cwd: this.packageDir,
-		});
-
+		this.exec("pnpm install --prefer-offline");
 		this.createTsConfigTs();
 	}
 
 	setInPackageJson(key: string, value: string) {
-		child_process.execSync(`npm pkg set "${key}"="${value}"`, {
-			cwd: this.packageDir,
-		});
+		this.exec(`npm pkg set "${key}"="${value}"`);
 	}
 
 	private createTsConfigTs() {
 		fs.writeFileSync(
-			path.join(this.packageDir, "tsconfig.json"),
+			path.join(this.scenarioPackageDir, "tsconfig.json"),
 			JSON.stringify({}),
 		);
+	}
+
+	private exec(command: string) {
+		child_process.execSync(command, { cwd: this.scenarioPackageDir });
 	}
 }

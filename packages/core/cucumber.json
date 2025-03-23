@@ -1,5 +1,6 @@
 {
 	"default": {
+		"parallel": 4,
 		"import": ["features/**/*.ts"],
 		"loader": ["./cli/tsload.mjs"],
 		"formatOptions": {

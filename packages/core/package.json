@@ -38,7 +38,7 @@
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"build": "node ./scripts/build.mjs",
-		"test": "cucumber-js"
+		"test": "node tests/index.test.mjs"
 	},
 	"devDependencies": {
 		"@cucumber/cucumber": "^11.2.0",

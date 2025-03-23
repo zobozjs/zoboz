@@ -1,27 +1,9 @@
 import assert from "node:assert";
-import {
-	AfterAll,
-	BeforeAll,
-	type DataTable,
-	Given,
-	Then,
-	When,
-} from "@cucumber/cucumber";
+import { type DataTable, Given, Then, When } from "@cucumber/cucumber";
 import type { Lab } from "../support/Lab.js";
-import { PilotPack } from "../support/PilotPack.js";
-
-const pilotPack = new PilotPack();
-
-BeforeAll(() => {
-	pilotPack.generate();
-});
-
-AfterAll(() => {
-	pilotPack.drop();
-});
 
 Given("a new package is created", function (this: Lab) {
-	this.initPackage(pilotPack.getTarballPath());
+	this.initPackage();
 });
 
 Given(
