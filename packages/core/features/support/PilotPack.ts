@@ -4,16 +4,15 @@ import { fileURLToPath } from "node:url";
 
 export class PilotPack {
 	private tarballPath: string;
+	private packageDir = getPackageDir();
 
 	generate(): void {
-		const packageDir = this.getPackageDir();
-
 		console.time("buildPackage");
-		this.build(packageDir);
+		this.build();
 		console.timeEnd("buildPackage");
 
 		console.time("createTarball");
-		this.pack(packageDir);
+		this.pack();
 		console.timeEnd("createTarball");
 	}
 
@@ -25,34 +24,31 @@ export class PilotPack {
 		return this.tarballPath;
 	}
 
-	private build(packageDir: string): void {
-		child_process.execSync("npm run build", { cwd: packageDir });
+	private build(): void {
+		child_process.execSync("npm run build", { cwd: this.packageDir });
 	}
 
-	private pack(packageDir: string): void {
+	private pack(): void {
 		const tarballName = child_process
 			.execSync("npm pack", {
-				cwd: packageDir,
+				cwd: this.packageDir,
 				stdio: "pipe",
 			})
 			.toString()
 			.trim();
 
-		this.tarballPath = path.join(packageDir, tarballName);
+		this.tarballPath = path.join(this.packageDir, tarballName);
 	}
+}
 
-	private getPackageDir(): string {
-		return this.getPackageDirFromFilename(this.getFilename());
-	}
+function getPackageDir(): string {
+	const relativePath = "../..";
 
-	private getPackageDirFromFilename(filename: string): string {
-		return path.resolve(path.dirname(filename), "../..");
-	}
-
-	private getFilename(): string {
-		return typeof __filename !== "undefined"
+	const filename =
+		typeof __filename !== "undefined"
 			? __filename
 			: // @ts-ignore
 				fileURLToPath(import.meta.url);
-	}
+
+	return path.resolve(path.dirname(filename), relativePath);
 }
