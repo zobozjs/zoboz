@@ -8,7 +8,7 @@ import {
 import tmp from "tmp";
 import { PackageManager } from "./PackageManager.js";
 
-export class ZobozCoreWorld extends World {
+export class Lab extends World {
 	private stderr: null | string = null;
 	private readonly packageDir: string;
 	private readonly packageManager: PackageManager;
@@ -75,4 +75,4 @@ export class ZobozCoreWorld extends World {
 	}
 }
 
-setWorldConstructor(ZobozCoreWorld);
+setWorldConstructor(Lab);
