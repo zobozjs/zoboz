@@ -71,3 +71,27 @@ Then(
 		assert.strictEqual(stderr?.trim(), errorOutput.trim());
 	},
 );
+
+Then(
+	"file {string} should contain {string} but not {string}",
+	function (
+		this: Lab,
+		filePath: string,
+		expectToExist: string,
+		expectToMiss: string,
+	) {
+		const content = this.readFile(filePath);
+
+		if (!content.includes(expectToExist)) {
+			throw new Error(
+				`keyword {${expectToExist}} does not exist in file content: """\n${content}"""`,
+			);
+		}
+
+		if (content.includes(expectToMiss)) {
+			throw new Error(
+				`keyword {${expectToMiss}} exists in file content: """\n${content}"""`,
+			);
+		}
+	},
+);
