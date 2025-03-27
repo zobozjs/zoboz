@@ -121,6 +121,73 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is ok
 
+  Scenario: If a runtime dependency is directly listed in peerDependencies,
+  in validate-mode, since it is already listed, no action is needed
+
+    Given there is an npm package with:
+      """
+      {
+        "name": "test",
+        "version": "1.0.0",
+        "main": "dist/cjs/index.js",
+        "dependencies": {
+          "package-available": "1.0.0"
+        },
+        "peerDependencies": {
+          "@package/available": "1.0.0"
+        },
+        "devDependencies": {
+          "@package/available": "1.0.0"
+        }
+      }
+      """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      require('@package/available/xyz/abc');
+      require('package-available/xyz/abc');
+      require('@package/available');
+      require('package-available');
+      """
+    And there is a JSON file named "node_modules/@package/available/package.json" with:
+      """
+      {
+        "name": "@package/available",
+        "version": "1.0.0",
+        "main": "index.js",
+        "exports": {
+          ".": "./index.js",
+          "./xyz/abc": "./index.js"
+        }
+      }
+      """
+    And there is a file named "node_modules/@package/available/index.js" with:
+      """
+      module.exports = {};
+      """
+    And there is a JSON file named "node_modules/package-available/package.json" with:
+      """
+      {
+        "name": "package-available",
+        "version": "1.0.0",
+        "main": "index.js",
+        "exports": {
+          ".": "./index.js",
+          "./xyz/abc": "./index.js"
+        }
+      }
+      """
+    And there is a file named "node_modules/package-available/index.js" with:
+      """
+      module.exports = {};
+      """
+    When the following command is executed:
+      """
+      verify-package-json --absolute-package-dir $scenario_dir
+      """
+    Then the result is ok
+
   Scenario: If a runtime dependency is not directly listed in dependencies or peerDependencies,
   but is resolved from node_modules,
   in validate-mode, it will be requested to be added to dependencies
