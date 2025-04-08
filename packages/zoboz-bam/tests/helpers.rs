@@ -1,7 +1,10 @@
-use cucumber::gherkin::Step;
 use cucumber::World;
-use std::{fs, path::Path};
-use tempfile::{tempdir, TempDir};
+use cucumber::gherkin::Step;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
+use tempfile::{TempDir, tempdir};
 
 #[derive(Debug, Default, World)]
 pub struct TheWorld {
@@ -9,12 +12,29 @@ pub struct TheWorld {
     pub command_result: Option<Result<(), String>>,
 }
 
-pub fn get_docstring(step: &Step) -> String {
-    step.docstring().cloned().unwrap_or_default()
+pub fn get_docstring(world: &TheWorld, step: &Step) -> String {
+    step.docstring()
+        .cloned()
+        .unwrap_or_default()
+        .replace("$scenario_dir", &get_scenario_dir(world))
 }
 
-pub fn get_dir_path(world: &TheWorld) -> &Path {
-    world.tempdir.as_ref().unwrap().path()
+fn get_scenario_dir(world: &TheWorld) -> String {
+    get_dir_path(world)
+        .to_str()
+        .unwrap()
+        .replace(r"\", r"\\") // win32 path fix
+        .to_string()
+}
+
+pub fn get_dir_path(world: &TheWorld) -> PathBuf {
+    world
+        .tempdir
+        .as_ref()
+        .unwrap()
+        .path()
+        .canonicalize()
+        .unwrap()
 }
 
 pub fn write_file(world: &TheWorld, file_name: &str, content: &str) {

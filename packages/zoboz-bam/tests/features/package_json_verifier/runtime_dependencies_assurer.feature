@@ -26,7 +26,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `package-not-available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
+      Runtime dependency package `package-not-available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is not directly listed at all,
@@ -56,7 +56,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `@package-not/available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
+      Runtime dependency package `@package-not/available` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is directly listed in dependencies,
@@ -249,7 +249,7 @@ Feature: Ensures runtime dependencies will be available for the consumers
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency `@package-not/listed` is not listed in package.json field `dependencies` or `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
+      Runtime dependency package `@package-not/listed` is not listed in package.json field `dependencies` or `peerDependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps
       """
 
   Scenario: If a runtime dependency is not directly listed at all,

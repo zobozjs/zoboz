@@ -81,11 +81,9 @@ impl PackageJson {
 }
 
 fn extract_export_entry_points(entry_points: &mut HashSet<String>, entry: &ExportEntry) {
-    let mut paths = HashSet::new();
-
     match entry {
         ExportEntry::Single(path) => {
-            paths.insert(path.clone());
+            entry_points.insert(path.clone());
         }
         ExportEntry::Multi(sub_entries) => {
             for (_, sub_entry) in sub_entries.iter() {

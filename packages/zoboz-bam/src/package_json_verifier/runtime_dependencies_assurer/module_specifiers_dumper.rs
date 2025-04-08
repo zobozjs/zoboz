@@ -10,8 +10,17 @@ pub(super) fn dump_modules_specifiers(
     dependent_path: &Path,
     resolved_absolute_specifiers: &mut HashSet<String>,
     unresolved_absolute_specifiers: &mut HashSet<String>,
+    _resolved_relative_specifiers: &mut HashSet<String>,
+    unresolved_relative_specifiers: &mut HashSet<String>,
 ) {
-    let file_content = fs::read_to_string(&dependent_path).unwrap();
+    let file_content = fs::read_to_string(&dependent_path);
+
+    if file_content.is_err() {
+        unresolved_relative_specifiers.insert(dependent_path.to_string_lossy().to_string());
+        return;
+    }
+    let file_content = file_content.unwrap();
+
     let mut resolution_results: Vec<(String, Result<String, String>)> = vec![];
     specifier_regex::RE_FROM.replace_all(&file_content, |caps: &regex::Captures| {
         let specifier = &caps[3];

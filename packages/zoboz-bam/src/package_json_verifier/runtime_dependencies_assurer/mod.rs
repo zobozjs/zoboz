@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use module_specifiers_dumper::dump_modules_specifiers;
 use resolved_absolute_specifiers_handler::handle_resolved_absolute_specifiers;
 use unresolved_absolute_specifiers_handler::handle_unresolved_absolute_specifiers;
+use unresolved_relative_specifiers_handler::handle_unresolved_relative_specifiers;
 
 use crate::shared::json_editor::ChangeSet;
 
@@ -13,6 +14,7 @@ use crate::shared::value_objects::AbsolutePackageDir;
 mod module_specifiers_dumper;
 mod resolved_absolute_specifiers_handler;
 mod unresolved_absolute_specifiers_handler;
+mod unresolved_relative_specifiers_handler;
 
 pub(crate) fn run(
     module_resolver: &SimpleModuleResolver,
@@ -24,6 +26,8 @@ pub(crate) fn run(
 
     let mut resolved_absolute_specifiers: HashSet<String> = HashSet::new();
     let mut unresolved_absolute_specifiers: HashSet<String> = HashSet::new();
+    let mut resolved_relative_specifiers: HashSet<String> = HashSet::new();
+    let mut unresolved_relative_specifiers: HashSet<String> = HashSet::new();
 
     for entry_point in entry_points {
         dump_modules_specifiers(
@@ -31,6 +35,8 @@ pub(crate) fn run(
             absolute_package_dir.value().join(entry_point).as_path(),
             &mut resolved_absolute_specifiers,
             &mut unresolved_absolute_specifiers,
+            &mut resolved_relative_specifiers,
+            &mut unresolved_relative_specifiers,
         );
     }
 
@@ -43,4 +49,5 @@ pub(crate) fn run(
     );
 
     handle_unresolved_absolute_specifiers(change_sets, unresolved_absolute_specifiers);
+    handle_unresolved_relative_specifiers(change_sets, unresolved_relative_specifiers);
 }

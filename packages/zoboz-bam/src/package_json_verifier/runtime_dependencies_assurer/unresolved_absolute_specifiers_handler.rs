@@ -8,7 +8,7 @@ pub fn handle_unresolved_absolute_specifiers(
 ) {
     for specifier in unresolved_absolute_specifiers {
         change_sets.push(ChangeSet {
-          description: format!("Runtime dependency `{}` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps", specifier),
+          description: format!("Runtime dependency package `{}` is not listed in package.json field `dependencies`. https://zobozjs.github.io/docs/learn/specify-runtime-deps", specifier),
           changes: vec![],
       });
     }
