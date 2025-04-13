@@ -1,4 +1,5 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
+use std::fs;
 
 use module_specifiers_dumper::dump_modules_specifiers;
 use resolved_absolute_specifiers_handler::handle_resolved_absolute_specifiers;
@@ -24,20 +25,32 @@ pub(crate) fn run(
 ) {
     let entry_points = package_json.get_entry_points();
 
-    let mut resolved_absolute_specifiers: HashSet<String> = HashSet::new();
-    let mut unresolved_absolute_specifiers: HashSet<String> = HashSet::new();
-    let mut resolved_relative_specifiers: HashSet<String> = HashSet::new();
-    let mut unresolved_relative_specifiers: HashSet<String> = HashSet::new();
+    let mut resolved_absolute_specifiers: BTreeSet<String> = BTreeSet::new();
+    let mut unresolved_absolute_specifiers: BTreeSet<String> = BTreeSet::new();
+    let mut resolved_relative_specifiers: BTreeSet<String> = BTreeSet::new();
+    let mut unresolved_relative_specifiers: BTreeSet<(String, String)> = BTreeSet::new();
 
     for entry_point in entry_points {
-        dump_modules_specifiers(
-            module_resolver,
-            absolute_package_dir.value().join(entry_point).as_path(),
-            &mut resolved_absolute_specifiers,
-            &mut unresolved_absolute_specifiers,
-            &mut resolved_relative_specifiers,
-            &mut unresolved_relative_specifiers,
-        );
+        let entry_point_path = absolute_package_dir.value().join(&entry_point);
+
+        match fs::exists(&entry_point_path) {
+            Ok(true) => {
+                dump_modules_specifiers(
+                    module_resolver,
+                    entry_point_path.as_path(),
+                    &mut resolved_absolute_specifiers,
+                    &mut unresolved_absolute_specifiers,
+                    &mut resolved_relative_specifiers,
+                    &mut unresolved_relative_specifiers,
+                );
+            }
+            Ok(false) => {
+                unresolved_relative_specifiers.insert(("package.json".to_owned(), entry_point));
+            }
+            Err(_) => {
+                // we couldn't even check if the file exist or not
+            }
+        }
     }
 
     handle_resolved_absolute_specifiers(

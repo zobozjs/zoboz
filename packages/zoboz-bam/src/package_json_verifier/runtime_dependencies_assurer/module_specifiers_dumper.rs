@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
@@ -8,17 +8,16 @@ use crate::shared::specifier_regex;
 pub(super) fn dump_modules_specifiers(
     module_resolver: &SimpleModuleResolver,
     dependent_path: &Path,
-    resolved_absolute_specifiers: &mut HashSet<String>,
-    unresolved_absolute_specifiers: &mut HashSet<String>,
-    _resolved_relative_specifiers: &mut HashSet<String>,
-    unresolved_relative_specifiers: &mut HashSet<String>,
+    resolved_absolute_specifiers: &mut BTreeSet<String>,
+    unresolved_absolute_specifiers: &mut BTreeSet<String>,
+    resolved_relative_specifiers: &mut BTreeSet<String>,
+    unresolved_relative_specifiers: &mut BTreeSet<(String, String)>,
 ) {
     let file_content = fs::read_to_string(&dependent_path);
-
     if file_content.is_err() {
-        unresolved_relative_specifiers.insert(dependent_path.to_string_lossy().to_string());
         return;
     }
+
     let file_content = file_content.unwrap();
 
     let mut resolution_results: Vec<(String, Result<String, String>)> = vec![];
@@ -44,22 +43,41 @@ pub(super) fn dump_modules_specifiers(
 
     for (specifier, resolution_result) in resolution_results {
         if specifier.starts_with("./") || specifier.starts_with("../") {
+            match resolution_result {
+                Ok(found_path) => {
+                    resolved_relative_specifiers.insert(found_path.to_string());
+                    dump_modules_specifiers(
+                        module_resolver,
+                        Path::new(&found_path),
+                        resolved_absolute_specifiers,
+                        unresolved_absolute_specifiers,
+                        resolved_relative_specifiers,
+                        unresolved_relative_specifiers,
+                    );
+                }
+                Err(_) => {
+                    unresolved_relative_specifiers.insert((
+                        dependent_path.to_string_lossy().to_string(),
+                        specifier.to_string(),
+                    ));
+                }
+            }
         } else {
-            let root_specifier = get_root_specifier(&specifier);
+            let package_name = get_package_name(&specifier);
 
             match resolution_result {
                 Ok(_) => {
-                    resolved_absolute_specifiers.insert(root_specifier.to_string());
+                    resolved_absolute_specifiers.insert(package_name.to_string());
                 }
                 Err(_) => {
-                    unresolved_absolute_specifiers.insert(root_specifier.to_string());
+                    unresolved_absolute_specifiers.insert(package_name.to_string());
                 }
             }
         }
     }
 }
 
-fn get_root_specifier(specifier: &str) -> String {
+fn get_package_name(specifier: &str) -> String {
     let keys: Vec<&str> = specifier.split('/').collect();
 
     if keys.len() == 1 {

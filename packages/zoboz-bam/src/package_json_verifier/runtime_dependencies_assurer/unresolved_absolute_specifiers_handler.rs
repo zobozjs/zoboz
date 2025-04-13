@@ -1,10 +1,10 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 use crate::shared::json_editor::ChangeSet;
 
 pub fn handle_unresolved_absolute_specifiers(
     change_sets: &mut Vec<ChangeSet>,
-    unresolved_absolute_specifiers: HashSet<String>,
+    unresolved_absolute_specifiers: BTreeSet<String>,
 ) {
     for specifier in unresolved_absolute_specifiers {
         change_sets.push(ChangeSet {

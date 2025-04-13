@@ -17,7 +17,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency file `$scenario_dir/dist/cjs/index.js` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `dist/cjs/index.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If package.json module entry point does not exist on disk, it will report an error
@@ -42,7 +42,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency file `$scenario_dir/dist/esm/index.js` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `dist/esm/index.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If package.json types entry point does not exist on disk, it will report an error
@@ -73,7 +73,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency file `$scenario_dir/dist/types/index.d.ts` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `dist/types/index.d.ts` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If package.json exports entry point does not exist on disk, it will report an error
@@ -101,7 +101,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency file `$scenario_dir/./dist/cjs/utils/index.js` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `./dist/cjs/utils/index.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If package.json exports with nested conditions has files that don't exist on disk, it will report an error
@@ -132,8 +132,8 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      Runtime dependency file `$scenario_dir/./dist/esm/index.js` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
-      Runtime dependency file `$scenario_dir/./dist/types/index.d.ts` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `./dist/esm/index.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `package.json` references `./dist/types/index.d.ts` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If all package.json entry points exist on disk, the result is ok
@@ -218,7 +218,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File "dist/cjs/index.js" imports "./utils" which does not exist on disk. https://zobozjs.github.io/docs/learn/verify-entry-points
+      File `$scenario_dir/dist/cjs/index.js` references `./utils` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If entry point files exist and have imports that also exist on disk, the result is ok
@@ -261,6 +261,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
     And there is a file named "dist/cjs/index.js" with:
       """
       const utils = require('./utils');
+      require('./non-existent');
       module.exports = { utils };
       """
     And there is a file named "dist/cjs/utils.js" with:
@@ -274,7 +275,8 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File "dist/cjs/utils.js" imports "./helpers" which does not exist on disk. https://zobozjs.github.io/docs/learn/verify-entry-points
+      File `$scenario_dir/dist/cjs/index.js` references `./non-existent` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
+      File `$scenario_dir/dist/cjs/utils.js` references `./helpers` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If entry point files recursively import files that exist on disk, the result is ok
@@ -330,7 +332,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File "dist/esm/index.js" imports "./utils.js" which does not exist on disk. https://zobozjs.github.io/docs/learn/verify-entry-points
+      File `$scenario_dir/dist/esm/index.js` references `./utils.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: If an ESM file uses import statements for local dependencies that exist, the result is ok
@@ -413,7 +415,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File "dist/index.js" imports "./dynamic-module.js" which does not exist on disk. https://zobozjs.github.io/docs/learn/verify-entry-points
+      File `$scenario_dir/dist/index.js` references `./dynamic-module.js` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: TypeScript imports in .d.ts files are checked
@@ -437,7 +439,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File "dist/types/index.d.ts" imports "./types" which does not exist on disk. https://zobozjs.github.io/docs/learn/verify-entry-points
+      File `$scenario_dir/dist/types/index.d.ts` references `./types` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files
       """
 
   Scenario: TypeScript imports in .d.ts files that exist pass validation

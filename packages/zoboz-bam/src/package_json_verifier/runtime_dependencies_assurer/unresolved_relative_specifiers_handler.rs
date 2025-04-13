@@ -1,14 +1,14 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 use crate::shared::json_editor::ChangeSet;
 
 pub fn handle_unresolved_relative_specifiers(
     change_sets: &mut Vec<ChangeSet>,
-    unresolved_relative_specifiers: HashSet<String>,
+    unresolved_relative_specifiers: BTreeSet<(String, String)>,
 ) {
-    for specifier in unresolved_relative_specifiers {
+    for (dependent, specifier) in unresolved_relative_specifiers {
         change_sets.push(ChangeSet {
-          description: format!("Runtime dependency file `{}` does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files", specifier),
+          description: format!("File `{}` references `{}` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files", dependent, specifier),
           changes: vec![],
       });
     }

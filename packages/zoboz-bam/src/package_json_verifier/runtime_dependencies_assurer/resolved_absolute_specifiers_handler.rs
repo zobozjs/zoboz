@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 use crate::shared::{
     json_editor::{Change, ChangeSet, ChangeType},
@@ -12,7 +12,7 @@ pub fn handle_resolved_absolute_specifiers(
     absolute_package_dir: &AbsolutePackageDir,
     package_json: &PackageJson,
     change_sets: &mut Vec<ChangeSet>,
-    resolved_absolute_specifiers: HashSet<String>,
+    resolved_absolute_specifiers: BTreeSet<String>,
 ) {
     for specifier in resolved_absolute_specifiers {
         if !package_json.dependencies.contains_key(&specifier)
