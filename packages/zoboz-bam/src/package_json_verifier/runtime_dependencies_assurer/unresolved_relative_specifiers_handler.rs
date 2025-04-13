@@ -8,8 +8,11 @@ pub fn handle_unresolved_relative_specifiers(
 ) {
     for (dependent, specifier) in unresolved_relative_specifiers {
         change_sets.push(ChangeSet {
-          description: format!("File `{}` references `{}` which does not exist on disk. https://zobozjs.github.io/docs/learn/runtime-files", dependent, specifier),
-          changes: vec![],
-      });
+            description: format!(
+                "File `{}` references `{}` which does not exist on disk.",
+                dependent, specifier
+            ),
+            changes: vec![],
+        });
     }
 }
