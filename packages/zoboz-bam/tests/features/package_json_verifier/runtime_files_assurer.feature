@@ -218,7 +218,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File `$scenario_dir/dist/cjs/index.js` references `./utils` which does not exist on disk.
+      File `$scenario_dir|dist/cjs/index.js` references `./utils` which does not exist on disk.
       """
 
   Scenario: If entry point files exist and have imports that also exist on disk, the result is ok
@@ -275,8 +275,8 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File `$scenario_dir/dist/cjs/index.js` references `./non-existent` which does not exist on disk.
-      File `$scenario_dir/dist/cjs/utils.js` references `./helpers` which does not exist on disk.
+      File `$scenario_dir|dist/cjs/index.js` references `./non-existent` which does not exist on disk.
+      File `$scenario_dir|dist|cjs|utils.js` references `./helpers` which does not exist on disk.
       """
 
   Scenario: If entry point files recursively import files that exist on disk, the result is ok
@@ -332,7 +332,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File `$scenario_dir/dist/esm/index.js` references `./utils.js` which does not exist on disk.
+      File `$scenario_dir|dist/esm/index.js` references `./utils.js` which does not exist on disk.
       """
 
   Scenario: If an ESM file uses import statements for local dependencies that exist, the result is ok
@@ -415,7 +415,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File `$scenario_dir/dist/index.js` references `./dynamic-module.js` which does not exist on disk.
+      File `$scenario_dir|dist/index.js` references `./dynamic-module.js` which does not exist on disk.
       """
 
   Scenario: TypeScript imports in .d.ts files are checked
@@ -439,7 +439,7 @@ Feature: Verifies that package.json entry points and their dependencies exist on
       """
     Then the result is error and equals the following text:
       """
-      File `$scenario_dir/dist/types/index.d.ts` references `./types` which does not exist on disk.
+      File `$scenario_dir|dist/types/index.d.ts` references `./types` which does not exist on disk.
       """
 
   Scenario: TypeScript imports in .d.ts files that exist pass validation

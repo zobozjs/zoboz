@@ -86,7 +86,13 @@ fn the_result_is_error_and_equals_the_following_text(world: &mut TheWorld, step:
     if let Some(result) = &world.command_result {
         if let Some(error) = result.clone().err() {
             let expected_error = get_docstring(world, step);
-            assert_eq!(error.trim(), expected_error.trim());
+            assert_eq!(
+                error
+                    .replace("/private/var/", "/var/") // fix macos /private/var vs /var
+                    .trim(),
+                expected_error.trim()
+            );
+
             return;
         } else {
             panic!("The command result is not error.");
@@ -98,6 +104,6 @@ fn the_result_is_error_and_equals_the_following_text(world: &mut TheWorld, step:
 
 #[when(expr = "the following command is executed:")]
 fn the_following_command_is_executed(world: &mut TheWorld, step: &Step) {
-    let command = get_docstring(world, step);
+    let command = get_docstring(world, step).replace(r"\", r"\\"); // win32 path fix
     world.command_result = Some(handle_command(&tokenize_input(&command)));
 }

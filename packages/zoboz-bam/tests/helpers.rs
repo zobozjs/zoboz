@@ -2,7 +2,7 @@ use cucumber::World;
 use cucumber::gherkin::Step;
 use std::{
     fs,
-    path::{Path, PathBuf},
+    path::{self, Path},
 };
 use tempfile::{TempDir, tempdir};
 
@@ -17,24 +17,15 @@ pub fn get_docstring(world: &TheWorld, step: &Step) -> String {
         .cloned()
         .unwrap_or_default()
         .replace("$scenario_dir", &get_scenario_dir(world))
+        .replace('|', path::MAIN_SEPARATOR.to_string().as_str())
 }
 
 fn get_scenario_dir(world: &TheWorld) -> String {
-    get_dir_path(world)
-        .to_str()
-        .unwrap()
-        .replace(r"\", r"\\") // win32 path fix
-        .to_string()
+    get_dir_path(world).to_str().unwrap().to_string()
 }
 
-pub fn get_dir_path(world: &TheWorld) -> PathBuf {
-    world
-        .tempdir
-        .as_ref()
-        .unwrap()
-        .path()
-        .canonicalize()
-        .unwrap()
+pub fn get_dir_path(world: &TheWorld) -> &Path {
+    world.tempdir.as_ref().unwrap().path()
 }
 
 pub fn write_file(world: &TheWorld, file_name: &str, content: &str) {
