@@ -3,10 +3,12 @@ import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
 import { RelativeSpecifier } from "@shared/domain/valueObjects/RelativeSpecifier";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir";
+import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 import type { DtsOutDir } from "../valueObjects/DtsOutDir";
 
 export class DtsPackageJsonExpectationFactory {
 	constructor(
+		private readonly moduletype: "cjs" | "esm",
 		private readonly filesRepository: FilesRepository,
 		private readonly exportsConfig: ExportsConfig,
 		private readonly srcDir: SrcDir,
@@ -14,14 +16,19 @@ export class DtsPackageJsonExpectationFactory {
 	) {}
 
 	public async create(): Promise<Promise<PackageJsonExpectation>> {
-		return new PackageJsonExpectation(this.filesRepository, {
-			types: await this.generatePackageJsonMain(),
-			exports: await this.generatePackageJsonExports(),
-		});
-	}
+		const exportsMap = await this.generatePackageJsonExports();
 
-	private generatePackageJsonMain(): Promise<string> {
-		return this.distFromSrc(this.exportsConfig.getRootExport());
+		return new PackageJsonExpectation(
+			this.filesRepository,
+			this.moduletype === "cjs"
+				? {
+						exports: exportsMap,
+						types: exportsMap["."].require.types,
+					}
+				: {
+						exports: exportsMap,
+					},
+		);
 	}
 
 	private async distFromSrc(relativeSrcPath: string): Promise<string> {
@@ -33,12 +40,15 @@ export class DtsPackageJsonExpectationFactory {
 		return new RelativeSpecifier(uri).uri;
 	}
 
-	private async generatePackageJsonExports(): Promise<
-		Record<string, Record<"types", string>>
-	> {
-		const entries = this.exportsConfig
-			.entries()
-			.map(async ([k, v]) => [k, { types: await this.distFromSrc(v) }]);
+	private async generatePackageJsonExports(): Promise<PackageJsonExportsField> {
+		const entries = this.exportsConfig.entries().map(async ([k, v]) => [
+			k,
+			{
+				[this.moduletype === "esm" ? "import" : "require"]: {
+					types: await this.distFromSrc(v),
+				},
+			},
+		]);
 
 		return Object.fromEntries(await Promise.all(entries));
 	}

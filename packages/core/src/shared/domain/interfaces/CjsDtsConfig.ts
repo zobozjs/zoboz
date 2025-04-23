@@ -1,5 +1,5 @@
 import type { Builder } from "./Builder.js";
 
-export interface DtsConfig {
+export interface CjsDtsConfig {
 	getBuilder(): Builder;
 }

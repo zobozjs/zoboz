@@ -1,5 +1,5 @@
 import type { Builder } from "./Builder.js";
 
-export interface EsmConfig {
+export interface EsmDtsConfig {
 	getBuilder(): Builder;
 }

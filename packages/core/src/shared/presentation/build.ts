@@ -7,6 +7,7 @@ import { DtsBuildOrchestrator } from "../../dts/app/DtsBuildOrchestrator.js";
 import { EsmBuildOrchestrator } from "../../esm/app/EsmBuildOrchestrator.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
+import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
 
 export async function build(
 	config: BuildConfig,
@@ -14,38 +15,69 @@ export async function build(
 ): Promise<void> {
 	const distEmptier = new DistEmptier(filesRepository);
 
-	const orchestrators = [
-		config.dts &&
-			new DtsBuildOrchestrator(
-				zobozBam,
-				filesRepository,
-				distEmptier,
-				config.exports,
-				config.dts,
-				config.srcDir,
-				config.distDir,
-			),
-		config.esm &&
-			new EsmBuildOrchestrator(
-				zobozBam,
-				filesRepository,
-				distEmptier,
-				config.exports,
-				config.esm,
-				config.srcDir,
-				config.distDir,
-			),
-		config.cjs &&
-			new CjsBuildOrchestrator(
-				zobozBam,
-				filesRepository,
-				distEmptier,
-				config.exports,
-				config.cjs,
-				config.srcDir,
-				config.distDir,
-			),
-	].filter(<A>(x: A | null): x is A => x !== null);
+	const orchestrators: BuildOrchestrator[] = [];
+
+	if (config.esm) {
+		if (config.esm.dts) {
+			orchestrators.push(
+				new DtsBuildOrchestrator(
+					"esm",
+					zobozBam,
+					filesRepository,
+					distEmptier,
+					config.exports,
+					config.esm.dts,
+					config.srcDir,
+					config.distDir,
+				),
+			);
+		}
+
+		if (config.esm.js) {
+			orchestrators.push(
+				new EsmBuildOrchestrator(
+					zobozBam,
+					filesRepository,
+					distEmptier,
+					config.exports,
+					config.esm.js,
+					config.srcDir,
+					config.distDir,
+				),
+			);
+		}
+	}
+
+	if (config.cjs) {
+		if (config.cjs.dts) {
+			orchestrators.push(
+				new DtsBuildOrchestrator(
+					"cjs",
+					zobozBam,
+					filesRepository,
+					distEmptier,
+					config.exports,
+					config.cjs.dts,
+					config.srcDir,
+					config.distDir,
+				),
+			);
+		}
+
+		if (config.cjs.js) {
+			orchestrators.push(
+				new CjsBuildOrchestrator(
+					zobozBam,
+					filesRepository,
+					distEmptier,
+					config.exports,
+					config.cjs.js,
+					config.srcDir,
+					config.distDir,
+				),
+			);
+		}
+	}
 
 	if (orchestrators.length === 0) {
 		logger.error("No cjs/esm/dts build config provided.");

@@ -1,5 +1,5 @@
 import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
-import type { CjsConfig } from "@shared/domain/interfaces/CjsConfig.js";
+import type { CjsJsConfig } from "@shared/domain/interfaces/CjsJsConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
@@ -24,7 +24,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly cjsConfig: CjsConfig,
+		private readonly cjsConfig: CjsJsConfig,
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {

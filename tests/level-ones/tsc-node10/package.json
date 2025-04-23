@@ -1,27 +1,32 @@
 {
-	"name": "@level-ones/tsc-node10",
-	"version": "0.0.0",
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
-	"types": "./dist/dts/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/dts/index.d.ts",
-			"require": "./dist/cjs/index.js",
-			"import": "./dist/esm/index.js"
-		}
-	},
-	"publishConfig": {
-		"registry": "http://verdaccio:4873",
-		"access": "public"
-	},
-	"scripts": {
-		"typecheck": "tsc --noEmit",
-		"build": "zoboz build"
-	},
-	"devDependencies": {
-		"@zoboz/core": "*",
-		"@types/node": "22.10.5",
-		"typescript": "5.7.3"
-	}
+  "name": "@level-ones/tsc-node10",
+  "version": "0.0.0",
+  "main": "./dist/cjs/js/index.js",
+  "module": "./dist/esm/js/index.js",
+  "types": "./dist/cjs/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/dts/index.d.ts",
+        "default": "./dist/esm/js/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/dts/index.d.ts",
+        "default": "./dist/cjs/js/index.js"
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "http://verdaccio:4873",
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "zoboz build"
+  },
+  "devDependencies": {
+    "@zoboz/core": "*",
+    "@types/node": "22.10.5",
+    "typescript": "5.7.3"
+  }
 }

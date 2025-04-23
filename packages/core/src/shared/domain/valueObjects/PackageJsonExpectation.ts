@@ -3,12 +3,13 @@ import * as process from "process";
 import { logger } from "../../supporting/logger.js";
 import { PackageJsonVerificationError } from "../errors/PackageJsonVerificationError.js";
 import type { FilesRepository } from "../interfaces/FilesRepository.js";
+import type { PackageJsonExportsField } from "../interfaces/PackageJsonExportsField.js";
 
 type PackageJsonExpectationValue = {
 	main?: string;
 	module?: string;
 	types?: string;
-	exports?: Record<string, Record<string, string>>;
+	exports?: PackageJsonExportsField;
 };
 
 export class PackageJsonExpectation {
@@ -30,7 +31,7 @@ export class PackageJsonExpectation {
 	}
 
 	merge(mergingPartner: PackageJsonExpectation): PackageJsonExpectation {
-		const newValue = { ...this.value };
+		const current = { ...this.value };
 		const merging = { ...mergingPartner.value };
 
 		const setOnceKeys = ["main", "module", "types"];
@@ -41,62 +42,74 @@ export class PackageJsonExpectation {
 			}
 
 			if (setOnceKeys.includes(key)) {
-				if (newValue[key] !== undefined) {
+				if (current[key] !== undefined) {
 					const errorGist = `Cannot merge package.json expectations because key "${key}" is already set`;
 					const errorDetails = JSON.stringify({
-						current: newValue[key],
-						coming: merging[key],
+						current: current[key],
+						merging: merging[key],
 					});
 					throw new Error([errorGist, errorDetails].join("; "));
 				}
 
-				newValue[key] = merging[key];
+				current[key] = merging[key];
 			}
 		}
 
-		const mergingExports = merging.exports || {};
-
-		if (newValue.exports === undefined) {
-			newValue.exports = {};
+		if (current.exports === undefined) {
+			current.exports = {};
 		}
 
-		for (const exportAliasKey of Object.keys(mergingExports)) {
-			const exportAlias = mergingExports[exportAliasKey];
-			const exportsTypes = ["types", "require", "import"];
+		if (merging.exports) {
+			for (const aliasKey of Object.keys(merging.exports)) {
+				const alias = merging.exports[aliasKey];
 
-			for (const exportType of exportsTypes) {
-				const mergingValue = exportAlias[exportType];
-
-				if (mergingValue === undefined) {
+				if (alias === undefined) {
 					continue;
 				}
 
-				if (newValue.exports[exportType] && mergingValue) {
-					throw new Error(
-						`Cannot merge package.json expectations because key "exports"."${exportAliasKey}"."${exportType}" is already set`,
-					);
+				for (const refTypeKey of ["require", "import"]) {
+					const refType = alias[refTypeKey];
+
+					if (refType === undefined) {
+						continue;
+					}
+
+					for (const entryKey of Object.keys(refType)) {
+						const entry = refType[entryKey];
+
+						if (entry === undefined) {
+							continue;
+						}
+
+						if (current.exports[aliasKey]?.[refTypeKey]?.[entryKey]) {
+							const errorGist = `Cannot merge package.json expectations because key "exports"."${aliasKey}"."${refTypeKey}"."${entryKey}" is already set`;
+							const errorDetails = JSON.stringify({
+								current: current.exports[aliasKey][refTypeKey][entryKey],
+								merging: entry,
+							});
+
+							throw new Error([errorGist, errorDetails].join("; "));
+						}
+
+						current.exports[aliasKey] = {
+							...current.exports[aliasKey],
+							[refTypeKey]: {
+								...current.exports[aliasKey]?.[refTypeKey],
+								[entryKey]: entry,
+							},
+						};
+					}
 				}
-
-				newValue.exports[exportAliasKey] = {
-					...newValue.exports[exportAliasKey],
-					[exportType]: mergingValue,
-				};
 			}
-
-			newValue.exports[exportAliasKey] = {
-				types: newValue.exports[exportAliasKey].types,
-				require: newValue.exports[exportAliasKey].require,
-				import: newValue.exports[exportAliasKey].import,
-			};
 		}
 
 		return new PackageJsonExpectation(
 			this.filesRepository,
 			this.undefinedOmitted({
-				main: newValue.main,
-				module: newValue.module,
-				types: newValue.types,
-				exports: newValue.exports,
+				main: current.main,
+				module: current.module,
+				types: current.types,
+				exports: current.exports,
 			}),
 		);
 	}

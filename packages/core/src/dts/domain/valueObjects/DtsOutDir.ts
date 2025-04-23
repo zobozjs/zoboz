@@ -3,7 +3,7 @@ import type { DistDir } from "@shared/domain/valueObjects/DistDir";
 import { OutDir } from "@shared/domain/valueObjects/OutDir";
 
 export class DtsOutDir extends OutDir {
-	constructor(distDir: DistDir) {
-		super(path.join(distDir.uri, "dts"));
+	constructor(moduleType: "cjs" | "esm", distDir: DistDir) {
+		super(path.join(distDir.uri, moduleType, "dts"));
 	}
 }

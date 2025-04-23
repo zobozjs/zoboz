@@ -5,8 +5,8 @@ import * as path from "path";
 import { ZobozConfigFetcher } from "../cli/ZobozConfigFetcher.mjs";
 import { nodeVersion } from "../cli/nodeVersion.mjs";
 import { program } from "../cli/program.mjs";
-import { build } from "../dist/esm/index.js";
-import { logger } from "../dist/esm/shared/supporting/logger.js";
+import { build } from "../dist/esm/js/index.js";
+import { logger } from "../dist/esm/js/shared/supporting/logger.js";
 
 logger.debug("Running zoboz on Node version:", nodeVersion.versionString);
 
@@ -28,12 +28,11 @@ program.registerCommand(
 		}
 
 		const template = [
-			'import { BuildConfig, esbuild, tsc } from "@zoboz/core";',
+			'import { BuildConfig } from "@zoboz/core";',
 			"",
 			"export default new BuildConfig({",
-			"  esm: esbuild.esm(),",
-			"  cjs: esbuild.cjs(),",
-			"  dts: tsc.dts(),",
+			"  esm: {},",
+			"  cjs: {},",
 			'  srcDir: "./src",',
 			'  distDir: "./dist",',
 			"  exports: {",

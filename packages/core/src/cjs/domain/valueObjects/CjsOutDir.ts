@@ -4,6 +4,6 @@ import { OutDir } from "@shared/domain/valueObjects/OutDir";
 
 export class CjsOutDir extends OutDir {
 	constructor(distDir: DistDir) {
-		super(path.join(distDir.uri, "cjs"));
+		super(path.join(distDir.uri, "cjs", "js"));
 	}
 }

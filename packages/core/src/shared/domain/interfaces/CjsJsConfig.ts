@@ -1,5 +1,5 @@
 import type { Builder } from "./Builder";
 
-export interface CjsConfig {
+export interface CjsJsConfig {
 	getBuilder(): Builder;
 }

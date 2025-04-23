@@ -1,6 +1,6 @@
 {
 	"name": "@zoboz/core",
-	"version": "4.1.2",
+	"version": "5.0.0",
 	"description": "zoboz | d.ts + esm + cjs - hassle",
 	"homepage": "https://github.com/zobozjs/zoboz#readme",
 	"bugs": {
@@ -17,19 +17,29 @@
 	"files": ["dist/", "bin/", "cli/"],
 	"license": "MIT",
 	"author": "Dariush Alipour <drsh.alipour@gmail.com>",
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
-	"types": "./dist/dts/index.d.ts",
+	"main": "./dist/cjs/js/index.js",
+	"module": "./dist/esm/js/index.js",
+	"types": "./dist/cjs/dts/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/dts/index.d.ts",
-			"require": "./dist/cjs/index.js",
-			"import": "./dist/esm/index.js"
+			"import": {
+				"types": "./dist/esm/dts/index.d.ts",
+				"default": "./dist/esm/js/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/dts/index.d.ts",
+				"default": "./dist/cjs/js/index.js"
+			}
 		},
 		"./extend": {
-			"types": "./dist/dts/extend.d.ts",
-			"require": "./dist/cjs/extend.js",
-			"import": "./dist/esm/extend.js"
+			"import": {
+				"types": "./dist/esm/dts/extend.d.ts",
+				"default": "./dist/esm/js/extend.js"
+			},
+			"require": {
+				"types": "./dist/cjs/dts/extend.d.ts",
+				"default": "./dist/cjs/js/extend.js"
+			}
 		}
 	},
 	"bin": {

@@ -1,11 +1,10 @@
-import type { CjsConfig } from "./CjsConfig.js";
-import type { DtsConfig } from "./DtsConfig.js";
-import type { EsmConfig } from "./EsmConfig.js";
+import type { CjsJsConfig } from "./CjsJsConfig.js";
+import type { EsmDtsConfig } from "./EsmDtsConfig.js";
+import type { EsmJsConfig } from "./EsmJsConfig.js";
 
 export interface BuildConfigParams {
-	esm: EsmConfig | null;
-	cjs: CjsConfig | null;
-	dts: DtsConfig | null;
+	esm?: { js?: EsmJsConfig; dts?: EsmDtsConfig };
+	cjs?: { js?: CjsJsConfig; dts?: EsmDtsConfig };
 	srcDir: string;
 	distDir: string;
 	exports: Record<"." | `.${string}`, `${string}.ts` | `${string}.tsx`>;

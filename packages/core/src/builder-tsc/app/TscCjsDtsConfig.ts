@@ -1,10 +1,10 @@
 import type { Builder } from "@shared/domain/interfaces/Builder.js";
-import type { DtsConfig } from "@shared/domain/interfaces/DtsConfig.js";
+import type { CjsDtsConfig } from "@shared/domain/interfaces/CjsDtsConfig.js";
 import { filesRepository, nodeProcessCommandRunner } from "container.js";
 import { TscDtsBuilder } from "../infra/TscDtsBuilder.js";
 
-export class TscDtsConfig implements DtsConfig {
+export class TscCjsDtsConfig implements CjsDtsConfig {
 	getBuilder(): Builder {
-		return new TscDtsBuilder(nodeProcessCommandRunner, filesRepository);
+		return new TscDtsBuilder("cjs", nodeProcessCommandRunner, filesRepository);
 	}
 }

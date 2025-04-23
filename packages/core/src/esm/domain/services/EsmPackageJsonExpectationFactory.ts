@@ -2,6 +2,7 @@ import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository"
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
 import type { EsmSrcDistMapper } from "./EsmSrcDistMapper";
+import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 
 export class EsmPackageJsonExpectationFactory {
 	constructor(
@@ -11,27 +12,20 @@ export class EsmPackageJsonExpectationFactory {
 	) {}
 
 	create(): PackageJsonExpectation {
+		const exportsMap = this.generatePackageJsonExports();
+
 		return new PackageJsonExpectation(this.filesRepository, {
-			module: this.generatePackageJsonMain(),
-			exports: this.generatePackageJsonExports(),
+			module: exportsMap["."].import.default,
+			exports: exportsMap,
 		});
 	}
 
-	private generatePackageJsonMain(): string {
-		return this.esmSrcDistMapper.distFromSrc(
-			this.exportsConfig.getRootExport(),
-		);
-	}
-
-	private generatePackageJsonExports(): Record<
-		string,
-		Record<"import", string>
-	> {
+	private generatePackageJsonExports(): PackageJsonExportsField {
 		const entries = this.exportsConfig
 			.entries()
 			.map(([entryAlias, srcPath]) => [
 				entryAlias,
-				{ import: this.esmSrcDistMapper.distFromSrc(srcPath) },
+				{ import: { default: this.esmSrcDistMapper.distFromSrc(srcPath) } },
 			]);
 
 		return Object.fromEntries(entries);

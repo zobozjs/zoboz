@@ -7,7 +7,7 @@ import type { SrcDir } from "@shared/domain/valueObjects/SrcDir.js";
 import type { CommandRunner } from "../domain/interfaces/CommandRunner.js";
 import { TscBinary } from "./TscBinary.js";
 
-export class TscEsmBuilder implements Builder {
+export class TscEsmJsBuilder implements Builder {
 	private readonly tscBinary: TscBinary = new TscBinary();
 
 	constructor(

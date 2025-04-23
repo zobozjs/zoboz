@@ -1,9 +1,12 @@
 import { BuildConfig, tsc } from "@zoboz/core";
 
 export default new BuildConfig({
-	esm: tsc.esm(),
-	cjs: tsc.cjs(),
-	dts: tsc.dts(),
+	esm: {
+		js: tsc.esm.js(),
+	},
+	cjs: {
+		js: tsc.cjs.js(),
+	},
 	srcDir: "./src",
 	distDir: "./dist",
 	exports: {

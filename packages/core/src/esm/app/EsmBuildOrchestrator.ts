@@ -1,5 +1,5 @@
 import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
-import type { EsmConfig } from "@shared/domain/interfaces/EsmConfig.js";
+import type { EsmJsConfig } from "@shared/domain/interfaces/EsmJsConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import { TypeEnforcer } from "@shared/domain/services/TypeEnforcer.js";
@@ -24,7 +24,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly esmConfig: EsmConfig,
+		private readonly esmConfig: EsmJsConfig,
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {

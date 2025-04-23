@@ -1,9 +1,8 @@
-import { BuildConfig, esbuild, tsc } from "@zoboz/core";
+import { BuildConfig } from "@zoboz/core";
 
 export default new BuildConfig({
-	esm: esbuild.esm(),
-	cjs: esbuild.cjs(),
-	dts: tsc.dts(),
+	esm: {},
+	cjs: {},
 	srcDir: "./src",
 	distDir: "./dist",
 	exports: {

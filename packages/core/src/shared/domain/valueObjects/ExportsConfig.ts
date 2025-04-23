@@ -31,10 +31,6 @@ export class ExportsConfig {
 		}
 	}
 
-	getRootExport(): string {
-		return this.value["."];
-	}
-
 	entries(): [string, string][] {
 		return this.items;
 	}

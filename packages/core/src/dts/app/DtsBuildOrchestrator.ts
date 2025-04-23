@@ -1,5 +1,5 @@
 import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
-import type { DtsConfig } from "@shared/domain/interfaces/DtsConfig.js";
+import type { EsmDtsConfig } from "@shared/domain/interfaces/EsmDtsConfig.js";
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository.js";
 import type { DistEmptier } from "@shared/domain/services/DistEmptier.js";
 import type { ZobozBam } from "@shared/domain/services/ZobozBam.js";
@@ -16,16 +16,18 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 	private readonly packageJsonExpectationFactory: DtsPackageJsonExpectationFactory;
 
 	constructor(
+		private readonly moduletype: "cjs" | "esm",
 		private readonly zobozBam: ZobozBam,
 		private readonly filesRepository: FilesRepository,
 		private readonly distEmptier: DistEmptier,
 		private readonly exportsConfig: ExportsConfig,
-		private readonly dtsConfig: DtsConfig,
+		private readonly dtsConfig: EsmDtsConfig,
 		private readonly srcDir: SrcDir,
 		distDir: DistDir,
 	) {
-		this.outDir = new DtsOutDir(distDir);
+		this.outDir = new DtsOutDir(moduletype, distDir);
 		this.packageJsonExpectationFactory = new DtsPackageJsonExpectationFactory(
+			this.moduletype,
 			this.filesRepository,
 			this.exportsConfig,
 			srcDir,

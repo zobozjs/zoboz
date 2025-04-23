@@ -33,9 +33,8 @@ Customize the `zoboz.config.ts` file to fit your project's needs. Here's an exam
 import { BuildConfig, tsc, esbuild } from "@zoboz/core";
 
 export default new BuildConfig({
-  esm: esbuild.esm(), // or tsc.esm()
-  cjs: esbuild.cjs(), // or tsc.cjs()
-  dts: tsc.dts(),
+	esm: {}, // Defaults to { js: esbuild.esm(), dts: tsc.esm.dts() }
+	cjs: {}, // Defaults to { js: esbuild.cjs(), dts: tsc.cjs.dts() }
   srcDir: "./src",
   distDir: "./dist",
   exports: {

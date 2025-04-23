@@ -38,9 +38,8 @@ With Zoboz, setting up sub-path exports is straightforward. For example, the fol
 import { BuildConfig, tsc, esbuild } from "@zoboz/core";
 
 export default new BuildConfig({
-	esm: esbuild.esm(), // tsc.esm() is also available
-	cjs: esbuild.cjs(), // tsc.cjs() is also available
-	dts: tsc.dts(),
+	esm: {}, // Defaults to { js: esbuild.esm(), dts: tsc.esm.dts() }
+	cjs: {}, // Defaults to { js: esbuild.cjs(), dts: tsc.cjs.dts() }
 	srcDir: "./src",
 	distDir: "./dist",
 	exports: {
