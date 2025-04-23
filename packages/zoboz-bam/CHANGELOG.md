@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2025-04-24
+
+### Features
+
+- references will be probed and will throw error if the entry points and their relative referenced files do not exist
+
 ## [1.3.2] - 2025-03-18
 
 ### Bug Fixes
