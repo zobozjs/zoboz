@@ -1,9 +1,9 @@
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
+import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
 import { RelativeSpecifier } from "@shared/domain/valueObjects/RelativeSpecifier";
 import type { SrcDir } from "@shared/domain/valueObjects/SrcDir";
-import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 import type { DtsOutDir } from "../valueObjects/DtsOutDir";
 
 export class DtsPackageJsonExpectationFactory {

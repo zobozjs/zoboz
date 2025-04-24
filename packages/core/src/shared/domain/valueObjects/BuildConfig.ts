@@ -1,7 +1,7 @@
 import type { BuildConfigParams } from "../interfaces/BuildConfigParams.js";
 import { CjsConfig } from "./CjsConfig.js";
-import { EsmConfig } from "./EsmConfig.js";
 import { DistDir } from "./DistDir.js";
+import { EsmConfig } from "./EsmConfig.js";
 import { ExportsConfig } from "./ExportsConfig.js";
 import { SrcDir } from "./SrcDir.js";
 

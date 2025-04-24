@@ -60,7 +60,7 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 
 		const endTime = Date.now();
 		logger.success(
-			`Built ${this.moduletype} Declarations: ${endTime - startTime}ms`,
+			`Built ${this.moduletype.toUpperCase()} Declarations: ${endTime - startTime}ms`,
 		);
 
 		return result;

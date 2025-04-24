@@ -1,7 +1,7 @@
+import { EsbuildEsmConfig } from "builder-esbuild/domain/valueObject/EsbuildEsmConfig";
 import { TscEsmDtsConfig } from "builder-tsc/app/TscEsmDtsConfig";
 import type { EsmDtsConfig } from "../interfaces/EsmDtsConfig";
 import type { EsmJsConfig } from "../interfaces/EsmJsConfig";
-import { EsbuildEsmConfig } from "builder-esbuild/domain/valueObject/EsbuildEsmConfig";
 
 export class EsmConfig {
 	private constructor(

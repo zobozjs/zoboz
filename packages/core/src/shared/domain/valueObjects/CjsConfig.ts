@@ -1,7 +1,7 @@
+import { EsbuildCjsConfig } from "builder-esbuild/domain/valueObject/EsbuildCjsConfig";
 import { TscCjsDtsConfig } from "builder-tsc/app/TscCjsDtsConfig";
 import type { CjsDtsConfig } from "../interfaces/CjsDtsConfig";
 import type { CjsJsConfig } from "../interfaces/CjsJsConfig";
-import { EsbuildCjsConfig } from "builder-esbuild/domain/valueObject/EsbuildCjsConfig";
 
 export class CjsConfig {
 	private constructor(

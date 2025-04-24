@@ -1,8 +1,8 @@
 import type { FilesRepository } from "@shared/domain/interfaces/FilesRepository";
+import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 import type { ExportsConfig } from "@shared/domain/valueObjects/ExportsConfig";
 import { PackageJsonExpectation } from "@shared/domain/valueObjects/PackageJsonExpectation";
 import type { EsmSrcDistMapper } from "./EsmSrcDistMapper";
-import type { PackageJsonExportsField } from "@shared/domain/interfaces/PackageJsonExportsField";
 
 export class EsmPackageJsonExpectationFactory {
 	constructor(

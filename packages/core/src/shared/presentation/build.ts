@@ -1,3 +1,4 @@
+import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
 import type { BuildConfig } from "@shared/domain/valueObjects/BuildConfig.js";
 import { logger } from "@shared/supporting/logger.js";
 import { filesRepository, zobozBam } from "container.js";
@@ -7,7 +8,6 @@ import { DtsBuildOrchestrator } from "../../dts/app/DtsBuildOrchestrator.js";
 import { EsmBuildOrchestrator } from "../../esm/app/EsmBuildOrchestrator.js";
 import { BuildsOrchestrator } from "../app/BuildsOrchestrator.js";
 import { DistEmptier } from "../domain/services/DistEmptier.js";
-import type { BuildOrchestrator } from "@shared/domain/interfaces/BuildOrchestrator.js";
 
 export async function build(
 	config: BuildConfig,
