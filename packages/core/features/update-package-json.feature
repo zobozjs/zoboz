@@ -18,12 +18,11 @@ Feature: Update Package JSON
       """
     And file "zoboz.config.ts" reads as:
       """typescript
-      import { BuildConfig, esbuild, tsc } from "@zoboz/core";
+      import { BuildConfig } from "@zoboz/core";
       
       export default new BuildConfig({
-        esm: esbuild.esm(),
-        cjs: esbuild.cjs(),
-        dts: tsc.dts(),
+        esm: {},
+        cjs: {},
         srcDir: "./src",
         distDir: "./dist",
         exports: {
@@ -41,7 +40,8 @@ Feature: Update Package JSON
       export const extensionEntryPoint = "hello, from extension entry point!";
       """
     When command "npm run build" runs
-    Then file "package.json" should read as:
+    Then the command should succeed
+    And file "package.json" should read as:
       """
       {
         "name": "my-package",
@@ -53,19 +53,29 @@ Feature: Update Package JSON
           "@zoboz/core": "ZOBOZ_CORE_VERSION",
           "typescript": "TYPESCRIPT_VERSION"
         },
-        "main": "./dist/cjs/index.js",
-        "module": "./dist/esm/index.js",
-        "types": "./dist/dts/index.d.ts",
+        "main": "./dist/cjs/js/index.js",
+        "module": "./dist/esm/js/index.js",
+        "types": "./dist/cjs/dts/index.d.ts",
         "exports": {
           ".": {
-            "types": "./dist/dts/index.d.ts",
-            "require": "./dist/cjs/index.js",
-            "import": "./dist/esm/index.js"
+            "import": {
+              "types": "./dist/esm/dts/index.d.ts",
+              "default": "./dist/esm/js/index.js"
+            },
+            "require": {
+              "types": "./dist/cjs/dts/index.d.ts",
+              "default": "./dist/cjs/js/index.js"
+            }
           },
           "./extension": {
-            "types": "./dist/dts/extension.d.ts",
-            "require": "./dist/cjs/extension.js",
-            "import": "./dist/esm/extension.js"
+            "import": {
+              "types": "./dist/esm/dts/extension.d.ts",
+              "default": "./dist/esm/js/extension.js"
+            },
+            "require": {
+              "types": "./dist/cjs/dts/extension.d.ts",
+              "default": "./dist/cjs/js/extension.js"
+            }
           }
         }
       }

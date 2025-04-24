@@ -4,12 +4,11 @@ Feature: Reformat Specifiers
     Given a new package is created
     And file "zoboz.config.ts" reads as:
       """typescript
-      import { BuildConfig, esbuild, tsc } from "@zoboz/core";
+      import { BuildConfig } from "@zoboz/core";
       
       export default new BuildConfig({
-        esm: esbuild.esm(),
-        cjs: esbuild.cjs(),
-        dts: tsc.dts(),
+        esm: {},
+        cjs: {},
         srcDir: "./src",
         distDir: "./dist",
         exports: {
@@ -32,9 +31,12 @@ Feature: Reformat Specifiers
       """
     And package.json sets "scripts.build" to "zoboz build --can-update-package-json"
     When command "npm run build" runs
-    Then file "dist/esm/greeting.js" should contain "\"./name.js\"" but not "\"./name.js.js\""
-    And file "dist/esm/index.js" should contain "\"./greeting.js\"" but not "\"./greeting\""
-    And file "dist/cjs/greeting.js" should contain "\"./name.js\"" but not "\"./name.js.js\""
-    And file "dist/cjs/index.js" should contain "\"./greeting.js\"" but not "\"./greeting\""
-    And file "dist/dts/greeting.d.ts" should not contain "./name"
-    And file "dist/dts/index.d.ts" should contain "\"./greeting.js\"" but not "\"./greeting\""
+    Then the command should succeed
+    And file "dist/esm/js/greeting.js" should contain "\"./name.js\"" but not "\"./name.js.js\""
+    And file "dist/esm/js/index.js" should contain "\"./greeting.js\"" but not "\"./greeting\""
+    And file "dist/cjs/js/greeting.js" should contain "\"./name.js\"" but not "\"./name.js.js\""
+    And file "dist/cjs/js/index.js" should contain "\"./greeting.js\"" but not "\"./greeting\""
+    And file "dist/esm/dts/greeting.d.ts" should not contain "./name"
+    And file "dist/cjs/dts/greeting.d.ts" should not contain "./name"
+    And file "dist/esm/dts/index.d.ts" should contain "\"./greeting.js\"" but not "\"./greeting\""
+    And file "dist/cjs/dts/index.d.ts" should contain "\"./greeting.js\"" but not "\"./greeting\""

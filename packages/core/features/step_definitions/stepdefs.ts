@@ -72,6 +72,11 @@ Then(
 	},
 );
 
+Then("the command should succeed", function (this: Lab) {
+	const stderr = this.getStderr();
+	assert.strictEqual(stderr, null);
+});
+
 Then(
 	"file {string} should contain {string} but not {string}",
 	function (
