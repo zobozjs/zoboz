@@ -59,7 +59,9 @@ export class DtsBuildOrchestrator implements BuildOrchestrator {
 		});
 
 		const endTime = Date.now();
-		logger.debug(`Built Declarations: ${endTime - startTime}ms`);
+		logger.success(
+			`Built ${this.moduletype} Declarations: ${endTime - startTime}ms`,
+		);
 
 		return result;
 	}

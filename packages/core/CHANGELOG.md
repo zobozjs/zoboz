@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - config API has changed to accomodate separate dts for esm and cjs
 
+### Improvements
+
+- cleaner stdout, debug does not show up unless asked for by env var DEBUG=true
+
 ## [4.1.2] - 2025-03-18
 
 ### Bug Fixes

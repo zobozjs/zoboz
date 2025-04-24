@@ -66,7 +66,7 @@ export class EsmBuildOrchestrator implements BuildOrchestrator {
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
 
 		const endTime = Date.now();
-		logger.debug(`Built ESM Module: ${endTime - startTime}ms`);
+		logger.success(`Built ESM Module: ${endTime - startTime}ms`);
 
 		return result;
 	}

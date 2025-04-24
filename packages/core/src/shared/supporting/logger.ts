@@ -2,10 +2,12 @@ const padding = 10;
 
 export const logger = {
 	debug: (message: string, ...messages: string[]) => {
-		console.debug("debug".padStart(padding, " "), "--", message, ...messages);
-	},
-	pending: (message: string, ...messages: string[]) => {
-		console.log("pending".padStart(padding, " "), "::", message, ...messages);
+		if (
+			process.env.NODE_ENV === "development" ||
+			process.env.DEBUG === "true"
+		) {
+			console.debug("debug".padStart(padding, " "), "--", message, ...messages);
+		}
 	},
 	success: (message: string, ...messages: string[]) => {
 		console.log("success".padStart(padding, " "), "⚡️", message, ...messages);

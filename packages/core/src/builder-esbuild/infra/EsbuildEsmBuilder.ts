@@ -17,7 +17,7 @@ export class EsbuildEsmBuilder implements Builder {
 		outDir,
 		logger,
 	}: BuildParams): Promise<void> {
-		logger.pending(`Building ES Module by esbuild to ${outDir.uri}`);
+		logger.debug(`Building ES Module by esbuild to ${outDir.uri}`);
 
 		const finalBuildOptions = deepMerge<BuildOptions>(
 			{

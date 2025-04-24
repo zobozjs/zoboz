@@ -17,7 +17,7 @@ export class EsbuildCjsBuilder implements Builder {
 		outDir,
 		logger,
 	}: BuildParams): Promise<void> {
-		logger.pending(`Building CommonJS by esbuild to ${outDir.uri}`);
+		logger.debug(`Building CommonJS by esbuild to ${outDir.uri}`);
 
 		const finalBuildOptions = deepMerge<BuildOptions>(
 			{

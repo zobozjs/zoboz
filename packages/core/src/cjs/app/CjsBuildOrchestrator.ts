@@ -65,7 +65,7 @@ export class CjsBuildOrchestrator implements BuildOrchestrator {
 		const result = new BuildOrchestratorResult(packageJsonExpectation);
 
 		const endTime = Date.now();
-		logger.debug(`Built CommonJS: ${endTime - startTime}ms`);
+		logger.success(`Built CommonJS: ${endTime - startTime}ms`);
 
 		return result;
 	}

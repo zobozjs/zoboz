@@ -124,7 +124,7 @@ export class PackageJsonExpectation {
 
 		const errors: string[] = [];
 
-		logger.pending(
+		logger.debug(
 			`Checking package.json matches ${JSON.stringify(this.value, null, 2)}`,
 		);
 
