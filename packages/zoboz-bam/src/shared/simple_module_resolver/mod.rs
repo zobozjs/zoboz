@@ -80,6 +80,13 @@ impl SimpleModuleResolver {
             .resolve(source_dirname, specifier_for_resolver);
 
         if resolved.is_err() {
+            match resolved.err() {
+                Some(oxc_resolver::ResolveError::Builtin { .. }) => {
+                    return Err("BUILTIN_MODULE".to_string());
+                }
+                _ => {}
+            }
+
             if !is_trying_base_url_already
                 && self.absolute_base_url.is_some()
                 && !specifier.starts_with("./")

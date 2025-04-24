@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2025-04-24
+
+### Bug Fixes
+
+- node built-in modules were not recognized as such, resulting in false alarms
+
 ## [1.4.0] - 2025-04-24
 
 ### Features
@@ -13,7 +19,6 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - imports going outside of srcDir while yet within package directory were left out as is and disconnected (example: importing package.json from within src)
-
 
 ## [1.3.1] - 2025-03-16
 

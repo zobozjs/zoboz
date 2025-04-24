@@ -58,7 +58,7 @@
 		"typescript": "5.7.3"
 	},
 	"dependencies": {
-		"@zoboz/bam": "1.4.0",
+		"@zoboz/bam": "1.4.1",
 		"esbuild": "0.25.1",
 		"oxc-resolver": "5.0.0"
 	}

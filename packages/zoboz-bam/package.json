@@ -1,6 +1,6 @@
 {
 	"name": "@zoboz/bam",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "A blazing-fast, standalone Rust-powered tool for reformatting specifiers and verifying package.json files with zero setup.",
 	"keywords": [],
 	"author": "Dariush Alipour<drsh.alipour@gmail.com>",
@@ -24,11 +24,11 @@
 		"test": "cargo test"
 	},
 	"optionalDependencies": {
-		"@zoboz/bam-bin-darwin-arm64": "1.4.0",
-		"@zoboz/bam-bin-win32-arm64": "1.4.0",
-		"@zoboz/bam-bin-linux-arm64": "1.4.0",
-		"@zoboz/bam-bin-darwin-x64": "1.4.0",
-		"@zoboz/bam-bin-win32-x64": "1.4.0",
-		"@zoboz/bam-bin-linux-x64": "1.4.0"
+		"@zoboz/bam-bin-darwin-arm64": "1.4.1",
+		"@zoboz/bam-bin-win32-arm64": "1.4.1",
+		"@zoboz/bam-bin-linux-arm64": "1.4.1",
+		"@zoboz/bam-bin-darwin-x64": "1.4.1",
+		"@zoboz/bam-bin-win32-x64": "1.4.1",
+		"@zoboz/bam-bin-linux-x64": "1.4.1"
 	}
 }

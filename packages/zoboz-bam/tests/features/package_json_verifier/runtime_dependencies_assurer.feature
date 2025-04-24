@@ -468,3 +468,33 @@ Feature: Ensures runtime dependencies will be available for the consumers
         "devDependencies": {}
       }
       """
+
+  Scenario: When using Node.js built-in modules, no error is thrown
+      because they are available in the Node.js runtime
+
+    Given there is an npm package with:
+      """
+      {
+        "name": "test",
+        "version": "1.0.0",
+        "main": "dist/cjs/index.js"
+      }
+      """
+    And the package has a directory named "src"
+    And the package has a directory named "dist/cjs"
+    And there is a file named "dist/cjs/index.js" with:
+      """
+      require('fs');
+      require('path');
+      require('http');
+      require('crypto');
+      require('node:fs');
+      require('node:path');
+      require('node:http');
+      require('node:crypto');
+      """
+    When the following command is executed:
+      """
+      verify-package-json --absolute-package-dir $scenario_dir
+      """
+    Then the result is ok

@@ -1,5 +1,8 @@
 pub(super) fn create_oxc_module_resolver() -> oxc_resolver::Resolver {
     let mut resolve_options = oxc_resolver::ResolveOptions::default();
+
+    resolve_options.builtin_modules = true;
+
     resolve_options.extensions = vec![
         ".js".to_string(),
         ".jsx".to_string(),

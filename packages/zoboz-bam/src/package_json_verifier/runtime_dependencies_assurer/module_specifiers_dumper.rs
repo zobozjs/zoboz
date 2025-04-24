@@ -69,8 +69,12 @@ pub(super) fn dump_modules_specifiers(
                 Ok(_) => {
                     resolved_absolute_specifiers.insert(package_name.to_string());
                 }
-                Err(_) => {
-                    unresolved_absolute_specifiers.insert(package_name.to_string());
+                Err(err) => {
+                    if err.eq("BUILTIN_MODULE") {
+                        // built-in modules do not concern us
+                    } else {
+                        unresolved_absolute_specifiers.insert(package_name.to_string());
+                    }
                 }
             }
         }
